@@ -6,7 +6,7 @@ const customInputStyle = {
   width: '100%',
   height: '53px',
   '& input': {
-    borderRadius: '30px',
+    borderRadius: '20px',
     height: '53px',
     border: '1px solid #000', // Apply border directly to the input
     outline: 'none',
@@ -88,6 +88,7 @@ export default function Login() {
           sx={{
             bgcolor: 'white',
             borderTopLeftRadius: 0,
+            paddingLeft:'0px',
             borderBottomLeftRadius: 0,
             '@media screen and (max-width: 899px)': {
               borderTopRightRadius: 0,
@@ -97,7 +98,7 @@ export default function Login() {
           }}
         >
           
-          <Stack sx={{ width: '100%' }} spacing={3} >
+          <Stack sx={{ width: '100%' }} spacing={10} maxHeight={'700px'}>
             
           <Stack spacing={1} >
              <Typography sx={{
