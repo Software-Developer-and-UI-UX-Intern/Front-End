@@ -51,8 +51,10 @@ export default function Register() {
     phoneNumber: '',
     domisili: '',
     jenisKelamin: '',
-    password: ''
+    password: '',
+    confirmPassword: '' // New state for confirm password
   });
+  const [submitPressed, setSubmitPressed] = useState(false);
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -67,10 +69,32 @@ export default function Register() {
     jenisKelamin: string;
     password: string;
   }
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+    setSubmitPressed(true); // Button is pressed
+
+    // Check if any of the fields are empty
+    if (
+      formData.fullName === '' ||
+      formData.email === '' ||
+      formData.nik === '' ||
+      formData.phoneNumber === '' ||
+      formData.domisili === '' ||
+      formData.jenisKelamin === '' ||
+      formData.password === '' ||
+      formData.confirmPassword === '' // Check if confirmPassword is empty
+    ) {
+      alert('Lengkapi semua data sebelum melanjutkan.');
+      return; // Prevent form submission
+    }
+
+    // Check if password and confirmPassword match
+    if (formData.password !== formData.confirmPassword) {
+      alert('Password dan konfirmasi password tidak cocok.');
+      return; // Prevent form submission
+    }
+
     const formDataCopy = new FormData(e.target as HTMLFormElement);
     const formDataObject: FormDataObject = {
       fullName: formDataCopy.get('fullName') as string,
@@ -81,7 +105,7 @@ export default function Register() {
       jenisKelamin: formDataCopy.get('jenisKelamin') as string,
       password: formDataCopy.get('password') as string,
     };
-  
+
     try {
       const response = await fetch('https://tripselbe.fly.dev/register', {
         method: 'POST',
@@ -90,18 +114,18 @@ export default function Register() {
         },
         body: JSON.stringify(formDataObject),
       });
-  
+
       if (!response.ok) {
         // Handle non-200 HTTP status codes
         const errorMessage = await response.text();
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
-  
+
       const data = await response.json();
       alert(data.message); // Display success message from the server
     } catch (error) {
       console.error('Error registering user:', error);
-      alert(`Failed to register user`); // Alert the specific error message
+      alert(`Failed to register user ${error}`); // Alert the specific error message
     }
   };
 
@@ -194,13 +218,33 @@ export default function Register() {
                         onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
                       }}
                     />
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: '#FF010C'
-                    }}>
-                      *Nama lengkap tidak boleh kosong
-                    </Typography>
+                    {(submitPressed && formData.fullName === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *Nama lengkap tidak boleh kosong
+                      </Typography>
+                    )}
+                     {(submitPressed && formData.fullName !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Nama lengkap tidak boleh kosong
+                      </Typography>
+                    )}
+                    {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Nama lengkap tidak boleh kosong
+                      </Typography>
+                    )}
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
@@ -219,13 +263,33 @@ export default function Register() {
                         onChange: (e) => setFormData({ ...formData, email: (e.target as HTMLInputElement).value }),
                       }}
                     />
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: '#FF010C'
-                    }}>
-                      *Inputkan email Telkomsel Anda
-                    </Typography>
+                    {(submitPressed && formData.email === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *Inputkan email Telkomsel Anda
+                      </Typography>
+                    )}
+                    {(submitPressed && formData.email !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Inputkan email Telkomsel Anda
+                      </Typography>
+                    )}
+                    {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Inputkan email Telkomsel Anda
+                      </Typography>
+                    )}
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
@@ -244,13 +308,33 @@ export default function Register() {
                         onChange: (e) => setFormData({ ...formData, nik: (e.target as HTMLInputElement).value }),
                       }}
                     />
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: '#FF010C'
-                    }}>
-                      *NIK tidak boleh kosong
-                    </Typography>
+                    {(submitPressed && formData.nik === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *NIK tidak boleh kosong
+                      </Typography>
+                    )}
+                    {(submitPressed && formData.nik !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *NIK tidak boleh kosong
+                      </Typography>
+                    )}
+                    {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *NIK tidak boleh kosong
+                      </Typography>
+                    )}
                   </Stack>
                   <Stack direction={'column'} maxWidth={'262px'} width={'100%'}>
                     <Typography sx={{
@@ -271,13 +355,33 @@ export default function Register() {
                         onChange: (e) => setFormData({ ...formData, phoneNumber: (e.target as HTMLInputElement).value }),
                       }}
                     />
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: '#FF010C'
-                    }}>
-                      *No handphone tidak valid
-                    </Typography>
+                    {(submitPressed && formData.phoneNumber === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *No handphone tidak valid
+                      </Typography>
+                    )}
+                    {(submitPressed && formData.phoneNumber !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *No handphone tidak valid
+                      </Typography>
+                    )}
+                  {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *No handphone tidak valid
+                      </Typography>
+                    )}
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
@@ -309,13 +413,33 @@ export default function Register() {
                       <MenuItem value='Nusa Penida'>Nusa Penida</MenuItem>
                       <MenuItem value='Bali'>Bali</MenuItem>
                     </MuiSelect>
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: '#FF010C'
-                    }}>
-                      *Domisili tidak valid
-                    </Typography>
+                    {(submitPressed && formData.domisili === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *Domisili tidak valid
+                      </Typography>
+                    )}
+                    {(submitPressed && formData.domisili !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Domisili tidak valid
+                      </Typography>
+                    )}
+                    {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Domisili tidak valid
+                      </Typography>
+                    )}
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
@@ -346,51 +470,160 @@ export default function Register() {
                       <MenuItem value='Perempuan'>Perempuan</MenuItem>
                       <MenuItem value='Pria'>Pria</MenuItem>
                     </MuiSelect>
+                    {(submitPressed && formData.jenisKelamin !== '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Jenis kelamin tidak valid
+                      </Typography>
+                    )}
+                    {(submitPressed === false) && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: 'transparent'
+                      }}>
+                        *Jenis kelamin tidak valid
+                      </Typography>
+                    )}
+                    {(submitPressed && formData.jenisKelamin === '') && (
+                      <Typography sx={{
+                        fontWeight: 500,
+                        fontSize: '16px',
+                        color: '#FF010C'
+                      }}>
+                        *Jenis kelamin tidak valid
+                      </Typography>
+                    )}
+                  </Stack>
+                </Stack>
+                <Stack>
+                  <Typography sx={{
+                    fontWeight: 500,
+                    fontSize: '24px',
+                    color: 'black'
+                  }}>
+                    Konfirmasi Password*
+                  </Typography>
+                  <Input
+                    disableUnderline
+                    id="password"
+                    placeholder="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    sx={customInputStyle}
+                    inputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleTogglePasswordVisibility}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      name: 'password',
+                      value: formData.password,
+                      onChange: (e) => setFormData({ ...formData, password: (e.target as HTMLInputElement).value }),
+                    }}
+                  />
+                  {(submitPressed && formData.password === '') && (
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '16px',
-                      color: '#FF010C'
+                      color: '#FF010C',
                     }}>
-                      *Jenis kelamin tidak valid
+                      *Password tidak sesuai
                     </Typography>
-                  </Stack>
+                  )}
+                  {(submitPressed && formData.password !== '') && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: 'transparent',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
+                    {(submitPressed === false) && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: 'transparent',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
                 </Stack>
+                <Stack>
                 <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: 'black'
-                }}>
-                  Password*
-                </Typography>
-                <Input
-                  disableUnderline
-                  id="password"
-                  placeholder="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  sx={customInputStyle}
-                  inputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleTogglePasswordVisibility}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    name: 'password',
-                    value: formData.password,
-                    onChange: (e) => setFormData({ ...formData, password: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  color: '#FF010C'
-                }}>
-                  *Password tidak sesuai
-                </Typography>
+                    fontWeight: 500,
+                    fontSize: '24px',
+                    color: 'black'
+                  }}>
+                    konfirmasi Password*
+                  </Typography>
+                  <Input
+                    disableUnderline
+                    id="confirmPassword"
+                    placeholder="Confirm Password"
+                    type={showPassword ? 'text' : 'password'}
+                    sx={customInputStyle}
+                    inputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleTogglePasswordVisibility}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      name: 'confirmPassword',
+                      value: formData.confirmPassword,
+                      onChange: (e) => setFormData({ ...formData, confirmPassword: (e.target as HTMLInputElement).value }),
+                    }}
+                  />
+                  {(submitPressed && formData.confirmPassword !== formData.password) && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: '#FF010C',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
+                   {(submitPressed && formData.confirmPassword === formData.password) && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: 'transparent',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
+                  {(submitPressed === false) && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: 'transparent',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
+                  {(submitPressed === true) && (
+                    <Typography sx={{
+                      fontWeight: 500,
+                      fontSize: '16px',
+                      color: 'transparent',
+                    }}>
+                      *Password tidak sesuai
+                    </Typography>
+                  )}
+                </Stack>
               </Stack>
               <Stack spacing={3} alignItems={'center'} width={'100%'}>
                 <Button
