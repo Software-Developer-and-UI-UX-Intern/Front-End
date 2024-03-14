@@ -89,6 +89,16 @@ export default function Register() {
       return; // Prevent form submission
     }
 
+    // Check if email ends with "@telkomsel.co.id"
+    if (!formData.email.endsWith('@telkomsel.co.id')) {
+      return; // Prevent form submission
+    }
+
+    // Check if password has at least 8 characters
+    if (formData.password.length < 8) {
+      return; // Prevent form submission
+    }
+
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
       alert('Password dan konfirmasi password tidak cocok.');
@@ -128,6 +138,7 @@ export default function Register() {
       alert(`Failed to register user ${error}`); // Alert the specific error message
     }
   };
+
 
   return (
     <Box>
@@ -222,7 +233,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *Nama lengkap tidak boleh kosong
                       </Typography>
@@ -231,7 +243,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Nama lengkap tidak boleh kosong
                       </Typography>
@@ -240,7 +253,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Nama lengkap tidak boleh kosong
                       </Typography>
@@ -267,7 +281,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *Inputkan email Telkomsel Anda
                       </Typography>
@@ -276,7 +291,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Inputkan email Telkomsel Anda
                       </Typography>
@@ -285,7 +301,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Inputkan email Telkomsel Anda
                       </Typography>
@@ -312,7 +329,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *NIK tidak boleh kosong
                       </Typography>
@@ -321,7 +339,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *NIK tidak boleh kosong
                       </Typography>
@@ -330,7 +349,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *NIK tidak boleh kosong
                       </Typography>
@@ -359,7 +379,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *No handphone tidak valid
                       </Typography>
@@ -368,7 +389,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *No handphone tidak valid
                       </Typography>
@@ -377,7 +399,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *No handphone tidak valid
                       </Typography>
@@ -407,17 +430,19 @@ export default function Register() {
                       onChange={(e) => setFormData({ ...formData, domisili: (e.target as HTMLInputElement).value })}
                     >
                       <MenuItem value="">
-                        <em>none</em>
+                        <em>Pilih Domisili</em>
                       </MenuItem>
-                      <MenuItem value='Jawa'>Jawa</MenuItem>
-                      <MenuItem value='Nusa Penida'>Nusa Penida</MenuItem>
                       <MenuItem value='Bali'>Bali</MenuItem>
+                      <MenuItem value='Kupang'>Kupang</MenuItem>
+                      <MenuItem value='Mataram'>Mataram</MenuItem>
+                      <MenuItem value='Flores'>Flores</MenuItem>
                     </MuiSelect>
                     {(submitPressed && formData.domisili === '') && (
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *Domisili tidak valid
                       </Typography>
@@ -426,7 +451,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Domisili tidak valid
                       </Typography>
@@ -435,7 +461,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Domisili tidak valid
                       </Typography>
@@ -464,8 +491,8 @@ export default function Register() {
                       value={formData.jenisKelamin}
                       onChange={(e) => setFormData({ ...formData, jenisKelamin: (e.target as HTMLInputElement).value })}
                     >
-                      <MenuItem value="">
-                        <em>none</em>
+                       <MenuItem value="">
+                        <em>Pilih Jenis Kelamin</em>
                       </MenuItem>
                       <MenuItem value='Perempuan'>Perempuan</MenuItem>
                       <MenuItem value='Pria'>Pria</MenuItem>
@@ -474,7 +501,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Jenis kelamin tidak valid
                       </Typography>
@@ -483,7 +511,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: 'transparent'
+                        color: 'transparent',
+                        marginTop:'4px',
                       }}>
                         *Jenis kelamin tidak valid
                       </Typography>
@@ -492,7 +521,8 @@ export default function Register() {
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
-                        color: '#FF010C'
+                        color: '#FF010C',
+                        marginTop:'4px',
                       }}>
                         *Jenis kelamin tidak valid
                       </Typography>
@@ -505,7 +535,7 @@ export default function Register() {
                     fontSize: '24px',
                     color: 'black'
                   }}>
-                    Konfirmasi Password*
+                    Password*
                   </Typography>
                   <Input
                     disableUnderline
@@ -529,13 +559,14 @@ export default function Register() {
                       onChange: (e) => setFormData({ ...formData, password: (e.target as HTMLInputElement).value }),
                     }}
                   />
-                  {(submitPressed && formData.password === '') && (
+                  {((submitPressed && formData.password === '') || (submitPressed && formData.password.length < 8)) && (
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '16px',
                       color: '#FF010C',
+                      marginTop:'4px',
                     }}>
-                      *Password tidak sesuai
+                      *Masukan minimal 8 huruf
                     </Typography>
                   )}
                   {(submitPressed && formData.password !== '') && (
@@ -543,8 +574,9 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: 'transparent',
+                      marginTop:'4px',
                     }}>
-                      *Password tidak sesuai
+                      *Masukan minimal 8 huruf
                     </Typography>
                   )}
                     {(submitPressed === false) && (
@@ -552,8 +584,9 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: 'transparent',
+                      marginTop:'4px',
                     }}>
-                      *Password tidak sesuai
+                      *Masukan minimal 8 huruf
                     </Typography>
                   )}
                 </Stack>
@@ -561,7 +594,7 @@ export default function Register() {
                 <Typography sx={{
                     fontWeight: 500,
                     fontSize: '24px',
-                    color: 'black'
+                    color: 'black',
                   }}>
                     konfirmasi Password*
                   </Typography>
@@ -592,6 +625,7 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: '#FF010C',
+                      marginTop:'4px',
                     }}>
                       *Password tidak sesuai
                     </Typography>
@@ -601,6 +635,7 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: 'transparent',
+                      marginTop:'4px',
                     }}>
                       *Password tidak sesuai
                     </Typography>
@@ -610,6 +645,7 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: 'transparent',
+                      marginTop:'4px',
                     }}>
                       *Password tidak sesuai
                     </Typography>
@@ -619,6 +655,7 @@ export default function Register() {
                       fontWeight: 500,
                       fontSize: '16px',
                       color: 'transparent',
+                      marginTop:'4px',
                     }}>
                       *Password tidak sesuai
                     </Typography>
@@ -630,40 +667,29 @@ export default function Register() {
                   type="submit"
                   sx={{
                     display: 'flex',
-                    width: '127px',
-                    height: '48px',
-                    padding: '10px 20px',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: '25px',
-                    background: '#FF010C',
-                    color: '#fff',
-                    cursor: 'pointer',
-                    fontFamily: 'Poppins',
-                    fontWeight: 500,
-                    fontSize: '20px',
-                    '&:hover': { background: 'white', color: 'red' },
+                    height: '50px',
+                    width: '200px',
+                    fontWeight: 'bold',
+                    fontSize: '24px',
+                    color: '#ffffff',
+                    backgroundColor: '#FF010C',
+                    borderRadius: '20px',
                   }}
                 >
-                  Masuk
+                  Daftar
                 </Button>
-                <Stack direction={'row'}>
-                  <Typography>
-                    Belum punya akun?
-                  </Typography>
-                  <Link sx={{
-                    textDecoration: 'underline',
-                    fontWeight: 700,
-                    color: '#FF010C',
-                  }}>
-                    <Typography sx={{
-                      fontWeight: 700,
-                      color: '#FF010C',
-                    }}>
-                      Daftar
-                    </Typography>
+                <Typography sx={{
+                  fontWeight: 400,
+                  fontSize: '18px',
+                  color: '#000',
+                }}>
+                  Sudah memiliki akun?{' '}
+                  <Link href="/login" sx={{ color: '#FF010C' }}>
+                    Masuk disini
                   </Link>
-                </Stack>
+                </Typography>
               </Stack>
             </Stack>
           </form>
