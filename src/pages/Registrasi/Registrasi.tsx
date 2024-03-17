@@ -85,7 +85,6 @@ export default function Register() {
       formData.password === '' ||
       formData.confirmPassword === '' // Check if confirmPassword is empty
     ) {
-      alert('Lengkapi semua data sebelum melanjutkan.');
       return; // Prevent form submission
     }
 
@@ -101,7 +100,6 @@ export default function Register() {
 
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
-      alert('Password dan konfirmasi password tidak cocok.');
       return; // Prevent form submission
     }
 
@@ -279,7 +277,7 @@ export default function Register() {
                         onChange: (e) => setFormData({ ...formData, email: (e.target as HTMLInputElement).value }),
                       }}
                     />
-                    {(submitPressed && formData.email === '') && (
+                    {(submitPressed &&!formData.email.endsWith('@telkomsel.co.id')) && (
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
@@ -289,7 +287,7 @@ export default function Register() {
                         *Inputkan email Telkomsel Anda
                       </Typography>
                     )}
-                    {(submitPressed && formData.email !== '') && (
+                    {(submitPressed && formData.email.endsWith('@telkomsel.co.id')) && (
                       <Typography sx={{
                         fontWeight: 500,
                         fontSize: '16px',
@@ -689,6 +687,9 @@ export default function Register() {
                       backgroundColor: '#FF010C', 
                     },
                     '&:focus': {
+                      backgroundColor: '#FF010C', 
+                    },
+                    '&:hover': {
                       backgroundColor: '#FF010C', 
                     },
                   }}

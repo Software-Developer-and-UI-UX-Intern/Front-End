@@ -124,78 +124,15 @@ export default function Login() {
             },
           }}
         >
-
           <Stack sx={{ width: '100%' }} spacing={10} maxHeight={'700px'}>
-            
-          <Stack spacing={1} >
-             <Typography sx={{
-              fontWeight: 700,
-              fontSize: '42px',
-              color:'#FF010C',
-          
-            }}>
-              Masuk
-            </Typography>
-            <Typography sx={{
-              fontWeight: 500,
-              fontSize: '32px',
-              color:'#FF010C',
-            }}>
-              Selamat datang di Trip-sel
-            </Typography>
-          </Stack>
-          
-          <Stack spacing={2}>
-          <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'black'
-            }}>
-              Email
-            </Typography>
-            <Input
-              disableUnderline
-              placeholder="Email"
-              sx={customInputStyle}
-              inputProps={{
-                'aria-label': 'description',
-              }}
-            />
-                <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'#FF010C'
-            }}>
-              *Nama lengkap tidak boleh kosong
-            </Typography>
-                <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'black'
-            }}>
-              Password
-            </Typography>
-          
-            <Input
-              disableUnderline
-              id="password"
-              placeholder="Password"
-              type={showPassword ? 'text' : 'password'}
-              sx={customInputStyle}
-              inputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleTogglePasswordVisibility}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-
+            <Stack spacing={1}>
+              <Typography sx={{
+                fontWeight: 700,
+                fontSize: '42px',
+                color:'#FF010C',
+              }}>
+                Masuk
+              </Typography>
               <Typography sx={{
                 fontWeight: 500,
                 fontSize: '32px',
@@ -290,16 +227,16 @@ export default function Login() {
                   fontFamily: 'Poppins',
                   fontWeight: 700,
                   fontSize: '24px',
-                  '&:hover': { background: 'white', color: 'red' },
+                  '&:hover': { background: '#FF010C', color: 'white' },
                 }}
               >
-                {loading ? <CircularProgress size={24} color="inherit" /> : 'Masuk'}
+                {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}
               </Button>
               <Stack direction={'row'} spacing={1}>
-                <Typography sx={{fontSize:'22px'}}>
+                <Typography sx={{fontSize:'22px', fontWeight: 500}}>
                   Belum punya akun?
                 </Typography>
-                <Link sx={{
+                <Link href='/register' sx={{
                   textDecoration: 'underline',
                   fontWeight: 700,
                   color: '#FF010C',
