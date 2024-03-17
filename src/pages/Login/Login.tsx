@@ -124,15 +124,78 @@ export default function Login() {
             },
           }}
         >
+
           <Stack sx={{ width: '100%' }} spacing={10} maxHeight={'700px'}>
-            <Stack spacing={1}>
-              <Typography sx={{
-                fontWeight: 700,
-                fontSize: '42px',
-                color:'#FF010C',
-              }}>
-                Masuk
-              </Typography>
+            
+          <Stack spacing={1} >
+             <Typography sx={{
+              fontWeight: 700,
+              fontSize: '42px',
+              color:'#FF010C',
+          
+            }}>
+              Masuk
+            </Typography>
+            <Typography sx={{
+              fontWeight: 500,
+              fontSize: '32px',
+              color:'#FF010C',
+            }}>
+              Selamat datang di Trip-sel
+            </Typography>
+          </Stack>
+          
+          <Stack spacing={2}>
+          <Typography sx={{
+              fontWeight: 500,
+              fontSize: '24px',
+              color:'black'
+            }}>
+              Email
+            </Typography>
+            <Input
+              disableUnderline
+              placeholder="Email"
+              sx={customInputStyle}
+              inputProps={{
+                'aria-label': 'description',
+              }}
+            />
+                <Typography sx={{
+              fontWeight: 500,
+              fontSize: '24px',
+              color:'#FF010C'
+            }}>
+              *Nama lengkap tidak boleh kosong
+            </Typography>
+                <Typography sx={{
+              fontWeight: 500,
+              fontSize: '24px',
+              color:'black'
+            }}>
+              Password
+            </Typography>
+          
+            <Input
+              disableUnderline
+              id="password"
+              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              sx={customInputStyle}
+              inputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleTogglePasswordVisibility}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
               <Typography sx={{
                 fontWeight: 500,
                 fontSize: '32px',
