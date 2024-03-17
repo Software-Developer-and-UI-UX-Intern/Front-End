@@ -12,7 +12,7 @@ const customInputStyle = {
   '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '1px solid #000', // Apply border directly to the input
+    border: '1px solid #04214C', // Apply border directly to the input
     outline: 'none',
     padding: '0px 10px'
   },
@@ -34,7 +34,7 @@ const customInputStyle = {
   '& .MuiOutlinedInput-root.MuiSelect-root': {
     borderRadius: '20px',
     '&:hover fieldset': {
-      borderColor: '#000',
+      borderColor: '#04214C',
     },
     '&.Mui-focused fieldset': {
       borderColor: '#04214C',
@@ -210,17 +210,18 @@ export default function Register() {
               </Stack>
               <Stack spacing={2} maxWidth={'674px'}>
                 <Stack direction={'row'} gap={2}>
-                  <Stack direction={'column'} maxWidth={'393px'} width={'100%'}>
+                  <Stack direction={'column'} maxWidth={'393px'} width={'100%'} spacing={1}>
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       Nama Lengkap (Sesuai KTP)*
                     </Typography>
                     <Input
                       disableUnderline
                       placeholder="Nama Lengkap"
+                      style={{fontSize:'22px', color:'#04214C'}}
                       sx={customInputStyle}
                       inputProps={{
                         'aria-label': 'Nama Lengkap',
@@ -262,7 +263,7 @@ export default function Register() {
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       Email Telkomsel*
                     </Typography>
@@ -270,6 +271,7 @@ export default function Register() {
                       disableUnderline
                       placeholder="Contoh: adimarnita@telkomsel"
                       sx={customInputStyle}
+                      style={{fontSize:'22px', color:'#04214C'}}
                       inputProps={{
                         'aria-label': 'Email Telkomsel',
                         name: 'email',
@@ -310,7 +312,7 @@ export default function Register() {
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       Nomor Induk Kependudukan*
                     </Typography>
@@ -318,6 +320,7 @@ export default function Register() {
                       disableUnderline
                       placeholder="Contoh: 5178xxxxxxxxx"
                       sx={customInputStyle}
+                      style={{fontSize:'22px', color:'#04214C'}}
                       inputProps={{
                         'aria-label': 'Nomor Induk Kependudukan',
                         name: 'nik',
@@ -356,11 +359,11 @@ export default function Register() {
                       </Typography>
                     )}
                   </Stack>
-                  <Stack direction={'column'} maxWidth={'262px'} width={'100%'}>
+                  <Stack direction={'column'} maxWidth={'262px'} width={'100%'} spacing={1}>
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       No. handphone*
                     </Typography>
@@ -368,6 +371,7 @@ export default function Register() {
                       disableUnderline
                       placeholder="No. handphone"
                       sx={customInputStyle}
+                      style={{fontSize:'22px', color:'#04214C'}}
                       inputProps={{
                         'aria-label': 'No. handphone',
                         name: 'phoneNumber',
@@ -408,27 +412,34 @@ export default function Register() {
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       Domisili*
                     </Typography>
                     <MuiSelect
-                      displayEmpty
-                      inputProps={{ 'aria-label': 'Domisili' }}
-                      style={{ borderRadius: '20px' }}
-                      sx={{
-                        ...customInputStyle,
-                        '&:focus': {
-                          backgroundColor: 'transparent',
-                        },
-                        '& fieldset': {
-                          borderColor: '#000',
-                        },
-                      }}
-                      name="domisili"
-                      value={formData.domisili}
-                      onChange={(e) => setFormData({ ...formData, domisili: (e.target as HTMLInputElement).value })}
-                    >
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Domisili' }}
+                    style={{ borderRadius: '20px', fontSize:'22px', color:'#04214C', border: '1px solid #04214C', }}
+                    sx={{
+                      ...customInputStyle,
+                      '&:focus': {
+                        borderColor: 'transparent !important', // Set border color on focus
+                      },
+                      '& fieldset': {
+                        borderColor: 'transparent !important', // Set default border color
+                      },
+                      '&:hover fieldset': {
+                        borderColor: 'transparent !important', // Set border color on hover
+                      },
+                      '&:active fieldset': {
+                        borderColor: 'transparent !important', // Set border color when active (clicked)
+                      },
+                    }}
+                    name="domisili"
+                    value={formData.domisili}
+                    onChange={(e) => setFormData({ ...formData, domisili: (e.target as HTMLInputElement).value })}
+                  >
+
                       <MenuItem value="">
                         <em>Pilih Domisili</em>
                       </MenuItem>
@@ -470,21 +481,27 @@ export default function Register() {
                     <Typography sx={{
                       fontWeight: 500,
                       fontSize: '24px',
-                      color: 'black'
+                      color: '#04214C'
                     }}>
                       Jenis Kelamin*
                     </Typography>
                     <MuiSelect
                       displayEmpty
                       inputProps={{ 'aria-label': 'Jenis Kelamin' }}
-                      style={{ borderRadius: '20px' }}
+                      style={{ borderRadius: '20px', fontSize:'22px', color:'#04214C', border: '1px solid #04214C', }}
                       sx={{
                         ...customInputStyle,
                         '&:focus': {
-                          backgroundColor: 'transparent',
+                          borderColor: 'transparent !important', // Set border color on focus
                         },
                         '& fieldset': {
-                          borderColor: '#000',
+                          borderColor: 'transparent !important', // Set default border color
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'transparent !important', // Set border color on hover
+                        },
+                        '&:active fieldset': {
+                          borderColor: 'transparent !important', // Set border color when active (clicked)
                         },
                       }}
                       name="jenisKelamin"
@@ -533,7 +550,7 @@ export default function Register() {
                   <Typography sx={{
                     fontWeight: 500,
                     fontSize: '24px',
-                    color: 'black'
+                    color: '#04214C'
                   }}>
                     Password*
                   </Typography>
@@ -543,6 +560,7 @@ export default function Register() {
                     placeholder="Password"
                     type={showPassword ? 'text' : 'password'}
                     sx={customInputStyle}
+                    style={{fontSize:'22px', color:'#04214C'}}
                     inputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -594,7 +612,7 @@ export default function Register() {
                 <Typography sx={{
                     fontWeight: 500,
                     fontSize: '24px',
-                    color: 'black',
+                    color: '#04214C',
                   }}>
                     konfirmasi Password*
                   </Typography>
@@ -603,6 +621,7 @@ export default function Register() {
                     id="confirmPassword"
                     placeholder="Confirm Password"
                     type={showPassword ? 'text' : 'password'}
+                    style={{fontSize:'22px', color:'#04214C'}}
                     sx={customInputStyle}
                     inputProps={{
                       endAdornment: (
@@ -650,16 +669,6 @@ export default function Register() {
                       *Password tidak sesuai
                     </Typography>
                   )}
-                  {(submitPressed === true) && (
-                    <Typography sx={{
-                      fontWeight: 500,
-                      fontSize: '16px',
-                      color: 'transparent',
-                      marginTop:'4px',
-                    }}>
-                      *Password tidak sesuai
-                    </Typography>
-                  )}
                 </Stack>
               </Stack>
               <Stack spacing={3} alignItems={'center'} width={'100%'}>
@@ -669,24 +678,30 @@ export default function Register() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '50px',
+                    height: '60px',
                     width: '200px',
                     fontWeight: 'bold',
                     fontSize: '24px',
                     color: '#ffffff',
                     backgroundColor: '#FF010C',
-                    borderRadius: '20px',
+                    borderRadius: '40px',
+                    '&:active': {
+                      backgroundColor: '#FF010C', 
+                    },
+                    '&:focus': {
+                      backgroundColor: '#FF010C', 
+                    },
                   }}
                 >
                   Daftar
                 </Button>
                 <Typography sx={{
-                  fontWeight: 400,
-                  fontSize: '18px',
-                  color: '#000',
+                  fontWeight: 500,
+                  fontSize: '22px',
+                  color: '#04214C',
                 }}>
                   Sudah memiliki akun?{' '}
-                  <Link href="/login" sx={{ color: '#FF010C' }}>
+                  <Link href="/login" underline='always' sx={{ color: '#FF010C', fontWeight:700, textDecorationColor: '#FF010C'  }}>
                     Masuk disini
                   </Link>
                 </Typography>
