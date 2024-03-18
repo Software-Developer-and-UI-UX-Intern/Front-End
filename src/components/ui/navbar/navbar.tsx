@@ -5,7 +5,7 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/700.css';
 import '@fontsource/poppins/800.css';
-import logo from '../../../assets/Trip-sel.png';
+import logoTripsel from '../../../assets/Trip-sel.png';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function Navbar() {
@@ -39,7 +39,7 @@ export default function Navbar() {
       <Container maxWidth="xl">
         <Toolbar style={{ justifyContent: 'space-between' }}>
           <Stack sx={{ width: '200px' }}>
-            <img src={logo} alt="logo" />
+            <img src={logoTripsel} alt="logo" />
           </Stack>
           <Stack style={{ justifyContent: 'space-between' }} width={'70%'} direction={'row'}>
           <Link style={{ textDecoration: 'none' }}>
@@ -166,7 +166,7 @@ export default function Navbar() {
                 fontFamily: 'Poppins',
                 fontWeight: 500,
                 fontSize: '20px',
-                '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',},
+                '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red', },
               }}
             >
               Masuk
