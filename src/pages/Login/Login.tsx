@@ -227,7 +227,7 @@ export default function Login() {
                   fontFamily: 'Poppins',
                   fontWeight: 700,
                   fontSize: '24px',
-                  '&:hover': { background: '#FF010C', color: 'white' },
+                  '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
                 }}
               >
                 {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}

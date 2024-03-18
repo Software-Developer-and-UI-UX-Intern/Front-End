@@ -689,9 +689,7 @@ export default function Register() {
                     '&:focus': {
                       backgroundColor: '#FF010C', 
                     },
-                    '&:hover': {
-                      backgroundColor: '#FF010C', 
-                    },
+                    '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
                   }}
                 >
                   Daftar
