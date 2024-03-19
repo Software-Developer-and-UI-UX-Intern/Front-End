@@ -1,6 +1,6 @@
 // Beranda.tsx
 import { useEffect } from 'react';
-import { Stack, Typography, Button, Grid } from '@mui/material';
+import { Stack, Typography, Button } from '@mui/material';
 import bg from '../../assets/beranda/main.jpg';
 // import { RekomenHotel } from '../../components/beranda/rekomenhotel';
 import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
@@ -171,21 +171,9 @@ export default function Beranda() {
           </Typography>
         </Stack>
 
-        <Grid container rowSpacing={7} columnSpacing={5} alignItems='center' justifyContent='center' borderRadius='40px'>
-          <Grid item lg={5} borderRadius='40px'>
-            <RowAndColumnSpacing />
-          </Grid>
-          <Grid item lg={5}>
-            <RowAndColumnSpacing />
-          </Grid>
-          <Grid item lg={5}>
-            <RowAndColumnSpacing />
-          </Grid>
-          <Grid item lg={5}>
-            <RowAndColumnSpacing
-            />
-          </Grid>
-        </Grid>
+        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
+          <RowAndColumnSpacing/>
+        </Stack>
         </Stack>
       </Stack>
 
