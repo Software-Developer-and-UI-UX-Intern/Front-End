@@ -1,7 +1,0 @@
-.hotel-card {
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .hotel-card:hover {
-    transform: scale(1.05);
-  }

@@ -1,49 +1,40 @@
 // Beranda.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Stack, Typography, Button, Grid } from '@mui/material';
 import bg from '../../assets/beranda/main.jpg';
-import { RekomenHotel } from '../../components/beranda/rekomenhotel';
+// import { RekomenHotel } from '../../components/beranda/rekomenhotel';
 import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
-import {Buttonslider}  from '../../../src/components/beranda/buttonslider';
 import logoTripsel from '../../assets/Trip-sel.png';
 import logoTelkomsel from '../../assets/Telkomsel (full).png';
+import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
+// interface Hotel {
+//   id: number;
+//   name: string;
+//   stars: string;
+//   image: string;
+// }
 
-interface Hotel {
-  id: number;
-  name: string;
-  stars: string;
-  image: string;
-}
+// interface HotelRecommendationsProps {
+//   hotels: Hotel[];
+// }
 
-interface HotelRecommendationsProps {
-  hotels: Hotel[];
-}
+// const HotelRecommendations: React.FC<HotelRecommendationsProps> = ({ hotels }) => {
+//   return (
+//     <Stack direction={'row'} spacing={2}>
+//       {hotels.map((hotel) => (
+//         <RekomenHotel
+//           key={hotel.id}
+//           name={hotel.name}
+//           stars={hotel.stars}
+//           image={hotel.image}
+//         />
+//       ))}
+//     </Stack>
+//   );
+// };
 
-const HotelRecommendations: React.FC<HotelRecommendationsProps> = ({ hotels }) => {
-  return (
-    <Stack direction={'row'} spacing={2}>
-      {hotels.map((hotel) => (
-        <RekomenHotel
-          key={hotel.id}
-          name={hotel.name}
-          stars={hotel.stars}
-          image={hotel.image}
-        />
-      ))}
-    </Stack>
-  );
-};
 
 export default function Beranda() {
-  const [hotelData, setHotelData] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    fetch('https://tripselbe.fly.dev/recommendation')
-      .then(response => response.json())
-      .then(data => setHotelData(data))
-      .catch(error => console.error('Error fetching hotel data:', error));
-  }, []);
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -51,11 +42,8 @@ export default function Beranda() {
     document.body.style.marginTop = '-120px';
   }, []);
 
-  const itemsPerPage = 2;
-  const totalPages = Math.ceil(hotelData.length / itemsPerPage);
-
-  const startIndex = activeIndex * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  // const startIndex = activeIndex * itemsPerPage;
+  // const endIndex = startIndex + itemsPerPage;
 
   return (
     <Stack sx={{
@@ -119,8 +107,8 @@ export default function Beranda() {
           backgroundColor: 'white',
         }}>
 
-          <Stack sx={{
-            height: '250px',
+          <Stack paddingBottom={'64px'} sx={{
+            height: 'auto',
             width: '100%',
             backgroundColor: 'white',
             borderBottomRightRadius: '500px',
@@ -156,9 +144,9 @@ export default function Beranda() {
             marginBottom: '50px',
             backgroundColor: 'white'
           }} direction='row' gap={5}>
-            <HotelRecommendations hotels={hotelData.slice(startIndex, endIndex)} />
+            {/* <HotelRecommendations hotels={hotelData.slice(startIndex, endIndex)} /> */}
+            <SwipeableHotelCarousel/>
           </Stack>
-          {hotelData.length > 0 && <Buttonslider activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />}
           <Stack justifyContent='center' alignContent='center' alignItems='center' sx={{ marginTop: '35px' }}>
             <Button sx={{ alignContent: 'center', width: '288px', height: '80px', borderRadius: '40px', backgroundColor: '#ff010c' }}>
               <Typography sx={{
@@ -171,7 +159,7 @@ export default function Beranda() {
               </Typography>
             </Button>
           </Stack>
-
+          <Stack>
           <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
@@ -198,7 +186,7 @@ export default function Beranda() {
             />
           </Grid>
         </Grid>
-
+        </Stack>
       </Stack>
 
       <Stack sx={{
