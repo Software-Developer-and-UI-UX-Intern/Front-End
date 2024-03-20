@@ -7,6 +7,7 @@ import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
 import logoTripsel from '../../assets/Trip-sel.png';
 import logoTelkomsel from '../../assets/Telkomsel (full).png';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
+import YoutubeVideo from '../../components/beranda/youtube';
 // interface Hotel {
 //   id: number;
 //   name: string;
@@ -179,11 +180,13 @@ export default function Beranda() {
 
       <Stack sx={{
         display: 'flex',
-        height: '530px',
+        height: 'auto',
         width: '100%',
         margin: '0',
         backgroundColor: '#04214c',
         borderRadius: '100px 100px 0 0',
+        paddingBottom: '60px',
+
       }}>
         <Typography sx={{
           marginLeft: '100px',
@@ -193,9 +196,12 @@ export default function Beranda() {
           fontSize: '55px',
           alignItems: 'center',
           textAlign: 'center',
+          paddingBottom: '60px',
         }}>
           Pengalaman Trip-Sel
         </Typography>
+        <YoutubeVideo/>
+
       </Stack>
 
       <Stack direction='row' sx={{
