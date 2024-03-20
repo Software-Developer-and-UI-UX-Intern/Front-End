@@ -8,12 +8,8 @@ import logoTripsel from '../../assets/Trip-sel.png';
 import logoTelkomsel from '../../assets/Telkomsel (full).png';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
 import YoutubeVideo from '../../components/beranda/youtube';
-// interface Hotel {
-//   id: number;
-//   name: string;
-//   stars: string;
-//   image: string;
-// }
+import Balimenunggu  from '../../components/beranda/balimenunggu';
+
 
 // interface HotelRecommendationsProps {
 //   hotels: Hotel[];
@@ -88,10 +84,13 @@ export default function Beranda() {
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
-          textAlign: 'center'
+          textAlign: 'center',
+          marginBottom:'85px'
         }}>
           Jelajahi seluruh regionalnya sekarang!
         </Typography>
+
+        <Balimenunggu/>
       </Stack>
 
       <Stack sx={{

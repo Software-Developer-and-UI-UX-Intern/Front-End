@@ -22,18 +22,16 @@ export default function RowAndColumnSpacing() {
   return (
     <Grid container rowSpacing={5} columnSpacing={5} alignItems='center' justifyContent='center' borderRadius='40px'>
       {recommendations.map(recommendation => (
-        <Grid item key={recommendation.id} xs={6}>
-          <Box height='385px' sx={{ borderRadius: '40px' }}>
-            <Stack width='100%' sx={{
+        <Grid item key={recommendation.id} xs={'auto'}>
+          <Box height='auto' sx={{ borderRadius: '40px' }}>
+            <Stack width='584px' height={'390px'} sx={{
               borderRadius: '40px',
-              background: `url(${recommendation.image}) center center / cover no-repeat`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover'
+              
             }}>
 
-              <img src={recommendation.image} alt={recommendation.name} width='100%' style={{ borderRadius: '40px 0 40px 0' }} />
+              <img src={recommendation.image} alt={recommendation.name} width='100%' height={'100%'} style={{ borderRadius: '40px 0 40px 0' }} />
 
-              <Stack marginTop={'-80px'} justifyContent={'center'} alignItems={'center'} paddingBottom={'20px'}>
+              <Stack marginTop={'-100px'} justifyContent={'center'} alignItems={'center'} paddingBottom={'20px'}>
                 <Typography color={'white'} sx={{ fontSize: '32px', fontWeight: 500 }}>
                   {recommendation.name}
                 </Typography>
