@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
-import SwipeableViews from 'react-swipeable-views-react-18-fix';
-import { RekomenHotel } from '../beranda/rekomenhotel'; // Assuming this is the correct path to your RekomenHotel component
-import { Buttonslider } from './buttonslider'; // Assuming this is the correct path to your Buttonslider component
+import React, { useState, useEffect, useContext } from 'react';
+import { CarouselProvider, Slider, Slide, CarouselContext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import { RekomenHotel } from '../beranda/rekomenhotel';
+import { Buttonslider } from './buttonslider';
 import { Stack } from '@mui/material';
 
 interface Hotel {
@@ -12,49 +12,77 @@ interface Hotel {
 }
 
 function SwipeableHotelCarousel() {
-    const theme = useTheme();
-    const [activeStep, setActiveStep] = useState(0);
-    const [hotels, setHotels] = useState<Hotel[]>([]); // Specify the type of hotels as Hotel[]
+    const [hotels, setHotels] = useState<Hotel[]>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
-        // Fetch data from the provided API
         fetch('https://tripselbe.fly.dev/recommendation')
             .then(response => response.json())
             .then(data => setHotels(data));
     }, []);
 
-    const handleStepChange = (step: number) => {
-        setActiveStep(step);
-    };
-
-    const totalPages = Math.ceil(hotels.length / 2); // Calculate the number of slides needed
+    const totalPages = Math.ceil(hotels.length / 2);
 
     return (
-        <Stack sx={{ width:'100%', height:'auto' }}>
-            <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={activeStep}
-                onChangeIndex={handleStepChange}
-                enableMouseEvents
-                
+        <Stack width={'100%'} height={'100%'}>
+            <CarouselProvider
+                naturalSlideWidth={100}
+                naturalSlideHeight={37}
+                totalSlides={totalPages}
+                visibleSlides={1}
+                currentSlide={activeIndex}
             >
+                <CarouselContent hotels={hotels} setActiveIndex={setActiveIndex} />
+            </CarouselProvider>
+        </Stack>
+    );
+}
+
+interface CarouselContentProps {
+    hotels: Hotel[];
+    setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function CarouselContent({ hotels, setActiveIndex }: CarouselContentProps) {
+    const [activeIndex, setActiveIndexLocal] = useState(0);
+    const carouselContext = useContext(CarouselContext);
+
+    useEffect(() => {
+        const slideChangeHandler = () => {
+            setActiveIndexLocal(carouselContext.state.currentSlide);
+        };
+
+        carouselContext.subscribe(slideChangeHandler);
+
+        return () => {
+            carouselContext.unsubscribe(slideChangeHandler);
+        };
+    }, [carouselContext]);
+
+    const totalPages = Math.ceil(hotels.length / 2);
+
+    return (
+        <Stack sx={{ width: 'auto', height: 'auto' }} >
+            <Slider>
                 {[...Array(totalPages)].map((_, index) => (
-                    <Stack height={'auto'} key={index}>
-                        <Stack height={'auto'}  marginBottom={'64px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
-                            {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex) => (
-                                <RekomenHotel
-                                    key={index * 2 + hotelIndex}
-                                    name={hotel.name}
-                                    stars={hotel.stars}
-                                    image={hotel.image}
-                                />
-                            ))}
+                    <Slide index={index} key={index}>
+                        <Stack height={'auto'} key={index}>
+                            <Stack height={'auto'} marginBottom={'64px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
+                                {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex: number) => (
+                                    <RekomenHotel
+                                        key={index * 2 + hotelIndex}
+                                        name={hotel.name}
+                                        stars={hotel.stars}
+                                        image={hotel.image}
+                                    />
+                                ))}
+                            </Stack>
                         </Stack>
-                    </Stack>
+                    </Slide>
                 ))}
-            </SwipeableViews>
+            </Slider>
             <Stack>
-            <Buttonslider activeIndex={activeStep} setActiveIndex={setActiveStep} totalPages={totalPages} />
+                <Buttonslider activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />
             </Stack>
         </Stack>
     );
