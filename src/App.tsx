@@ -4,6 +4,7 @@ import Navbar  from './components/ui/navbar/navbar';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
+import { Register } from './pages/Registrasi';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
   },
 ]);
 

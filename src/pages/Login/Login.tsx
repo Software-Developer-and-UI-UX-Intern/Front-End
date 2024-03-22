@@ -1,21 +1,27 @@
-import { Grid, Stack, Box, Typography, Input } from '@mui/material';
-import {  Button, InputAdornment, IconButton,Link } from '@mui/material';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { Grid, Stack, Box, Typography, Input, CircularProgress } from '@mui/material'; // Import CircularProgress
+import { Button, InputAdornment, IconButton, Link } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import axios from 'axios';
+import { debounce } from 'lodash';
+
+import bg from '../../assets/login.png';
+import logo from '../../assets/Trip-sel.png'
+
 const customInputStyle = {
   width: '100%',
   height: '53px',
   '& input': {
-    borderRadius: '30px',
+    borderRadius: '20px',
     height: '53px',
-    border: '1px solid #000', // Apply border directly to the input
+    border: '1px solid #04214C',
     outline: 'none',
-    padding:'0px 10px'
+    padding:'0px 10px',
   },
   '& .MuiInputLabel-root': {
-    color:  '#6E6C6C', // Initially make label transparent
+    color:  '#04214C',
     '&.Mui-focused': {
-      color:'transparent', // Change label color when focused
+      color:'transparent',
     },
   },
   '& .MuiOutlinedInput-root': {
@@ -25,57 +31,78 @@ const customInputStyle = {
     },
     '&.Mui-focused fieldset': {
       borderColor: '#04214C',
-      
     },
   },
 };
 
-import bg from '../../assets/login.png';
-import logo from '../../assets/Trip-sel.png'
-
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState(false); // State to manage login error
+
+  const debouncedHandleLogin = debounce(handleLogin, 1000);
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    // Reset loginError state when email changes
+    setLoginError(false);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    // Reset loginError state when password changes
+    setLoginError(false);
+  };
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
+  async function handleLogin() {
+    try {
+      setLoading(true);
+      const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
+      const { token } = response.data;
+      console.log('Token:', token);
+      setLoading(false);
+    } catch (error) {
+      console.log('Invalid email or password');
+      setLoading(false);
+      setLoginError(true); // Set loginError state to true on error
+    }
+  }
+
   return (
     <Box>
       <Grid container sx={{ height: '100vh' }}>
         <Grid item xs={12} md={6} sx={{ maxHeight: '100%' }}>
-        <Stack height={'100%'} justifyContent={'center'} alignItems={'center'}>
-       
-          <Stack direction={'column'} sx={{ display: { md: 'flex' },width:'100%', height: '100%', justifyContent:'center',alignContent:'center', alignItems:'center' }}>
-          <Stack sx={{ width:'100%', justifyContent:'center', alignItems:'center' }}>
-            <img
-              src={
-                logo
-              }
-              alt=""
-              // height="100%"
-              width="100%"
-              style={{maxWidth:'314px'}}
-            />
+          <Stack height={'100%'} justifyContent={'center'} alignItems={'center'}>
+            <Stack direction={'column'} sx={{ display: { md: 'flex' },width:'100%', height: '100%', justifyContent:'center',alignContent:'center', alignItems:'center' }}>
+              <Stack sx={{ width:'100%', justifyContent:'center', alignItems:'center' }}>
+                <img
+                  src={logo}
+                  alt=""
+                  width="100%"
+                  style={{maxWidth:'314px'}}
+                />
+              </Stack>
+              <img
+                src={bg}
+                alt=""
+                width="100%"
+                style={{maxWidth:'550px', maxHeight:'550px'}}
+              />
+              <Typography sx={{
+                fontWeight: 700,
+                fontSize: '42px',
+                color:'#FF010C',
+              }}>
+                #TripwithTelkomsel
+              </Typography>
             </Stack>
-            <img
-              src={
-                bg
-              }
-              alt=""
-              // height="100%"
-              width="100%"
-              style={{maxWidth:'550px', maxHeight:'550px'}}
-            />
-             <Typography sx={{
-            fontWeight: 700,
-            fontSize: '42px',
-            color:'#FF010C',
-          }}>
-          #TripwithTelkomsel
-          </Typography>
           </Stack>
-         
-        </Stack>
         </Grid>
         <Grid
           container
@@ -88,6 +115,7 @@ export default function Login() {
           sx={{
             bgcolor: 'white',
             borderTopLeftRadius: 0,
+            paddingLeft:'0px',
             borderBottomLeftRadius: 0,
             '@media screen and (max-width: 899px)': {
               borderTopRightRadius: 0,
@@ -96,126 +124,133 @@ export default function Login() {
             },
           }}
         >
-          
-          <Stack sx={{ width: '100%' }} spacing={3} >
-            
-          <Stack spacing={1} >
-             <Typography sx={{
-              fontWeight: 700,
-              fontSize: '42px',
-              color:'#FF010C',
-          
-            }}>
-              Masuk
-            </Typography>
-            <Typography sx={{
-              fontWeight: 500,
-              fontSize: '32px',
-              color:'#FF010C',
-            }}>
-              Selamat datang di Trip-sel
-            </Typography>
-          </Stack>
-          
-          <Stack spacing={2}>
-          <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'black'
-            }}>
-              Email
-            </Typography>
-            <Input
-              disableUnderline
-              placeholder="Email"
-              sx={customInputStyle}
-              inputProps={{
-                'aria-label': 'description',
-              }}
-            />
-                <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'#FF010C'
-            }}>
-              *Nama lengkap tidak boleh kosong
-            </Typography>
-                <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'black'
-            }}>
-              Password
-            </Typography>
-          
-            <Input
-              disableUnderline
-              id="password"
-              placeholder="Password"
-              type={showPassword ? 'text' : 'password'}
-              sx={customInputStyle}
-              inputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleTogglePasswordVisibility}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+          <Stack sx={{ width: '100%' }} spacing={10} maxHeight={'700px'}>
+            <Stack spacing={1}>
               <Typography sx={{
-              fontWeight: 500,
-              fontSize: '24px',
-              color:'#FF010C'
-            }}>
-              *Password Salah
-            </Typography>
-          </Stack>
-          <Stack spacing={3} alignItems={'center'} width={'100%'}>
-            <Button
-              sx={{
-                display: 'flex',
-                width: '127px',
-                height: '48px',
-                padding: '10px 20px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: '25px',
-                background: '#FF010C',
-                color: '#fff',
-                cursor: 'pointer',
-                fontFamily: 'Poppins',
+                fontWeight: 700,
+                fontSize: '42px',
+                color:'#FF010C',
+              }}>
+                Masuk
+              </Typography>
+              <Typography sx={{
                 fontWeight: 500,
-                fontSize: '20px',
-                '&:hover': { background: 'white', color: 'red' },
-              }}
-            >
-              Masuk
-            </Button>
-            <Stack direction={'row'}>
-            <Typography>
-              Belum punya akun?
-            </Typography>
-            <Link sx={{
-                textDecoration: 'underline',
-                fontWeight: 700, // Set to match the Typography component's font weight
-                color: '#FF010C', // Set to match the Typography component's color
-            }}>
-            <Typography sx={{
-              fontWeight:700,
-              color:'#FF010C',
-            }}>
-              Daftar
-            </Typography>
-            </Link>
+                fontSize: '32px',
+                color:'#FF010C',
+              }}>
+                Selamat datang di Trip-sel
+              </Typography>
             </Stack>
-          </Stack>
+            <Stack spacing={2}>
+              <Typography sx={{
+                fontWeight: 500,
+                fontSize: '24px',
+                color:'#04214C'
+              }}>
+                Email
+              </Typography>
+              <Input
+                disableUnderline
+                placeholder="Email"
+                sx={customInputStyle}
+                style={{fontSize:'22px', color:'#04214C'}}
+                inputProps={{
+                  'aria-label': 'description',
+                }}
+                value={email}
+                onChange={handleEmailChange}
+                
+              />
 
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '16px',
+                  color:'transparent'
+                }}>
+                  *Email atau password salah
+                </Typography>
 
+              <Typography sx={{
+                fontWeight: 500,
+                fontSize: '24px',
+                color:'#04214C'
+              }}>
+                Password
+              </Typography>
+              <Input
+                disableUnderline
+                id="password"
+                placeholder="Password"
+                type={showPassword ? 'text' : 'password'}
+                sx={customInputStyle}
+                style={{fontSize:'22px', color:'#04214C'}}
+                inputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleTogglePasswordVisibility}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '16px',
+                  color: loginError ? '#FF010C': 'transparent'
+                }}>
+                  *Email atau password salah
+                </Typography>
+              
+            </Stack>
+            <Stack spacing={3} alignItems={'center'} width={'100%'}>
+              <Button
+                disabled={loading} // Disable the button when loading
+                onClick={debouncedHandleLogin} // Use debounced handleLogin
+                sx={{
+                  display: 'flex',
+                  width: '200px',
+                  height: '60px',
+                  padding: '10px 20px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '40px',
+                  background: '#FF010C',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontFamily: 'Poppins',
+                  fontWeight: 700,
+                  fontSize: '24px',
+                  '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
+                }}
+              >
+                {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}
+              </Button>
+              <Stack direction={'row'} spacing={1}>
+                <Typography sx={{fontSize:'22px', fontWeight: 500}}>
+                  Belum punya akun?
+                </Typography>
+                <Link href='/register' sx={{
+                  textDecoration: 'underline',
+                  fontWeight: 700,
+                  color: '#FF010C',
+                }}>
+                  <Typography sx={{
+                    fontWeight:700,
+                    color:'#FF010C',
+                    fontSize:'22px',
+                  }}>
+                    Daftar
+                  </Typography>
+                </Link>
+              </Stack>
+            </Stack>
           </Stack>
         </Grid>
       </Grid>
