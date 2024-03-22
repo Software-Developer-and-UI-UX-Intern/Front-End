@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-// @ts-expect-error depedencies eror fix, react swipeable not compatible with react 18
 import SwipeableViews from 'react-swipeable-views-react-18-fix';
 import { RekomenHotel } from '../beranda/rekomenhotel'; // Assuming this is the correct path to your RekomenHotel component
 import { Buttonslider } from './buttonslider'; // Assuming this is the correct path to your Buttonslider component
