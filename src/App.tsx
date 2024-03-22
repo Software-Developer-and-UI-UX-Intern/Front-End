@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Navbar  from './components/ui/navbar/navbar';
+import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { Register } from './pages/Registrasi';
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Beranda />
+        <Footer/>
       </>
     )
   },
