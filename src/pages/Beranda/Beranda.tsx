@@ -63,11 +63,12 @@ export default function Beranda() {
 
       <Stack sx={{
         display: 'flex',
-        height: '1024px',
+        height: 'auto',
         width: '100%',
         margin: '0',
         backgroundColor: '#04214c',
         borderRadius: '0 0 100px 100px',
+        paddingBottom:'145px'
       }}>
 
         <Typography sx={{

@@ -1,13 +1,18 @@
 import { Stack } from '@mui/material';
-import { useRef, useState } from 'react'; // Import useRef and useState hooks
-import gwk from '../../assets/beranda/Pulau Padar.jpg';
+import { useRef, useState } from 'react';
+import bali from '../../assets/beranda/balinusra/Bali.svg';
+import kupang from '../../assets/beranda/balinusra/kupang.svg';
+import mataram from '../../assets/beranda/balinusra/mataram.svg';
 import Orangewithimage1 from '../beranda/orangewithimage';
 import left from '../../assets/arrowleft.svg';
 import right from '../../assets/arrowright.svg';
 
 export default function Orangewithimage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null); // State to hold the scroll interval
+  const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   const startScrollLeft = () => {
     setScrollInterval(setInterval(() => {
@@ -32,16 +37,38 @@ export default function Orangewithimage() {
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsMouseDown(true);
+    setStartX(e.pageX - containerRef.current!.offsetLeft);
+    setScrollLeft(containerRef.current!.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isMouseDown) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current!.offsetLeft;
+    const walk = (x - startX) * 2;
+    containerRef.current!.scrollLeft = scrollLeft - walk;
+  };
+
   return (
     <Stack
       style={{ overflowX: 'auto' }}
       alignItems={'center'}
       justifyContent={'center'}
       direction={'row'}
-      onMouseUp={stopScroll} // Stop scrolling when mouse is released anywhere in the stack
+      onMouseUp={stopScroll}
     >
       <Stack
-        onMouseDown={startScrollLeft} // Start scrolling left when mouse is pressed down on this stack
+        onMouseDown={startScrollLeft}
       >
         <img src={left} alt="left" />
       </Stack>
@@ -57,27 +84,28 @@ export default function Orangewithimage() {
           scrollbarWidth: 'none',
           overflowX: 'auto',
           maxWidth: '100%',
-          width:'1168px'
+          width: '1168px'
         }}
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
       >
         <Stack>
-          <Orangewithimage1 imageSrc={gwk} textContent="Bali" />
+          <Orangewithimage1 imageSrc={bali} textContent="Bali" />
         </Stack>
         <Stack>
-          <Orangewithimage1 imageSrc={gwk} textContent="Bali" />
+          <Orangewithimage1 imageSrc={kupang} textContent="Kupang" />
         </Stack>
         <Stack>
-          <Orangewithimage1 imageSrc={gwk} textContent="Bali" />
+          <Orangewithimage1 imageSrc={mataram} textContent="Mataram" />
         </Stack>
         <Stack>
-          <Orangewithimage1 imageSrc={gwk} textContent="Bali" />
-        </Stack>
-        <Stack>
-          <Orangewithimage1 imageSrc={gwk} textContent="Bali" />
+          <Orangewithimage1 imageSrc={mataram} textContent="Flores" />
         </Stack>
       </Stack>
       <Stack
-        onMouseDown={startScrollRight} // Start scrolling right when mouse is pressed down on this stack
+        onMouseDown={startScrollRight}
       >
         <img src={right} alt="right" />
       </Stack>

@@ -29,7 +29,7 @@ const YouTubeVideo = () => {
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
-                            style={{ borderRadius: "40px" }}
+                            style={{ borderRadius: '40px' }}
                         ></iframe>
                     </Stack>
                 </Grid>
