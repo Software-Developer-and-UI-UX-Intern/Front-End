@@ -4,12 +4,9 @@ import { Stack, Typography, Button } from '@mui/material';
 import bg from '../../assets/beranda/main.jpg';
 // import { RekomenHotel } from '../../components/beranda/rekomenhotel';
 import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
-import logoTripsel from '../../assets/Trip-sel.png';
-import logoTelkomsel from '../../assets/Telkomsel (full).png';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
 import YoutubeVideo from '../../components/beranda/youtube';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
-
 
 // interface HotelRecommendationsProps {
 //   hotels: Hotel[];
@@ -204,105 +201,7 @@ export default function Beranda() {
 
       </Stack>
 
-      <Stack direction='row' sx={{
-        display: 'flex',
-        height: '440px',
-        width: '100%',
-        margin: '0',
-        backgroundColor: 'white',
-      }}>
-        <Stack width='200px' sx={{
-          padding: '175px 100px',
-          alignContent: 'center',
-        }}>
-          <img src={logoTripsel} alt="Logo Tripsel" />
-          <Stack direction='row' gap={1} paddingTop={1}>
-            <Typography>
-              by
-            </Typography>
-            <img src={logoTelkomsel} alt="Logo Telkomsel" width='100px' />
-          </Stack>
-        </Stack>
 
-        <Stack sx={{
-          padding: '50px',
-        }}>
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 600,
-            fontSize: 25,
-          }}>
-            Tentang Trip-sel
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 400,
-            fontSize: 20,
-            paddingTop: 1,
-          }}>
-            Tentang Kami
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 400,
-            fontSize: 20,
-            paddingTop: 1,
-          }}>
-            Kontak
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 600,
-            fontSize: 25,
-            paddingTop: 7.5,
-          }}>
-            Ikuti Perjalanan Trip-sel
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 400,
-            fontSize: 20,
-            paddingTop: 1,
-          }}>
-            Instagram
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 400,
-            fontSize: 20,
-            paddingTop: 1,
-          }}>
-            TikTok
-          </Typography>
-
-          <Typography sx={{
-            color: '#04214c',
-            fontWeight: 400,
-            fontSize: 20,
-            paddingTop: 1,
-          }}>
-            YouTube
-          </Typography>
-
-        </Stack>
-
-        <Typography sx={{
-          color: '#04214c',
-          fontWeight: 600,
-          fontSize: 25,
-          paddingTop: 7.5,
-          paddingLeft: 15,
-        }}>
-          Ada kendala dengan Trip-mu?<br></br>
-          QOS-an hadir disini!
-        </Typography>
-
-      </Stack>
 
     </Stack>
   );

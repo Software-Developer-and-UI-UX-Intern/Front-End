@@ -40,7 +40,7 @@ function SwipeableHotelCarousel() {
             >
                 {[...Array(totalPages)].map((_, index) => (
                     <Stack height={'auto'} key={index}>
-                        <Stack height={'auto'}  marginBottom={'64px'} direction={'row'} gap={5} sx={{ display: 'flex' }}>
+                        <Stack height={'auto'}  marginBottom={'64px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
                             {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex) => (
                                 <RekomenHotel
                                     key={index * 2 + hotelIndex}
