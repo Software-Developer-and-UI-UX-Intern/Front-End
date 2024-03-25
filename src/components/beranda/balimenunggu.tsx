@@ -1,13 +1,12 @@
 import { Stack } from '@mui/material';
 import { useRef, useState } from 'react';
-import bali from '../../assets/beranda/balinusra/Bali.svg';
-import kupang from '../../assets/beranda/balinusra/kupang.svg';
-import mataram from '../../assets/beranda/balinusra/mataram.svg';
 import Orangewithimage1 from '../beranda/orangewithimage';
 import left from '../../assets/arrowleft.svg';
 import right from '../../assets/arrowright.svg';
-
-export default function Orangewithimage() {
+interface OrangewithimageProps {
+  orangeData: { imageSrc: string; textContent: string }[];
+}
+export default function Orangewithimage({ orangeData }: OrangewithimageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -39,8 +38,8 @@ export default function Orangewithimage() {
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsMouseDown(true);
-    setStartX(e.pageX - containerRef.current!.offsetLeft);
-    setScrollLeft(containerRef.current!.scrollLeft);
+    setStartX(e.pageX - (containerRef.current?.offsetLeft || 0));
+    setScrollLeft(containerRef.current?.scrollLeft || 0);
   };
 
   const handleMouseLeave = () => {
@@ -52,11 +51,11 @@ export default function Orangewithimage() {
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isMouseDown) return;
+    if (!isMouseDown || !containerRef.current) return;
     e.preventDefault();
-    const x = e.pageX - containerRef.current!.offsetLeft;
+    const x = e.pageX - (containerRef.current?.offsetLeft || 0);
     const walk = (x - startX) * 2;
-    containerRef.current!.scrollLeft = scrollLeft - walk;
+    containerRef.current.scrollLeft = scrollLeft - walk;
   };
 
   return (
@@ -67,9 +66,7 @@ export default function Orangewithimage() {
       direction={'row'}
       onMouseUp={stopScroll}
     >
-      <Stack
-        onMouseDown={startScrollLeft}
-      >
+      <Stack onMouseDown={startScrollLeft}>
         <img src={left} alt="left" />
       </Stack>
       <Stack
@@ -91,22 +88,13 @@ export default function Orangewithimage() {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        <Stack>
-          <Orangewithimage1 imageSrc={bali} textContent="Bali" />
+        {orangeData.map((item, index) => (
+        <Stack key={index}>
+          <Orangewithimage1 imageSrc={item.imageSrc} textContent={item.textContent} />
         </Stack>
-        <Stack>
-          <Orangewithimage1 imageSrc={kupang} textContent="Kupang" />
-        </Stack>
-        <Stack>
-          <Orangewithimage1 imageSrc={mataram} textContent="Mataram" />
-        </Stack>
-        <Stack>
-          <Orangewithimage1 imageSrc={mataram} textContent="Flores" />
-        </Stack>
+      ))}
       </Stack>
-      <Stack
-        onMouseDown={startScrollRight}
-      >
+      <Stack onMouseDown={startScrollRight}>
         <img src={right} alt="right" />
       </Stack>
     </Stack>

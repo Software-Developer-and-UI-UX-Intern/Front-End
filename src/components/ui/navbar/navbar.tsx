@@ -171,11 +171,13 @@ export default function Navbar() {
                   </Stack>
                 </Link>
                 
-                <Button
+                
+                <IconButton
               onClick={handleSearchButtonClick}
+              disableTouchRipple
               sx={{
-                width: '54px',
                 height: '54px',
+                width:'54px',
                 color: isOpaque ? '#6E6C6C' : 'white',
                 borderRadius: '50%',
                 border: isOpaque ? '2px solid #6E6C6C' : '2px solid white',
@@ -183,8 +185,8 @@ export default function Navbar() {
               }}
             >
               <SearchIcon sx={{ width: 'auto' }} />
-            </Button>
-              </Stack>
+            </IconButton>
+            </Stack>
             )}
             {!showCategories && (
   <Stack

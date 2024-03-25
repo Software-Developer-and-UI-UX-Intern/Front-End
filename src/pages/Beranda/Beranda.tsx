@@ -7,7 +7,7 @@ import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
 import YoutubeVideo from '../../components/beranda/youtube';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
-
+import BerandaData from './berandadata'
 // interface HotelRecommendationsProps {
 //   hotels: Hotel[];
 // }
@@ -88,7 +88,7 @@ export default function Beranda() {
           Jelajahi seluruh regionalnya sekarang!
         </Typography>
 
-        <Balimenunggu/>
+        <Balimenunggu orangeData={BerandaData} />
       </Stack>
 
       <Stack sx={{
