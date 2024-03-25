@@ -5,6 +5,7 @@ import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { Register } from './pages/Registrasi';
+import { About } from './pages/About';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -35,6 +36,16 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Beranda />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/about',
+    element: (
+      <>
+        <Navbar />
+        <About />
         <Footer/>
       </>
     )
