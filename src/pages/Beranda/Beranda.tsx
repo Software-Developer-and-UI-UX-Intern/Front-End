@@ -170,7 +170,7 @@ export default function Beranda() {
         </Stack>
 
         <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
-          <RowAndColumnSpacing/>
+        <RowAndColumnSpacing backendLink="https://tripselbe.fly.dev/recommendationwisata" />
         </Stack>
         </Stack>
       </Stack>

@@ -3,10 +3,11 @@ import { Stack, Typography } from '@mui/material';
 import bali from '../../assets/aboutbali.jpg';
 import RowAndColumnSpacing from '../../components/beranda/ayojalan';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
-import AboutData from './AboutData'
+import { areapopuler } from './AboutData'
 import balitext from '../../assets/about/Bali.svg'
 import sampaiberjumpa from '../../assets/about/sampaiberjumpa.png'
-
+import berandaData from './AboutData';
+import nusapenida from '../../assets/about/nusapenida.jpg'
 export default function Beranda() {
 
   useEffect(() => {
@@ -49,12 +50,12 @@ export default function Beranda() {
         borderRadius: '0 0 100px 100px',
         paddingBottom:'80px'
       }}>
-<Stack gap={4}>
+<Stack gap={4} marginLeft={'145px'} marginRight={'145px'} >
         <Typography sx={{
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
-          textAlign: 'center',
+          textAlign: 'left',
         }}>
                 Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
         </Typography>
@@ -62,14 +63,14 @@ export default function Beranda() {
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
-          textAlign: 'center',
+          textAlign: 'left',
         }}>
 Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
         <Typography sx={{
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
-          textAlign: 'center',
+          textAlign: 'left',
         }}>
 Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi lebih banyak tentang keindahan dan petualangan di Bali?        </Typography>
 </Stack>
@@ -101,7 +102,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           }}>
             Ayo Kunjungi
           </Typography>
-          <Balimenunggu orangeData={AboutData} />
+          <Balimenunggu orangeData={berandaData} />
         </Stack>
 
         <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
@@ -115,7 +116,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           }}>
             Area Populer
           </Typography>
-          <RowAndColumnSpacing/>
+          <RowAndColumnSpacing recommendationData={areapopuler} />
         </Stack>
         </Stack>
       </Stack>
@@ -128,7 +129,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         borderRadius: '100px 100px 0 0',
       }}>
         <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${bali})`,
+        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${nusapenida})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
