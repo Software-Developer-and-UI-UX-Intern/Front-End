@@ -5,8 +5,11 @@ import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { Register } from './pages/Registrasi';
-import { About } from './pages/About';
-import { Oleh } from './pages/Oleh';
+import { Flores } from './pages/About/flores';
+import { Bali } from './pages/About/bali';
+import { Kupang } from './pages/About/kupang';
+import { Mataram } from './pages/About/mataram';
+import {Oleh} from './pages/Oleh'
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -42,11 +45,41 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/about',
+    path: '/about-bali',
     element: (
       <>
         <Navbar />
-        <About />
+        <Bali />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/about-kupang',
+    element: (
+      <>
+        <Navbar />
+        <Kupang />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/about-mataram',
+    element: (
+      <>
+        <Navbar />
+        <Mataram />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/about-flores',
+    element: (
+      <>
+        <Navbar />
+        <Flores />
         <Footer/>
       </>
     )

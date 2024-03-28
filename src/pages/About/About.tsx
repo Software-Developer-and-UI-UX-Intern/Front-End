@@ -4,10 +4,9 @@ import bali from '../../assets/aboutbali.jpg';
 import RowAndColumnSpacing from '../../components/beranda/ayojalan';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
 import { areapopuler } from './AboutData'
-import balitext from '../../assets/about/Bali.svg'
-import sampaiberjumpa from '../../assets/about/sampaiberjumpa.png'
 import berandaData from './AboutData';
 import nusapenida from '../../assets/about/nusapenida.jpg'
+import '../../assets/font/telkomselbatik.css'
 export default function Beranda() {
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function Beranda() {
     }} gap={0}>
       
       <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url(${bali})`,
+        backgroundImage: `linear-gradient(180deg, transparent 30.5%, #04214C 100%), url(${bali})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -36,8 +35,7 @@ export default function Beranda() {
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <img src={balitext}>
-          </img>
+          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Bali</Typography>
         </Stack>
       </Stack>
       <Stack sx={{
@@ -140,8 +138,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <img src={sampaiberjumpa}>
-          </img>
+          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Bali!</Typography>
         </Stack>
         
          
