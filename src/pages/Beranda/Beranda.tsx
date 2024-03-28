@@ -1,13 +1,14 @@
 // Beranda.tsx
 import { useEffect } from 'react';
 import { Stack, Typography, Button } from '@mui/material';
-import bg from '../../assets/beranda/main.jpg';
+import bg from '../../assets/beranda/Bali.png';
 // import { RekomenHotel } from '../../components/beranda/rekomenhotel';
 import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
 import YoutubeVideo from '../../components/beranda/youtube';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
 import BerandaData from './berandadata'
+import '../../assets/font/telkomselbatik.css'
 // interface HotelRecommendationsProps {
 //   hotels: Hotel[];
 // }
@@ -48,14 +49,38 @@ export default function Beranda() {
     }} gap={0}>
 
       <Stack sx={{
-        background: `url(${bg}) center center / cover no-repeat`,
+        backgroundImage: `linear-gradient(180deg, transparent 20%, #04214C 100%), url(${bg})`,
         backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
         display: 'flex',
-        height: '1100px',
+        height: '1024px',
         justifyContent: 'center',
         width: '100%',
         margin: '0',
       }}>
+        <Stack marginLeft={'127px'}>
+         <Typography sx={{
+          fontWeight: 500,
+          color: 'white',
+          fontSize: '100px',
+          textAlign: 'left',
+          fontFamily: 'TelkomselBatikBold'
+        }}>
+          Selamat Datang T-Flyers!
+        </Typography>
+        <Typography sx={{
+          fontWeight: 500,
+          color: 'white',
+          fontSize: '32px',
+          textAlign: 'left'
+        }}>
+          Temukan berbagai rekomendasi yang kamu inginkan di regional Bali-Nusra, spesial hanya untuk T-Flyers.
+        </Typography>
+        </Stack>
+      </Stack>
+      <Stack width={'100%'} height={'10px'} sx={{backgroundColor:'#04214C'}} marginTop={'-3px'}>
+
       </Stack>
 
       <Stack sx={{
@@ -73,7 +98,8 @@ export default function Beranda() {
           color: 'white',
           fontSize: '60px',
           paddingTop: '50px',
-          textAlign: 'center'
+          textAlign: 'center',
+          fontFamily: 'TelkomselBatikBold'
         }}>
           Bali-Nusra Menunggumu
         </Typography>
@@ -117,6 +143,7 @@ export default function Beranda() {
               color: '#ff010c',
               fontSize: '60px',
               alignItems: 'center',
+              fontFamily: 'TelkomselBatikBold'
             }}>
               Rekomendasi Hotel
             </Typography>
@@ -163,7 +190,8 @@ export default function Beranda() {
             color: '#ff010c',
             fontSize: '60px',
             paddingTop: '50px',
-            textAlign: 'center'
+            textAlign: 'center',
+            fontFamily: 'TelkomselBatikBold',
           }}>
             Ayo Jalan-Jalan
           </Typography>
@@ -194,6 +222,7 @@ export default function Beranda() {
           alignItems: 'center',
           textAlign: 'center',
           paddingBottom: '60px',
+          fontFamily: 'TelkomselBatikRegular',
         }}>
           Pengalaman Trip-Sel
         </Typography>
