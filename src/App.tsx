@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Navbar  from './components/ui/navbar/navbar';
+import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
@@ -88,7 +89,7 @@ const router = createBrowserRouter([
     path: '/oleh-oleh',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <Oleh />
         <Footer/>
       </>
