@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
+import { Link } from 'react-router-dom';
 import Item from '../../components/beranda/orangewithimage';
 
 interface OrangewithimageProps {
@@ -8,8 +9,8 @@ interface OrangewithimageProps {
 }
 
 interface GridProps {
-  backendLink?: string; // Optional prop for providing the backend link
-  Data?: OrangewithimageProps[]; // Optional prop for providing data from a .ts file
+  backendLink?: string;
+  Data?: OrangewithimageProps[];
 }
 
 export default function GridOrange({ backendLink, Data }: GridProps) {
@@ -17,10 +18,8 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
 
   useEffect(() => {
     if (Data) {
-      // If Data is provided, use it
       setGridData(Data);
     } else if (backendLink) {
-      // If backendLink is provided, fetch data from the backend
       fetch(backendLink)
         .then(response => response.json())
         .then((data: OrangewithimageProps[]) => setGridData(data))
@@ -31,8 +30,11 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   return (
     <Grid container rowSpacing={3} columnSpacing={3} alignItems='center' justifyContent='center' borderRadius='40px'>
       {GridData.map((orangedata, index) => (
-        <Grid item key={index} alignItems='center' justifyContent='center' >
-          <Item imageSrc={orangedata.imageSrc} textContent={orangedata.textContent} width='579px' height='600px' />
+        <Grid item key={index} alignItems='center' justifyContent='center'>
+          {/* Wrap the Item component inside a Link */}
+          <Link to={`/oleh-oleh?${encodeURIComponent(orangedata.textContent)}`}>
+            <Item imageSrc={orangedata.imageSrc} textContent={orangedata.textContent} width='579px' height='600px' />
+          </Link>
         </Grid>
       ))}
     </Grid>
