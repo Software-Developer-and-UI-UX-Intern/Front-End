@@ -1,26 +1,37 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
-import krisna1 from '../../assets/oleholeh/krisnaoleh.png';
 
 interface Location {
   name: string;
   imageUrl: string;
 }
 
-const locations: Location[] = [
-  { name: 'Krisna Oleh-Oleh Bali Desa Wisata Blangsinga', imageUrl: krisna1 },
-  { name: 'Another Location Name', imageUrl: krisna1 },
-  { name: 'Krisna Oleh-Oleh Bali Desa Wisata Blangsinga', imageUrl: krisna1 },
-  { name: 'Another Location Name', imageUrl: krisna1 },
-];
-
 export default function DragableAlamat() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [addresses, setAddresses] = useState<Location[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://tripselbe.fly.dev/addresses/Oleh%205');
+        const data: { nama: string, gambar_url: string }[] = await response.json();
+        const updatedAddresses: Location[] = data.map(item => ({
+          name: item.nama,
+          imageUrl: item.gambar_url,
+        }));
+        setAddresses(updatedAddresses);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-
 
   const stopScroll = () => {
     if (scrollInterval) {
@@ -53,7 +64,6 @@ export default function DragableAlamat() {
 
   return (
     <Stack direction={'row'} onMouseUp={stopScroll}>
-
       <Stack
         ref={containerRef}
         direction="row"
@@ -73,22 +83,21 @@ export default function DragableAlamat() {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        {locations.map((location, index) => (
+        {addresses.map((address, index) => (
           <Stack key={index}>
             <img
-              src={location.imageUrl}
-              alt={location.name}
+              src={address.imageUrl}
+              alt={address.name}
               height={'300px'}
               width={'570px'}
               style={{ borderRadius: '40px 0px', objectFit: 'cover' }}
             />
             <Typography fontSize={'28px'} fontWeight={600} color={'#04214C'}>
-              {location.name}
+              {address.name}
             </Typography>
           </Stack>
         ))}
       </Stack>
- 
     </Stack>
   );
 }
