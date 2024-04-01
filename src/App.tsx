@@ -10,6 +10,7 @@ import { Bali } from './pages/About/bali';
 import { Kupang } from './pages/About/kupang';
 import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh'
+import {OlehBali} from './pages/Oleh/OlehBali'
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -90,6 +91,16 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Oleh />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/oleh-oleh-bali',
+    element: (
+      <>
+        <Navbar />
+        <OlehBali />
         <Footer/>
       </>
     )
