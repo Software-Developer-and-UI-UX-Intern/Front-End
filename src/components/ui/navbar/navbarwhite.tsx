@@ -1,3 +1,4 @@
+
 import { useState, useEffect, ChangeEvent } from 'react';
 import { AppBar, Container, Toolbar, Stack, Link, Typography, Button, InputBase, IconButton } from '@mui/material';
 import '@fontsource/poppins/300.css';
@@ -47,7 +48,7 @@ export default function Navbar() {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: isOpaque ? 'white' : 'transparent',
+        backgroundColor: isOpaque ? 'white' : 'white',
         transition: 'background-color 0.3s ease-in-out', // Add transition effect
         boxShadow: isOpaque ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
         margin: '0px 0px',
@@ -65,7 +66,7 @@ export default function Navbar() {
                 <Link style={{ textDecoration: 'none' }} href="/beranda">
                   <Stack direction="row" alignItems="center" sx={{
                     fontWeight: isOpaque ? 700 : 400,
-                    color: isOpaque ? '#6E6C6C' : 'white',
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
                     <Typography
@@ -84,7 +85,7 @@ export default function Navbar() {
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
                   <Stack direction="row" alignItems="center" sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', // Change color based on isOpaque
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C', // Change color based on isOpaque
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
                     <Typography
@@ -106,7 +107,7 @@ export default function Navbar() {
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
                   <Stack direction="row" alignItems="center" sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', // Change color based on isOpaque
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C', // Change color based on isOpaque
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
                     <Typography
@@ -128,7 +129,7 @@ export default function Navbar() {
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
                   <Stack direction="row" alignItems="center" sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', // Change color based on isOpaque
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C', // Change color based on isOpaque
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
                     <Typography
@@ -150,7 +151,7 @@ export default function Navbar() {
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
                   <Stack direction="row" alignItems="center" sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', // Change color based on isOpaque
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C', // Change color based on isOpaque
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
                     <Typography
@@ -178,9 +179,9 @@ export default function Navbar() {
               sx={{
                 height: '54px',
                 width:'54px',
-                color: isOpaque ? '#6E6C6C' : 'white',
+                color: isOpaque ? '#6E6C6C' : '#6E6C6C',
                 borderRadius: '50%',
-                border: isOpaque ? '2px solid #6E6C6C' : '2px solid white',
+                border: isOpaque ? '2px solid #6E6C6C' : '2px solid #6E6C6C',
                 padding: '0px',
               }}
             >
