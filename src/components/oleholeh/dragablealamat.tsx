@@ -9,11 +9,12 @@ interface Location {
 export default function DragableAlamat() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [addresses, setAddresses] = useState<Location[]>([]);
+  const kesiniyuk = new URLSearchParams(location.search).get('kesiniyuk');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://tripselbe.fly.dev/addresses/Oleh%205');
+        const response = await fetch(`https://tripselbe.fly.dev/addresses/${kesiniyuk}`);
         const data: { nama: string, gambar_url: string }[] = await response.json();
         const updatedAddresses: Location[] = data.map(item => ({
           name: item.nama,
@@ -26,7 +27,7 @@ export default function DragableAlamat() {
     };
 
     fetchData();
-  }, []);
+  },  [kesiniyuk]);
 
   const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
