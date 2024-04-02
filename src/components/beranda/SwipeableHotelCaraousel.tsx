@@ -24,10 +24,10 @@ function SwipeableHotelCarousel() {
     const totalPages = Math.ceil(hotels.length / 2);
 
     return (
-        <Stack width={'100%'} height={'100%'}>
+        <Stack width={'100%'}>
             <CarouselProvider
                 naturalSlideWidth={100}
-                naturalSlideHeight={37}
+                naturalSlideHeight={50}
                 totalSlides={totalPages}
                 visibleSlides={1}
                 currentSlide={activeIndex}
@@ -62,12 +62,13 @@ function CarouselContent({ hotels, setActiveIndex }: CarouselContentProps) {
     const totalPages = Math.ceil(hotels.length / 2);
 
     return (
-        <Stack sx={{ width: 'auto', height: 'auto' }} >
+        <Stack gap={5}>
+        <Stack sx={{ width: 'auto', maxHeight:'435px' }} gap={5} >
             <Slider>
                 {[...Array(totalPages)].map((_, index) => (
                     <Slide index={index} key={index}>
-                        <Stack height={'auto'} key={index}>
-                            <Stack height={'auto'} marginBottom={'64px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
+                        <Stack maxHeight={'426px'} key={index}>
+                            <Stack maxHeight={'426px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
                                 {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex: number) => (
                                     <RekomenHotel
                                         key={index * 2 + hotelIndex}
@@ -81,9 +82,8 @@ function CarouselContent({ hotels, setActiveIndex }: CarouselContentProps) {
                     </Slide>
                 ))}
             </Slider>
-            <Stack>
-                <Buttonslider activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />
-            </Stack>
+        </Stack>
+        <Buttonslider  activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />
         </Stack>
     );
 }

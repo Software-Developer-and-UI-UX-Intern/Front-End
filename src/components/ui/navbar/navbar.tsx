@@ -62,9 +62,8 @@ export default function Navbar() {
           <Stack gap={3} width={'73%'} direction={'row'}>
             {showCategories && (
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'}>
-                <Link style={{ textDecoration: 'none' }} href="/beranda">
+                <Link style={{ textDecoration: 'none' }} href="/">
                   <Stack direction="row" alignItems="center" sx={{
-                    fontWeight: isOpaque ? 700 : 400,
                     color: isOpaque ? '#6E6C6C' : 'white',
                     '&:hover': { fontWeight: 700, color: 'red' },
                   }}>
@@ -75,6 +74,8 @@ export default function Navbar() {
                         paddingRight: '5px',
                         paddingTop: '5px',
                         fontSize: '24px',
+                        color: 'inherit',
+                        fontWeight: 'inherit',
                         transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
                       }}
                     >
@@ -101,7 +102,7 @@ export default function Navbar() {
                     >
                       Hotel
                     </Typography>
-                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '10px' }} />
+                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '5px' }} />
                   </Stack>
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
@@ -123,7 +124,7 @@ export default function Navbar() {
                     >
                       Restoran
                     </Typography>
-                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '10px' }} />
+                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '5px' }} />
                   </Stack>
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
@@ -145,7 +146,7 @@ export default function Navbar() {
                     >
                       Oleh-Oleh
                     </Typography>
-                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '10px' }} />
+                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '5px' }} />
                   </Stack>
                 </Link>
                 <Link style={{ textDecoration: 'none' }}>
@@ -167,7 +168,7 @@ export default function Navbar() {
                     >
                       Wisata
                     </Typography>
-                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '10px' }} />
+                    <ExpandMoreIcon sx={{ color: 'inherit', paddingTop: '5px' }} />
                   </Stack>
                 </Link>
                 
@@ -175,13 +176,16 @@ export default function Navbar() {
                 <IconButton
               onClick={handleSearchButtonClick}
               disableTouchRipple
+              disableFocusRipple
+              disableRipple
               sx={{
                 height: '54px',
                 width:'54px',
-                color: isOpaque ? '#6E6C6C' : 'white',
+                color: isOpaque ? '#FF010C' : 'white',
                 borderRadius: '50%',
-                border: isOpaque ? '2px solid #6E6C6C' : '2px solid white',
+                border: isOpaque ? '2px solid #FF010C' : '2px solid white',
                 padding: '0px',
+                '&:hover': { border:'3px solid #FF010C', color:'#FF010C' },
               }}
             >
               <SearchIcon sx={{ width: 'auto' }} />

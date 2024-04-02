@@ -54,7 +54,7 @@ export default function Beranda() {
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         display: 'flex',
-        height: '1024px',
+        height: '920px',
         justifyContent: 'center',
         width: '100%',
         margin: '0',
@@ -119,14 +119,14 @@ export default function Beranda() {
 
       <Stack sx={{
         display: 'flex',
-        height: '2030px',
+        height: 'auto',
         width: '100%',
         paddingTop: '50px',
         backgroundColor: 'white',
       }}>
 
         <Stack sx={{
-          height: '1000px',
+          height: 'auto',
           width: '100%',
           backgroundColor: 'white',
         }}>
@@ -166,19 +166,19 @@ export default function Beranda() {
             width: 'auto',
             marginLeft: '100px',
             marginRight: '100px',
-            marginBottom: '50px',
             backgroundColor: 'white'
           }} direction='row' gap={5}>
             {/* <HotelRecommendations hotels={hotelData.slice(startIndex, endIndex)} /> */}
             <SwipeableHotelCarousel/>
           </Stack>
-          <Stack justifyContent='center' alignContent='center' alignItems='center' sx={{ marginTop: '35px' }}>
-            <Button sx={{ alignContent: 'center', width: '288px', height: '80px', borderRadius: '40px', backgroundColor: '#ff010c' }}>
+          <Stack justifyContent='center' alignContent='center' alignItems='center' sx={{ marginTop: '46px', marginBottom:'126px' }}>
+            <Button sx={{ alignContent: 'center', width: '288px', height: '80px', borderRadius: '40px', backgroundColor: '#ff010c', color:'white',
+                          '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red', borderRadius: '40px' }
+                        }}>
               <Typography sx={{
-                color: 'white',
+                color: 'inherit',
                 fontWeight: '600',
                 fontSize:'32px',
-                '&:hover': { width: 'auto', height: 'auto', background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red', borderRadius: '30px' }
               }}>
                 Jelajahi
               </Typography>
@@ -189,7 +189,6 @@ export default function Beranda() {
             fontWeight: 700,
             color: '#ff010c',
             fontSize: '60px',
-            paddingTop: '50px',
             textAlign: 'center',
             fontFamily: 'TelkomselBatikBold',
           }}>
@@ -197,7 +196,7 @@ export default function Beranda() {
           </Typography>
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
+        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} marginBottom={'55px'}>
         <RowAndColumnSpacing backendLink="https://tripselbe.fly.dev/recommendationwisata" />
         </Stack>
         </Stack>
