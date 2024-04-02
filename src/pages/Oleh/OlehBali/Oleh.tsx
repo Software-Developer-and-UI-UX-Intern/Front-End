@@ -23,11 +23,16 @@ const Oleh = () => {
   const [olehData, setOlehData] = useState<OrangewithimageProps[]>([]);
 
   useEffect(() => {
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.marginTop = '-120px';
     const fetchData = async () => {
       try {
         const response = await fetch('https://tripselbe.fly.dev/oleh');
         const data: OlehDataItem[] = await response.json();
-        const transformedData: OrangewithimageProps[] = data.map(item => ({
+        // Filter the data to include only items where domisili is equal to 'bali'
+        const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'bali');
+        const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
           imageSrc: item.gambar_url1,
           textContent: item.nama
         }));
@@ -66,7 +71,7 @@ const Oleh = () => {
         </Stack>
       </Stack>
       <Stack sx={{marginBottom:'265px'}}>
-      <GridOrange Data={olehData} />
+        <GridOrange Data={olehData} />
       </Stack>
     </Stack>
   );

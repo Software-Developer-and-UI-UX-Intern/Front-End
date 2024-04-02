@@ -12,6 +12,9 @@ import { Kupang } from './pages/About/kupang';
 import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh'
 import {OlehBali} from './pages/Oleh/OlehBali'
+import {OlehMataram} from './pages/Oleh/OlehMataram'
+import {OlehKupang} from './pages/Oleh/OlehKupang'
+import {OlehFlores} from './pages/Oleh/OlehFlores'
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -100,8 +103,38 @@ const router = createBrowserRouter([
     path: '/oleh-oleh-bali',
     element: (
       <>
-        <Navbarwhite />
+        <Navbar />
         <OlehBali />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/oleh-oleh-mataram',
+    element: (
+      <>
+        <Navbar />
+        <OlehMataram />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/oleh-oleh-kupang',
+    element: (
+      <>
+        <Navbar />
+        <OlehKupang />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/oleh-oleh-flores',
+    element: (
+      <>
+        <Navbar />
+        <OlehFlores/>
         <Footer/>
       </>
     )
