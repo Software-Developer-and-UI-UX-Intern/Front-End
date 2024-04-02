@@ -57,6 +57,7 @@ const Oleh = () => {
           justifyContent: 'center',
           width: '100%',
           margin: '0',
+          
         }}>
           <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
             <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Oleh-Oleh</Typography>
@@ -64,7 +65,9 @@ const Oleh = () => {
           </Stack>
         </Stack>
       </Stack>
+      <Stack sx={{marginBottom:'265px'}}>
       <GridOrange Data={olehData} />
+      </Stack>
     </Stack>
   );
 };

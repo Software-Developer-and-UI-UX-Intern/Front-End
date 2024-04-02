@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
+import '../../pages/Oleh/Oleh.css'
 
 interface Location {
   name: string;
@@ -8,63 +9,106 @@ interface Location {
 
 export default function DragableAlamat() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [addresses, setAddresses] = useState<Location[]>([]);
+  const [addresses, setAddresses] = useState<Location[] | null>(null);
   const kesiniyuk = new URLSearchParams(location.search).get('kesiniyuk');
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Variables to handle dragging
+  let isDragging = false;
+  let startX = 0;
+  let scrollLeft = 0;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(`https://tripselbe.fly.dev/addresses/${kesiniyuk}`);
+        if (!response.ok) {
+          console.error('Error fetching data:', response.statusText);
+          setLoading(false);
+          return;
+        }
         const data: { nama: string, gambar_url: string }[] = await response.json();
+        if (data.length === 0) {
+          // Handle the case where no data is returned
+          console.log('No data found');
+          setLoading(false);
+          return;
+        }
         const updatedAddresses: Location[] = data.map(item => ({
           name: item.nama,
           imageUrl: item.gambar_url,
         }));
         setAddresses(updatedAddresses);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
-
+  
     fetchData();
   },  [kesiniyuk]);
 
-  const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const stopScroll = () => {
-    if (scrollInterval) {
-      clearInterval(scrollInterval);
-      setScrollInterval(null);
+  // Handle mouse down event for starting drag
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target instanceof HTMLImageElement) {
+      // Prevent dragging if the clicked element is an image
+      return;
     }
+    isDragging = true;
+    startX = event.pageX - containerRef.current!.offsetLeft;
+    scrollLeft = containerRef.current!.scrollLeft;
+    // Prevent selection of text during drag
+    event.preventDefault();
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsMouseDown(true);
-    setStartX(e.pageX - (containerRef.current?.offsetLeft || 0));
-    setScrollLeft(containerRef.current?.scrollLeft || 0);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMouseDown(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isMouseDown || !containerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - (containerRef.current?.offsetLeft || 0);
+  // Handle mouse move event for dragging
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    const x = event.pageX - containerRef.current!.offsetLeft;
     const walk = (x - startX) * 2;
-    containerRef.current.scrollLeft = scrollLeft - walk;
+    containerRef.current!.scrollLeft = scrollLeft - walk;
   };
+
+  // Handle mouse up event for stopping drag
+  const handleMouseUp = () => {
+    isDragging = false;
+  };
+
+  if (loading || addresses === null) {
+    // Display loading text or gray background items while data is being fetched or if addresses is null
+    return (
+      <Stack direction="row">
+         <Stack
+        ref={containerRef}
+        direction="row"
+        spacing={3}
+        sx={{
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          '-ms-overflow-style': 'none',
+          scrollbarWidth: 'none',
+          overflowX: 'auto',
+          maxWidth: '100%',
+          width: '100%'
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+          {[...Array(2)].map((_, index) => (
+            <Stack key={index} className='loading' sx={{ backgroundColor: 'lightgray', width: '570px', height: '300px', borderRadius: '40px 0px' }}>
+              
+            </Stack>
+          ))}
+        </Stack>
+      </Stack>
+    );
+  }
 
   return (
-    <Stack direction={'row'} onMouseUp={stopScroll}>
+    <Stack direction="row">
       <Stack
         ref={containerRef}
         direction="row"
@@ -80,9 +124,8 @@ export default function DragableAlamat() {
           width: '100%'
         }}
         onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
       >
         {addresses.map((address, index) => (
           <Stack key={index}>
@@ -91,7 +134,7 @@ export default function DragableAlamat() {
               alt={address.name}
               height={'300px'}
               width={'570px'}
-              style={{ borderRadius: '40px 0px', objectFit: 'cover' }}
+              style={{ borderRadius: '40px 0px', objectFit: 'cover', pointerEvents: 'none' }} // Disable pointer events on images
             />
             <Typography fontSize={'28px'} fontWeight={600} color={'#04214C'}>
               {address.name}

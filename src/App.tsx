@@ -100,7 +100,7 @@ const router = createBrowserRouter([
     path: '/oleh-oleh-bali',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <OlehBali />
         <Footer/>
       </>

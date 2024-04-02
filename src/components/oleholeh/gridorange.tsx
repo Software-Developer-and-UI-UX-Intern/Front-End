@@ -32,8 +32,8 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
       {GridData.map((orangedata, index) => (
         <Grid item key={index} alignItems='center' justifyContent='center'>
           {/* Wrap the Item component inside a Link */}
-          <Link to={`/oleh-oleh?kesiniyuk=${encodeURIComponent(orangedata.textContent)}`}>
-            <Item imageSrc={orangedata.imageSrc} textContent={orangedata.textContent} width='579px' height='600px' />
+          <Link style={{textDecoration:'none'}} to={`/oleh-oleh?kesiniyuk=${encodeURIComponent(orangedata.textContent)}`}>
+            <Item imageSrc={orangedata.imageSrc} textContent={orangedata.textContent} width='579px' height='600px' fontsize='42px' imgheight='90px' />
           </Link>
         </Grid>
       ))}
