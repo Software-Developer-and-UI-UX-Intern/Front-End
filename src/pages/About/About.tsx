@@ -1,154 +1,212 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
-import bali from '../../assets/aboutbali.jpg';
-import RowAndColumnSpacing from '../../components/beranda/ayojalan';
-import Balimenunggu  from '../../components/beranda/balimenunggu';
-import { areapopuler } from './AboutData'
-import berandaData from './AboutData';
-import nusapenida from '../../assets/about/nusapenida.jpg'
-import '../../assets/font/telkomselbatik.css'
-export default function Beranda() {
+import { Link } from 'react-router-dom';
+import Dragablealamat from '../../components/oleholeh/dragablealamat';
+import './About.css';
+interface OlehData {
+  nama: string;
+  gambar_url1: string;
+  gambar_url2: string;
+  gambar_url3: string;
+  tiket_masuk: string;
+  parkir: string;
+  description: string;
+  domisili: string;
+  alamat_gbr:string;
+  alamat_url:string;
+}
+
+export default function Oleh() {
+  const [data, setData] = useState<OlehData | null>(null);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.style.marginTop = '-120px';
+    const fetchData = async () => {
+      try {
+        const searchParams = new URLSearchParams(window.location.search);
+        const textContent = searchParams.get('kesiniyuk');
+        if (!textContent) {
+          throw new Error('Text content not found in query parameters');
+        }
+        const response = await fetch(`https://tripselbe.fly.dev/wisata/${encodeURIComponent(textContent)}`);
+        const result = await response.json();
+        if (result) {
+          setData(result);
+          setImageLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
+  // Display gray placeholders until data is loaded or data is empty
+  if (!data) {
+    return (
+      <Stack gap={3}>
+        <Stack direction={'row'} gap={3} width={'100%'}>
+          <Stack height={'510px'} width={'50%'} className='loading'></Stack>
+          <Stack direction={'column'} gap={4} width={'50%'}>
+            <Stack height={'240px'} width={'100%'} className='loading'></Stack>
+            <Stack height={'240px'} width={'100%'} className='loading'></Stack>
+          </Stack>
+        </Stack>
+
+        <Stack gap={3} marginLeft={'80px'} marginRight={'80px'}>
+          <Typography fontFamily={'TelkomselBatikBold'} fontSize={'50px'} color={'#04214C'}>
+            Loading...
+          </Typography>
+          <Stack gap={3} direction={'row'}>
+            <Stack
+              flexWrap={'wrap'}
+              sx={{
+                width: 'auto',
+                height: '70px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '40px',
+                background: 'white',
+                color: 'red',
+                cursor: 'pointer',
+                boxShadow: '0px 0px 0px 2px red',
+                padding: '0px 40px',
+              }}
+            >
+              <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
+                Loading...
+              </Typography>
+            </Stack>
+            <Stack
+              flexWrap={'wrap'}
+              sx={{
+                width: 'auto',
+                height: '70px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '40px',
+                background: 'white',
+                color: 'red',
+                cursor: 'pointer',
+                boxShadow: '0px 0px 0px 2px red',
+                padding: '0px 40px',
+              }}
+            >
+              <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
+                Loading...
+              </Typography>
+            </Stack>
+          </Stack>
+          <Typography fontSize={'32px'} textAlign={'justify'} color={'#04214C'}>
+            Loading...
+          </Typography>
+          <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'}>
+            Loading...
+          </Typography>
+          <Dragablealamat />
+        </Stack>
+      </Stack>
+    );
+  }
+
   return (
-    <Stack sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginLeft: '0px',
-    }} gap={0}>
-      
-      <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 30.5%, #04214C 100%), url(${bali})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        display: 'flex',
-        height: '527px',
-        justifyContent: 'center',
-        width: '100%',
-        margin: '0',
-      }}>
-        <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Bali</Typography>
+    <Stack gap={3}>
+      <Stack direction={'row'} gap={3} width={'100%'}>
+        <Stack height={'510px'} width={'50%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url1 ? 'lightgray' : 'inherit' }}>
+          {!imageLoading && data.gambar_url1 && (
+            <img
+              src={data.gambar_url1}
+              onLoad={() => setImageLoading(false)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt="Image1"
+            />
+          )}
+        </Stack>
+        <Stack direction={'column'} gap={4} width={'50%'}>
+          <Stack height={'240px'} width={'100%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url2 ? 'lightgray' : 'inherit' }}>
+            {!imageLoading && data.gambar_url2 && (
+              <img
+                src={data.gambar_url2}
+                onLoad={() => setImageLoading(false)}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Image2"
+              />
+            )}
+          </Stack>
+          <Stack height={'240px'} width={'100%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url3 ? 'lightgray' : 'inherit' }}>
+            {!imageLoading && data.gambar_url3 && (
+              <img
+                src={data.gambar_url3}
+                onLoad={() => setImageLoading(false)}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Image3"
+              />
+            )}
+          </Stack>
         </Stack>
       </Stack>
-      <Stack sx={{
-        display: 'flex',
-        height: 'auto',
-        width: '100%',
-        margin: '0',
-        marginTop:'-1px',
-        backgroundColor: '#04214c',
-        borderRadius: '0 0 100px 100px',
-        paddingBottom:'80px'
-      }}>
-<Stack gap={4} marginLeft={'145px'} marginRight={'145px'} >
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-                Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
+
+      <Stack gap={3} marginLeft={'80px'} marginRight={'80px'}>
+        <Typography fontFamily={'TelkomselBatikBold'} fontSize={'50px'} color={'#04214C'}>
+          {data.nama || 'Loading...'}
         </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
+        <Stack gap={3} direction={'row'}>
+          <Stack
+            flexWrap={'wrap'}
+            sx={{
+              width: 'auto',
+              height: '70px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '40px',
+              background: 'white',
+              color: 'red',
+              cursor: 'pointer',
+              boxShadow: '0px 0px 0px 2px red',
+              padding: '0px 40px',
+            }}
+          >
+            <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
+              {`Tiket Masuk : ${data.tiket_masuk || 'Loading...'}`}
+            </Typography>
+          </Stack>
+          <Stack
+            flexWrap={'wrap'}
+            sx={{
+              width: 'auto',
+              height: '70px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '40px',
+              background: 'white',
+              color: 'red',
+              cursor: 'pointer',
+              boxShadow: '0px 0px 0px 2px red',
+              padding: '0px 40px',
+            }}
+          >
+            <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
+              {`Parkir : ${data.parkir || 'Loading...'}`}
+            </Typography>
+          </Stack>
+        </Stack>
+        <Typography fontSize={'32px'} textAlign={'justify'} color={'#04214C'}>
+          {data.description || 'Loading...'}
+        </Typography>
+        <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'}>
+          Alamat
+        </Typography>
+        <Link to={`${data.alamat_url}`} style={{ textDecoration: 'none' }}>
+        <Stack width={'100%'} height={'600px'} sx={{
+           backgroundImage: `url(${data.alamat_gbr})`,
+           backgroundSize: 'cover',
+           backgroundRepeat: 'no-repeat',
+           borderRadius: '0px 40px',
         }}>
-Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi lebih banyak tentang keindahan dan petualangan di Bali?        </Typography>
-</Stack>
+        </Stack>
+        </Link>
       </Stack>
-
-      <Stack sx={{
-        display: 'flex',
-        height: 'auto',
-        width: '100%',
-        paddingTop: '50px',
-        paddingBottom:'50px',
-        backgroundColor: 'white',
-      }}>
-
-        <Stack sx={{
-          height: 'auto',
-          width: '100%',
-          backgroundColor: 'white',
-        }}>
-
-          <Stack>
-          <Typography sx={{
-            fontWeight: 700,
-            color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
-            paddingBottom: '30px',
-            textAlign: 'center'
-          }}>
-            Ayo Kunjungi
-          </Typography>
-          <Balimenunggu orangeData={berandaData} />
-        </Stack>
-
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
-        <Typography sx={{
-            fontWeight: 700,
-            color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
-            paddingBottom: '30px',
-            textAlign: 'center'
-          }}>
-            Area Populer
-          </Typography>
-          <RowAndColumnSpacing recommendationData={areapopuler} />
-        </Stack>
-        </Stack>
-      </Stack>
-
-      <Stack sx={{
-        display: 'flex',
-        height: 'auto',
-        width: '100%',
-        margin: '0',
-        borderRadius: '100px 100px 0 0',
-      }}>
-        <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${nusapenida})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        display: 'flex',
-        height: '554px',
-        justifyContent: 'center',
-        width: '100%',
-        margin: '0',
-      }}>
-        <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Bali!</Typography>
-        </Stack>
-        
-         
-        </Stack>
-        <Stack width={'100%'} height={'3px'} marginTop={'-2px'} sx={{background:'white'}}>
-        </Stack>
-      </Stack>
-
-
-
     </Stack>
   );
 }

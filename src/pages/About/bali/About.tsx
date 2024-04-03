@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/aboutbali.jpg';
-import RowAndColumnSpacing from '../../../components/beranda/ayojalan';
+import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/aboutwisata';
-import { areapopuler } from './AboutData'
 import balitext from '../../../assets/about/Bali.svg'
 import berandaData from './AboutData';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
@@ -105,7 +104,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           <Balimenunggu orangeData={berandaData} />
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
+        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
         <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
@@ -116,7 +115,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           }}>
             Area Populer
           </Typography>
-          <RowAndColumnSpacing recommendationData={areapopuler} />
+          <RowAndColumnSpacing domisili='bali' />
         </Stack>
         </Stack>
       </Stack>
