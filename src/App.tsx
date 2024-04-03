@@ -6,6 +6,7 @@ import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { Register } from './pages/Registrasi';
+import { About } from './pages/About';
 import { Flores } from './pages/About/flores';
 import { Bali } from './pages/About/bali';
 import { Kupang } from './pages/About/kupang';
@@ -45,6 +46,16 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Beranda />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/cari-wisata',
+    element: (
+      <>
+        <Navbar />
+        <About />
         <Footer/>
       </>
     )
