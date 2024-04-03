@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/aboutbali.jpg';
 import RowAndColumnSpacing from '../../../components/beranda/ayojalan';
-import Balimenunggu  from '../../../components/beranda/balimenunggu';
+import Balimenunggu  from '../../../components/about/aboutwisata';
 import { areapopuler } from './AboutData'
 import balitext from '../../../assets/about/Bali.svg'
-import sampaiberjumpa from '../../../assets/about/sampaiberjumpa.png'
 import berandaData from './AboutData';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
+import '../../../assets/font/telkomselbatik.css'
 export default function Beranda() {
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Beranda() {
           fontSize: '25px',
           textAlign: 'left',
         }}>
-                Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
+        Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
         </Typography>
         <Typography sx={{
           fontWeight: 400,
@@ -65,7 +65,7 @@ export default function Beranda() {
           fontSize: '25px',
           textAlign: 'left',
         }}>
-Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
+        Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
         <Typography sx={{
           fontWeight: 400,
           color: 'white',
@@ -140,8 +140,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <img src={sampaiberjumpa}>
-          </img>
+          <Typography fontSize={'90px'} fontFamily={'TelkomselBatikBold'} color={'#04214C'}>Sampai berjumpa di Bali!</Typography>
         </Stack>
         
          

@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/about-bali',
+    path: '/wisata-bali',
     element: (
       <>
         <Navbar />
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/about-kupang',
+    path: '/wisata-kupang',
     element: (
       <>
         <Navbar />
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/about-mataram',
+    path: '/wisata-mataram',
     element: (
       <>
         <Navbar />
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/about-flores',
+    path: '/wisata-flores',
     element: (
       <>
         <Navbar />
@@ -90,7 +90,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/oleh-oleh',
+    path: '/cari-oleh-oleh',
     element: (
       <>
         <Navbarwhite />

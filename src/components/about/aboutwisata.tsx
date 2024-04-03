@@ -1,8 +1,8 @@
 import { Stack } from '@mui/material';
 import { useRef, useState } from 'react';
 import Orangewithimage1 from '../beranda/orangewithimage';
-import left from '../../assets/arrowleft.svg';
-import right from '../../assets/arrowright.svg';
+import left from '../../assets/about/arrow_left_blue.png';
+import right from '../../assets/about/arrow_right_blue.png';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
 interface OrangewithimageProps {

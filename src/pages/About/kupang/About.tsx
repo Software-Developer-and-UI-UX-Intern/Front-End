@@ -138,7 +138,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Bali!</Typography>
+          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Kupang!</Typography>
         </Stack>
         
          

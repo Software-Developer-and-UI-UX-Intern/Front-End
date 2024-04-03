@@ -35,7 +35,7 @@ export default function Beranda() {
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Flores</Typography>
+          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Mataram</Typography>
         </Stack>
       </Stack>
       <Stack sx={{
@@ -137,7 +137,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Bali!</Typography>
+          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Matarm!</Typography>
         </Stack>
         
          
