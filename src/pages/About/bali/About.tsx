@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/aboutbali.jpg';
 import RowAndColumnSpacing from '../../../components/about/dragablealamat';
-import Balimenunggu  from '../../../components/about/aboutwisata';
+import Balimenunggu  from '../../../components/about/ayokunjungi';
 import balitext from '../../../assets/about/Bali.svg'
-import berandaData from './AboutData';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
 import '../../../assets/font/telkomselbatik.css'
 export default function Beranda() {
@@ -13,6 +12,7 @@ export default function Beranda() {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
+    window.scrollTo(0, 0); // Scroll to the top of the page when the component is mounted or navigation occurs
   }, []);
 
   return (
@@ -101,7 +101,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           }}>
             Ayo Kunjungi
           </Typography>
-          <Balimenunggu orangeData={berandaData} />
+          <Balimenunggu domisili='bali'/>
         </Stack>
 
         <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>

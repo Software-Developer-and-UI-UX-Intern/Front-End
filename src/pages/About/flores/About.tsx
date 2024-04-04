@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
-import RowAndColumnSpacing from '../../../components/beranda/ayojalan';
-import Balimenunggu  from '../../../components/beranda/balimenunggu';
-import { areapopuler } from './AboutData'
-import berandaData from './AboutData';
+import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+import Balimenunggu  from '../../../components/about/ayokunjungi';
 import pinkbawah from '../../../assets/about/flores/pinkzoomair.png'
 import pinkatas from '../../../assets/about/flores/pinkorang.png'
 import '../../../assets/font/telkomselbatik.css'
@@ -13,6 +11,7 @@ export default function Beranda() {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
+    window.scrollTo(0, 0); 
   }, []);
 
   return (
@@ -99,7 +98,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
           }}>
             Ayo Kunjungi
           </Typography>
-          <Balimenunggu orangeData={berandaData} />
+          <Balimenunggu domisili='flores'/>
         </Stack>
 
         <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
@@ -113,7 +112,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
           }}>
             Area Populer
           </Typography>
-          <RowAndColumnSpacing recommendationData={areapopuler} />
+          <RowAndColumnSpacing domisili='flores' />
         </Stack>
         </Stack>
       </Stack>

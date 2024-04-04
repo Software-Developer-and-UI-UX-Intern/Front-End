@@ -17,11 +17,13 @@ const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, textContent
       <Stack width={width} height={`calc(${height} - ${imgheight})`}>
         <img src={imageSrc} alt="Image" width={width} height="100%" style={{borderBottomLeftRadius:'104px'}}/>
       </Stack>
-      <Stack height={imgheight} justifyContent={'center'} alignItems={'center'}>
-      <Typography sx={{ textAlign: 'center' }} fontSize={fontsize} fontWeight={500} color={'white'}>
-        {textContent}
-      </Typography>
-      </Stack>
+      <Stack width={'100%'}justifyContent={'center'} alignItems={'center'}>
+        <Stack width={'100%'} height={imgheight} justifyContent={'center'}sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <Typography sx={{ textAlign: 'center' }} fontSize={fontsize} fontWeight={500} color={'white'}>
+          {textContent.length >= 22 ? `${textContent.slice(0, 22)}...` : textContent}
+        </Typography>
+    </Stack>
+    </Stack>
     </Card>
   );
 }

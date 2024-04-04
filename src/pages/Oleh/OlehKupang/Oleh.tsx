@@ -26,6 +26,7 @@ const Oleh = () => {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
         const response = await fetch('https://tripselbe.fly.dev/oleh');

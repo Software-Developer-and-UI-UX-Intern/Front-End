@@ -54,7 +54,7 @@ const router = createBrowserRouter([
     path: '/cari-wisata',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <About />
         <Footer/>
       </>

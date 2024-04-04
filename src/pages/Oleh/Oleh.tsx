@@ -16,7 +16,10 @@ interface OlehData {
 export default function Oleh() {
   const [data, setData] = useState<OlehData | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(true);
-
+  useEffect(() => {
+  document.body.style.marginTop = '0px';
+  window.scrollTo(0, 0);
+}, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
