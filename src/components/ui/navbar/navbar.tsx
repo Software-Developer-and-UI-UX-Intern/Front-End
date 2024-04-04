@@ -114,7 +114,8 @@ export default function Navbar() {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: isOpaque ? 'white' : 'transparent',
+        // backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive) ? 'white' : (isOpaque ? 'white' : 'transparent'),
+        backgroundColor: (isOpaque ? 'white' : 'transparent'),
         transition: 'background-color 0.3s ease-in-out', // Add transition effect
         boxShadow: isOpaque ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
         margin: '0px 0px',
@@ -151,7 +152,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out, color 0.3s ease-in-out ',
                       }}
                     >
                       Beranda
