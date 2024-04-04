@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, MenuList } from '@mui/material';
+import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider } from '@mui/material';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -19,27 +19,40 @@ export default function Navbar() {
   const [restoranAnchorEl, setRestoranAnchorEl] = useState<null | HTMLElement>(null); // Separate state for restoran menu
   const [olehOlehAnchorEl, setOlehOlehAnchorEl] = useState<null | HTMLElement>(null); // State for oleh-oleh menu
   const [wisataAnchorEl, setWisataAnchorEl] = useState<null | HTMLElement>(null); // State for wisata menu
+  const [hotelMenuActive, setHotelMenuActive] = useState(false); // State to track hotel menu activation
+  const [restoranMenuActive, setRestoranMenuActive] = useState(false); // State to track restoran menu activation
+  const [olehOlehMenuActive, setOlehOlehMenuActive] = useState(false); // State to track oleh-oleh menu activation
+  const [wisataMenuActive, setWisataMenuActive] = useState(false); // State to track wisata menu activation
   const navigate = useNavigate();
 
   const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+    setHotelMenuActive(true); // Set hotel menu as active
   };
 
   const handleRestoranMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setRestoranAnchorEl(event.currentTarget); // Set anchor element when restoran menu button is clicked
+    setRestoranMenuActive(true); // Set restoran menu as active
   };
   const handleOlehOlehMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOlehOlehAnchorEl(event.currentTarget); // Set anchor element when oleh-oleh menu button is clicked
+    setOlehOlehMenuActive(true); // Set oleh-oleh menu as active
   };
 
   const handleWisataMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setWisataAnchorEl(event.currentTarget); // Set anchor element when wisata menu button is clicked
+    setWisataMenuActive(true); // Set wisata menu as active
   };
+
   const handleMenuClose = () => {
     setHotelAnchorEl(null); // Clear hotel anchor element to close the hotel menu
     setRestoranAnchorEl(null); // Clear restoran anchor element to close the restoran menu
     setOlehOlehAnchorEl(null); // Clear hotel anchor element to close the hotel menu
     setWisataAnchorEl(null);
+    setHotelMenuActive(false); // Set hotel menu as inactive
+    setRestoranMenuActive(false); // Set restoran menu as inactive
+    setOlehOlehMenuActive(false); // Set oleh-oleh menu as inactive
+    setWisataMenuActive(false); // Set wisata menu as inactive
   };
 
   const handleBerandamenu = () => {
@@ -96,7 +109,6 @@ export default function Navbar() {
     setShowCategories(prevState => !prevState); // Toggle the state of showCategories
     setSearchValue(''); // Clear search input when toggling visibility
   };
-  
   return (
 
     <AppBar
@@ -147,13 +159,14 @@ export default function Navbar() {
                 </Button>
                 <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
                   onClick={handleHotelMenuOpen}
-                  endIcon={<ExpandMoreIcon />}
+                  endIcon={<ExpandMoreIcon sx={{transform: hotelMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: hotelMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
                   sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', 
+                    color: hotelMenuActive? 'red' : isOpaque ? '#6E6C6C' : 'white', 
                     '&:hover': { fontWeight: 700, color: 'red' },
                     padding:'0px',
                     minWidth:'auto',
                     height:'auto',
+                    transition: 'color 0.75s ease-in-out',
                   }}
                 >
                    <Typography
@@ -165,7 +178,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out, ',
                       }}
                     >
                       Hotel
@@ -189,7 +202,6 @@ export default function Navbar() {
                   },
                 }}
               >
-              <MenuList>
                     <MenuItem onClick={() => handleMenuItemClick('Bali')} sx={{
                           fontSize:'22px',
                           fontWeight:500,
@@ -207,18 +219,18 @@ export default function Navbar() {
                           fontWeight:500,
                           padding:'0px 20px'
                     }}>NTB</MenuItem>
-                  </MenuList>
             </Menu>
 
-                <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
-                  onClick={handleRestoranMenuOpen} // Handle opening restoran menu
-                  endIcon={<ExpandMoreIcon />}
+            <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
+                  onClick={handleRestoranMenuOpen}
+                  endIcon={<ExpandMoreIcon sx={{transform: restoranMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: restoranMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
                   sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', 
+                    color: restoranMenuActive? 'red' : isOpaque ? '#6E6C6C' : 'white', 
                     '&:hover': { fontWeight: 700, color: 'red' },
                     padding:'0px',
                     minWidth:'auto',
                     height:'auto',
+                    transition: 'color 0.75s ease-in-out',
                   }}
                 >
                    <Typography
@@ -230,7 +242,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out ',
                       }}
                     >
                       Restoran
@@ -253,7 +265,6 @@ export default function Navbar() {
                   },
                 }}
               >
-                  <MenuList>
                     <MenuItem onClick={() => handleRestoranMenuItemClick('Bali')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Bali</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleRestoranMenuItemClick('Mataram')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Mataram</MenuItem>
@@ -261,17 +272,17 @@ export default function Navbar() {
                     <MenuItem onClick={() => handleRestoranMenuItemClick('Kupang')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Kupang</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleRestoranMenuItemClick('Flores')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Flores</MenuItem>
-                  </MenuList>
                 </Menu>
-                <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
+               <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
                   onClick={handleOlehOlehMenuOpen}
-                  endIcon={<ExpandMoreIcon />}
+                  endIcon={<ExpandMoreIcon sx={{transform: olehOlehMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: olehOlehMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
                   sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', 
+                    color: olehOlehMenuActive? 'red' : isOpaque ? '#6E6C6C' : 'white', 
                     '&:hover': { fontWeight: 700, color: 'red' },
                     padding:'0px',
                     minWidth:'auto',
                     height:'auto',
+                    transition: 'color 0.75s ease-in-out',
                   }}
                 >
                    <Typography
@@ -283,7 +294,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out ',
                       }}
                     >
                       Oleh-oleh
@@ -306,7 +317,6 @@ export default function Navbar() {
                   },
                 }}
               >
-                   <MenuList>
                     <MenuItem onClick={() => handleOlehOlehMenuItemClick('Bali')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Bali</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleOlehOlehMenuItemClick('Mataram')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Mataram</MenuItem>
@@ -314,17 +324,17 @@ export default function Navbar() {
                     <MenuItem onClick={() => handleOlehOlehMenuItemClick('Kupang')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Kupang</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleOlehOlehMenuItemClick('Flores')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Flores</MenuItem>
-                  </MenuList>
                 </Menu>
                 <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
                   onClick={handleWisataMenuOpen}
-                  endIcon={<ExpandMoreIcon />}
+                  endIcon={<ExpandMoreIcon sx={{transform: wisataMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: wisataMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
                   sx={{
-                    color: isOpaque ? '#6E6C6C' : 'white', 
+                    color: wisataMenuActive? 'red' : isOpaque ? '#6E6C6C' : 'white', 
                     '&:hover': { fontWeight: 700, color: 'red' },
                     padding:'0px',
                     minWidth:'auto',
                     height:'auto',
+                    transition: 'color 0.75s ease-in-out',
                   }}
                 >
                    <Typography
@@ -336,7 +346,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.2s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out',
                       }}
                     >
                       Wisata
@@ -359,7 +369,6 @@ export default function Navbar() {
                   },
                 }}
               >
-             <MenuList>
                     <MenuItem onClick={() => handleWisataMenuItemClick('Bali')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Bali</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleWisataMenuItemClick('Mataram')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Mataram</MenuItem>
@@ -367,7 +376,6 @@ export default function Navbar() {
                     <MenuItem onClick={() => handleWisataMenuItemClick('Kupang')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Kupang</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleWisataMenuItemClick('Flores')} sx={{ fontSize: '22px', fontWeight: 500, padding: '0px 20px' }}>Flores</MenuItem>
-                  </MenuList>
                 </Menu>
                 
                 <Stack justifyContent={'center'} alignItems={'center'}>
@@ -385,6 +393,7 @@ export default function Navbar() {
                 border: isOpaque ? '2px solid #FF010C' : '2px solid white',
                 padding: '0px',
                 '&:hover': { border:'3px solid #FF010C', color:'#FF010C' },
+                transition: 'color 0.75s ease-in-out, border 0.75s ease-in-out'
               }}
             >
               <SearchIcon sx={{ width: 'auto' }} />
