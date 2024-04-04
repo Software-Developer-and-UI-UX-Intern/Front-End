@@ -12,7 +12,7 @@ export default function Beranda() {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
-    window.scrollTo(0, 0); // Scroll to the top of the page when the component is mounted or navigation occurs
+    // window.scrollTo(0, 0); // Scroll to the top of the page when the component is mounted or navigation occurs
   }, []);
 
   return (

@@ -11,7 +11,7 @@ export default function Beranda() {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
-    window.scrollTo(0, 0); 
+    // window.scrollTo(0, 0); 
   }, []);
 
   return (
