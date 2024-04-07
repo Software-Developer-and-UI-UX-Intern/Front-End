@@ -16,6 +16,11 @@ import {OlehBali} from './pages/Oleh/OlehBali'
 import {OlehMataram} from './pages/Oleh/OlehMataram'
 import {OlehKupang} from './pages/Oleh/OlehKupang'
 import {OlehFlores} from './pages/Oleh/OlehFlores'
+import {Restoran} from './pages/Restoran'
+import {RestoranBali} from './pages/Restoran/RestoranBali'
+import {RestoranMataram} from './pages/Restoran/RestoranMataram'
+import {RestoranKupang} from './pages/Restoran/RestoranKupang'
+import {RestoranFlores} from './pages/Restoran/RestoranFlores'
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -146,6 +151,56 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <OlehFlores/>
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/cari-restoran',
+    element: (
+      <>
+        <Navbarwhite />
+        <Restoran />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/restoran-bali',
+    element: (
+      <>
+        <Navbar />
+        <RestoranBali />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/restoran-mataram',
+    element: (
+      <>
+        <Navbar />
+        <RestoranMataram />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/restoran-kupang',
+    element: (
+      <>
+        <Navbar />
+        <RestoranKupang />
+        <Footer/>
+      </>
+    )
+  },
+  {
+    path: '/restoran-flores',
+    element: (
+      <>
+        <Navbar />
+        <RestoranFlores/>
         <Footer/>
       </>
     )
