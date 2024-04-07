@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
-import bali from '../../../assets/aboutbali.jpg';
+import bali from '../../../assets/about/mataram/header.jpg';
 import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
-import nusapenida from '../../../assets/about/nusapenida.jpg'
+import nusapenida from '../../../assets/about/mataram/footer.jpg'
 import '../../../assets/font/telkomselbatik.css'
 export default function Beranda() {
 
@@ -136,7 +136,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Matarm!</Typography>
+          <Typography fontSize={'70px'} color={'#04214C'} fontFamily={'TelkomselBatikBold'}>Sampai Berjumpa Di Mataram!</Typography>
         </Stack>
         
          
