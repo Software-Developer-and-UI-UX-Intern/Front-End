@@ -141,6 +141,7 @@ export default function Navbar() {
                     padding:'0px',
                     minWidth:'auto',
                     height:'auto',
+                    transition:'color 0.75s ease-in-out'
                   }}
                 >
                    <Typography
@@ -152,7 +153,7 @@ export default function Navbar() {
                         fontSize: '24px',
                         color: 'inherit',
                         fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, color 0.3s ease-in-out ',
+                        transition: 'font-weight 0.1s ease-in-out',
                       }}
                     >
                       Beranda

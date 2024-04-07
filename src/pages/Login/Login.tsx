@@ -11,7 +11,7 @@ import logo from '../../assets/Trip-sel.png'
 const customInputStyle = {
   width: '100%',
   height: '53px',
-  '& input': {
+  '&z input': {
     borderRadius: '20px',
     height: '53px',
     border: '1px solid #04214C',

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Dragablealamat from '../../components/oleholeh/dragablealamat';
 import './About.css';
 interface OlehData {
   nama: string;
@@ -107,7 +106,13 @@ export default function Oleh() {
           <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'}>
             Loading...
           </Typography>
-          <Dragablealamat />
+          <Stack width={'100%'} height={'600px'} className='loading' sx={{
+            background:'gray',
+           backgroundSize: 'cover',
+           backgroundRepeat: 'no-repeat',
+           borderRadius: '0px 40px',
+        }}>
+        </Stack>
         </Stack>
       </Stack>
     );
@@ -201,8 +206,8 @@ export default function Oleh() {
           Alamat
         </Typography>
         <Link to={`${data.alamat_url}`} style={{ textDecoration: 'none' }}>
-        <Stack width={'100%'} height={'600px'} sx={{
-           backgroundImage: `url(${data.alamat_gbr})`,
+        <Stack width={'100%'} height={'600px'} className='loading' sx={{
+           backgroundImage: imageLoading || !data.gambar_url3 ? 'lightgray' : `url(${data.alamat_gbr})`,
            backgroundSize: 'cover',
            backgroundRepeat: 'no-repeat',
            borderRadius: '0px 40px',

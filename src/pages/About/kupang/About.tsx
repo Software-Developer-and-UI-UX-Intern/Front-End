@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
-import bali from '../../../assets/aboutbali.jpg';
+import bali from '../../../assets/about/kupang/header.png';
 import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
-import nusapenida from '../../../assets/about/nusapenida.jpg'
+import nusapenida from '../../../assets/about/kupang/footer.png'
 import '../../../assets/font/telkomselbatik.css'
 export default function Beranda() {
 
@@ -34,7 +34,7 @@ export default function Beranda() {
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Bali</Typography>
+          <Typography fontSize={'82px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Kupang</Typography>
         </Stack>
       </Stack>
       <Stack sx={{
@@ -54,23 +54,20 @@ export default function Beranda() {
           fontSize: '25px',
           textAlign: 'left',
         }}>
-                Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
-        </Typography>
+Kupang terletak di Nusa Tenggara Timur, Indonesia. Di sini, kita bisa menjelajahi alam liar yang menakjubkan, seperti pegunungan yang hijau dan air terjun yang menawan. Selain itu, Kupang juga memiliki kehidupan laut yang kaya, sehingga snorkeling atau menyelam di sini pasti akan menjadi pengalaman yang tak terlupakan.        </Typography>
         <Typography sx={{
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
           textAlign: 'left',
         }}>
-Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
-        <Typography sx={{
+Tapi, Kupang tidak hanya tentang keindahan alamnya. Kota ini juga memiliki budaya yang unik dan menarik. Ada tarian tradisional, musik khas, dan festival-festival yang seru untuk diikuti.        </Typography>  <Typography sx={{
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
           textAlign: 'left',
         }}>
-Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi lebih banyak tentang keindahan dan petualangan di Bali?        </Typography>
-</Stack>
+Apakah T-Flyers sudah siap mengunjungi Kupang? Ayo jelajahi tempat-tempat khusus hanya untuk kamu!.  </Typography></Stack>
       </Stack>
 
       <Stack sx={{
