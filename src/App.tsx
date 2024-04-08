@@ -169,7 +169,7 @@ const router = createBrowserRouter([
     path: '/restoran-bali',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <RestoranBali />
         <Footer/>
       </>
@@ -179,7 +179,7 @@ const router = createBrowserRouter([
     path: '/restoran-mataram',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <RestoranMataram />
         <Footer/>
       </>
@@ -189,7 +189,7 @@ const router = createBrowserRouter([
     path: '/restoran-kupang',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <RestoranKupang />
         <Footer/>
       </>
@@ -199,7 +199,7 @@ const router = createBrowserRouter([
     path: '/restoran-flores',
     element: (
       <>
-        <Navbar />
+        <Navbarwhite />
         <RestoranFlores/>
         <Footer/>
       </>
