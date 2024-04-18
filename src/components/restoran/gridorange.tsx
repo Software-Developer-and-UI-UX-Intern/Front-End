@@ -35,7 +35,7 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   };
 
   return (
-    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'space-around' : 'center'}>
+    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'start' : 'start'} paddingLeft={'125px'}>
       {GridData.map((orangedata, index) => (
         <Grid item key={index} >
           <div style={{ cursor: 'pointer' }} onClick={() => handleItemClick(orangedata.textContent)}>
