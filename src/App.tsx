@@ -13,6 +13,7 @@ import { Kupang } from './pages/About/kupang';
 import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh'
 import {OlehBali} from './pages/Oleh/OlehBali'
+import {Hotel} from './pages/Hotel'
 import {OlehMataram} from './pages/Oleh/OlehMataram'
 import {OlehKupang} from './pages/Oleh/OlehKupang'
 import {OlehFlores} from './pages/Oleh/OlehFlores'
@@ -213,6 +214,18 @@ const router = createBrowserRouter([
     path: '/register',
     element: <Register />,
   },
+
+  {
+  path: '/hotel',
+  element: (
+  <>
+  <Navbarwhite />
+  <Hotel/>,
+  <Footer/>
+  </>
+  )
+
+  }
 ]);
 
 function App() {
