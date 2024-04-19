@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import '../../../assets/font/telkomselbatik.css'
 import GridOrange from '../../../components/oleholeh/gridorange'
 import kupangthumb from '../../../assets/oleholeh/kupang/kupangup.png';
+import loading from '../../../assets/restoran/comingsoongray.png';
 
 interface OlehDataItem {
   nama: string;
@@ -21,6 +22,7 @@ interface OrangewithimageProps {
 
 const Oleh = () => {
   const [olehData, setOlehData] = useState<OrangewithimageProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -29,6 +31,7 @@ const Oleh = () => {
     window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch('https://tripselbe.fly.dev/oleh');
         const data: OlehDataItem[] = await response.json();
         const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'flores');
@@ -39,6 +42,8 @@ const Oleh = () => {
         setOlehData(transformedData);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching data
       }
     };
     fetchData();
@@ -71,7 +76,13 @@ const Oleh = () => {
         </Stack>
       </Stack>
       <Stack sx={{marginBottom:'265px'}}>
-        <GridOrange Data={olehData} />
+      {isLoading ? (
+        <Stack width={'100%'} height={'1315px'} justifyContent={'center'} alignItems={'center'}>
+          <img src={loading} alt="Loading" style={{ width: '700px', height: '700px' }} />
+          </Stack>
+        ) : (
+          <GridOrange Data={olehData} />
+        )}
       </Stack>
     </Stack>
   );
