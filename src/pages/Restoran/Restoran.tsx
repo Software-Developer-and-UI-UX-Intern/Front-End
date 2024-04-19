@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import './Restoran.css';
 import call from '../../assets/restoran/call.svg';
@@ -23,6 +23,9 @@ interface OlehData {
 export default function Oleh() {
   const [data, setData] = useState<OlehData | null>(null);
   const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const makananRef = useRef<HTMLDivElement>(null);
+  const minumanRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
   document.body.style.marginTop = '0px';
   window.scrollTo(0, 0);
@@ -227,10 +230,25 @@ export default function Oleh() {
         <Typography fontSize={'32px'} textAlign={'justify'} color={'#04214C'}>
         Berikut adalah menu dari restoran ini.
         </Typography>
-        <Stack direction={'row'} gap={'30px'}>
-        <List restaurantName={data.nama} menuType="makanan"/>
-        <List restaurantName={data.nama} menuType="minuman"/>
-        </Stack>
+        <Stack direction="row" gap={3}>
+        {data?.makanan && (
+          <List
+            restaurantName={data.nama}
+            menuType="makanan"
+            ref={makananRef}
+            maxHeight={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
+          />
+        )}
+        {data?.minuman && (
+          <List
+            restaurantName={data.nama}
+            menuType="minuman"
+            ref={minumanRef}
+            maxHeight={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
+          />
+        )}
+      </Stack>
+
         <Stack justifyContent={'center'} alignItems={'center'} >
         <Stack width={'386px'} height={'100px'} borderRadius={'40px'} justifyContent={'center'} alignItems={'center'} sx={{background:'linear-gradient(65deg, #FF0025 23.51%, #F9A12D 81.92%)', cursor:'pointer'}}  onClick={handleMenuClick}>
         <Typography fontSize={'42px'} color={'white'} fontWeight={700}>Menu Lengkap</Typography>
