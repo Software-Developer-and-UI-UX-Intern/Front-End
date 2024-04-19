@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material';
 // import DirectionsIcon from '@mui/icons-material/Directions';
 // import StarRateIcon from '@mui/icons-material/StarRate';
 // import StarOutlineIcon from '@mui/icons-material/StarOutline';
-import krisna1 from '../../assets/oleholeh/krisnaoleh.png';
+import krisna1 from '../../assets/oleholeh/bali/baliup.png';
 import '../../assets/font/telkomselbatik.css'
 import DragableFasilitas from '../../components/hotel/dragableFasilitas';
 import { Icon } from '@iconify/react';

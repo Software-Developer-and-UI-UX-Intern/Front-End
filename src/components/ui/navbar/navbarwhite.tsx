@@ -373,9 +373,9 @@ export default function Navbar() {
               sx={{
                 height: '54px',
                 width:'54px',
-                color: isOpaque ? '#FF010C' : 'white',
+                color: isOpaque ? '#FF010C' : '#FF010C',
                 borderRadius: '50%',
-                border: isOpaque ? '2px solid #FF010C' : '2px solid white',
+                border: isOpaque ? '2px solid #FF010C' : '2px solid #FF010C',
                 padding: '0px',
                 '&:hover': { border:'3px solid #FF010C', color:'#FF010C' },
                 transition: 'color 0.75s ease-in-out, border 0.75s ease-in-out'
