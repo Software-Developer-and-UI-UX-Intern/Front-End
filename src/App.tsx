@@ -11,17 +11,18 @@ import { Flores } from './pages/About/flores';
 import { Bali } from './pages/About/bali';
 import { Kupang } from './pages/About/kupang';
 import { Mataram } from './pages/About/mataram';
-import {Oleh} from './pages/Oleh'
-import {OlehBali} from './pages/Oleh/OlehBali'
-import {Hotel} from './pages/Hotel'
-import {OlehMataram} from './pages/Oleh/OlehMataram'
-import {OlehKupang} from './pages/Oleh/OlehKupang'
-import {OlehFlores} from './pages/Oleh/OlehFlores'
-import {Restoran} from './pages/Restoran'
-import {RestoranBali} from './pages/Restoran/RestoranBali'
-import {RestoranMataram} from './pages/Restoran/RestoranMataram'
-import {RestoranKupang} from './pages/Restoran/RestoranKupang'
-import {RestoranFlores} from './pages/Restoran/RestoranFlores'
+import {Oleh} from './pages/Oleh';
+import {OlehBali} from './pages/Oleh/OlehBali';
+import {Hotel} from './pages/Hotel';
+import {HotelBali} from './pages/Hotel/bali'
+import {OlehMataram} from './pages/Oleh/OlehMataram';
+import {OlehKupang} from './pages/Oleh/OlehKupang';
+import {OlehFlores} from './pages/Oleh/OlehFlores';
+import {Restoran} from './pages/Restoran';
+import {RestoranBali} from './pages/Restoran/RestoranBali';
+import {RestoranMataram} from './pages/Restoran/RestoranMataram';
+import {RestoranKupang} from './pages/Restoran/RestoranKupang';
+import {RestoranFlores} from './pages/Restoran/RestoranFlores';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -216,7 +217,7 @@ const router = createBrowserRouter([
   },
 
   {
-  path: '/hotel',
+  path: '/cari-hotel',
   element: (
   <>
   <Navbarwhite />
@@ -225,6 +226,16 @@ const router = createBrowserRouter([
   </>
   )
 
+  },
+  {
+    path: '/hotel-bali',
+    element: (
+      <>
+        <Navbar/>
+        <HotelBali />
+        <Footer/>
+      </>
+    )
   }
 ]);
 

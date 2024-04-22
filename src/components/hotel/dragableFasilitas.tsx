@@ -1,26 +1,44 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
-import deluxeRoom from '../../assets/hotel/deluxe room.png';
 
-interface Location {
-  name: string;
-  imageUrl: string;
+interface Kamar {
+  nama: string;
+  hotel_nama: string;
+  gambar_url: string;
 }
 
-const locations: Location[] = [
-  { name: 'Deluxe Room', imageUrl: deluxeRoom },
-  { name: 'Deluxe Premium Room', imageUrl: deluxeRoom },
-  { name: 'Luxury Suite', imageUrl: deluxeRoom },
-  { name: 'Another Location Name', imageUrl: deluxeRoom },
-];
 
 export default function DragableFasilitas() {
+  const [kamars, setKamars] = useState<Kamar[]>([]); // Initialize as an empty array
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
+  useEffect(() => {
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const textContent = searchParams.get('kesiniyuk');
+      if (!textContent) {
+        throw new Error('Text content not found in query parameters');
+      }
+      const fetchData = async () => {
+        const response = await fetch(`https://tripselbe.fly.dev/kamar/${encodeURIComponent(textContent)}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch kamar data');
+        }
+        const data = await response.json();
+        setKamars(data); 
+        console.log([data])
+      };
+
+      fetchData();
+    } catch (error) {
+      console.error('Error fetching kamar data:', error);
+    }
+  }, []);
+  
 
   const stopScroll = () => {
     if (scrollInterval) {
@@ -73,32 +91,23 @@ export default function DragableFasilitas() {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-          {locations.map((Item, index) => (
-            <Stack key={index}>
-              {/* <img
-                src={location.imageUrl}
-                alt={location.name}
-                height={'300px'}
-                width={'570px'}
-                style={{ borderRadius: '40px 0px', objectFit: 'cover' }}
-              /> */}
-              <Stack sx={{
-                  width: '580px', height: '325px', 
-                  backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url('${Item.imageUrl}')`, 
-                  backgroundSize: 'cover',
-                  backgroundRepeat: 'no-repeat',
-                  borderRadius: '50px 0px'}}>
-
-                <Typography fontSize={'32px'} fontWeight={500} color={'white'} sx={{marginTop: 33, marginLeft: 3}}>
-                  {Item.name}
-                </Typography>
-              </Stack>
-
-              
+        {kamars.map((kamar, index) => (
+          <Stack key={index}>
+            <Stack sx={{
+              width: '580px', height: '325px',
+              backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url('${kamar.gambar_url}')`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              borderRadius: '50px 0px'
+            }}>
+              <Typography fontSize={'32px'} fontWeight={500} color={'white'} sx={{ marginTop: 33, marginLeft: 3 }}>
+                {kamar.nama}
+              </Typography>
             </Stack>
-          ))}
-        </Stack>
- 
+          </Stack>
+        ))}
+      </Stack>
+
     </Stack>
   );
 }

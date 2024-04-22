@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { Stack, Typography } from '@mui/material';
-import bali from '../../../assets/aboutbali.jpg';
+import { Button, Stack, Typography } from '@mui/material';
+import bali from '../../../assets/hotel/bali/up.png';
 import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
 import '../../../assets/font/telkomselbatik.css'
-export default function Beranda() {
+export default function Hotel() {
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -18,59 +18,28 @@ export default function Beranda() {
     <Stack sx={{
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'start',
       marginLeft: '0px',
     }} gap={0}>
       
       <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url(${bali})`,
+        backgroundImage: `linear-gradient(180deg, transparent 50%, #FFF 100%), url(${bali})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         display: 'flex',
-        height: '527px',
-        justifyContent: 'center',
+        height: '1024px',
+        justifyContent: 'start',
         width: '100%',
         margin: '0',
       }}>
-        <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}> Bali</Typography>
+        <Stack  marginLeft={'145px'} marginTop={'250px'}>
+        <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di Bali!</Typography>
+        <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
+        <Stack justifyContent={'center'} alignItems={'center'} paddingTop={'275px'}>
+        <Button sx={{width:'500px', height:'100px',boxShadow:'0px 4px 4px 0px rgba(0, 0, 0, 0.25)',borderRadius:'100px', color:'white',fontSize:'44px', fontWeight:700,     background: 'linear-gradient(360deg, #fb8c2a, #FF010C)'}}>Cek Rekomendasi</Button>
         </Stack>
-      </Stack>
-      <Stack sx={{
-        display: 'flex',
-        height: 'auto',
-        width: '100%',
-        margin: '0',
-        marginTop:'-1px',
-        backgroundColor: '#04214c',
-        borderRadius: '0 0 100px 100px',
-        paddingBottom:'80px'
-      }}>
-<Stack gap={4} marginLeft={'145px'} marginRight={'145px'} >
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-        Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
-        </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-        Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi lebih banyak tentang keindahan dan petualangan di Bali?        </Typography>
-</Stack>
+        </Stack>
       </Stack>
 
       <Stack sx={{
@@ -94,10 +63,19 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
             color: '#ff010c',
             fontSize: '60px',
             paddingTop: '50px',
-            paddingBottom: '30px',
+            textAlign: 'center',
+            font:'TelkomselBatikBold'
+          }}>
+            Temukan Rekomendasi Hotel
+          </Typography>
+          <Typography sx={{
+            fontWeight: 500,
+            color: '#04214C',
+            fontSize: '38px',
+            paddingBottom: '42px',
             textAlign: 'center'
           }}>
-            Ayo Kunjungi
+          Rekomendasi kami hanya untuk T-Flyers
           </Typography>
           <Balimenunggu domisili='bali'/>
         </Stack>

@@ -205,7 +205,7 @@ export default function Oleh() {
               justifyContent:'center',
               alignItems:'center',
             }}>
-               <Stack sx={{
+          <Stack sx={{
             backgroundImage: 'linear-gradient(to top right, #FF0025, #F9A12D)',
             width: '70px',
             height: '70px',
@@ -236,7 +236,7 @@ export default function Oleh() {
             restaurantName={data.nama}
             menuType="makanan"
             ref={makananRef}
-            maxHeight={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
+            Height={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
           />
         )}
         {data?.minuman && (
@@ -244,7 +244,7 @@ export default function Oleh() {
             restaurantName={data.nama}
             menuType="minuman"
             ref={minumanRef}
-            maxHeight={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
+            Height={Math.max(makananRef.current?.scrollHeight || 0, minumanRef.current?.scrollHeight || 0)}
           />
         )}
       </Stack>

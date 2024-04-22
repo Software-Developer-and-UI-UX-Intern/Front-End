@@ -5,7 +5,7 @@ import axios from 'axios';
 interface MenuListProps {
   restaurantName: string;
   menuType: 'makanan' | 'minuman';
-  maxHeight: number;
+  Height: number;
 }
 
 interface RestaurantData {
@@ -13,7 +13,7 @@ interface RestaurantData {
   minuman: string;
 }
 
-const MenuList = forwardRef<HTMLDivElement, MenuListProps>(({ restaurantName, menuType, maxHeight }, ref) => {
+const MenuList = forwardRef<HTMLDivElement, MenuListProps>(({ restaurantName, menuType }, ref) => {
   const [menuItems, setMenuItems] = useState<string[]>([]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const MenuList = forwardRef<HTMLDivElement, MenuListProps>(({ restaurantName, me
       <Typography fontSize={'42px'} fontWeight={700} textAlign={'center'} color={'#FFF'} paddingTop={'20px'} paddingBottom={'20px'}>
       {menuType.charAt(0).toUpperCase() + menuType.slice(1)}
       </Typography>
-      <Stack justifyContent={'center'} alignItems={'center'} height={maxHeight} sx={{ backgroundColor: 'white' }} paddingTop={'60px'} paddingBottom={'60px'} borderRadius={'0 0 40px 40px'}  ref={ref}>
+      <Stack justifyContent={'center'} alignItems={'center'} height={'100%'} sx={{ backgroundColor: 'white' }} paddingTop={'60px'} paddingBottom={'60px'} borderRadius={'0 0 40px 40px'}  ref={ref}>
         <List sx={{ justifyContent: 'center', alignItems: 'center' }} >
           {menuItems.map((item, index) => (
             <ListItem key={index} sx={{ justifyContent: 'center', alignItems: 'center' }} >
