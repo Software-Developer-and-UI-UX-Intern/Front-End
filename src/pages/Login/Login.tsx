@@ -11,23 +11,32 @@ import logo from '../../assets/Trip-sel.png'
 const customInputStyle = {
   width: '100%',
   height: '53px',
-  '&z input': {
+  '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '1px solid #04214C',
+    border: '1px solid #04214C', // Apply border directly to the input
     outline: 'none',
-    padding:'0px 10px',
+    padding: '0px 10px'
   },
   '& .MuiInputLabel-root': {
-    color:  '#04214C',
+    color: '#6E6C6C', // Initially make label transparent
     '&.Mui-focused': {
-      color:'transparent',
+      color: 'transparent', // Change label color when focused
     },
   },
   '& .MuiOutlinedInput-root': {
     borderRadius: '20px',
     '&:hover fieldset': {
-      borderColor: '#000',
+      borderColor: 'red',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#04214C',
+    },
+  },
+  '& .MuiOutlinedInput-root.MuiSelect-root': {
+    borderRadius: '20px',
+    '&:hover fieldset': {
+      borderColor: '#04214C',
     },
     '&.Mui-focused fieldset': {
       borderColor: '#04214C',

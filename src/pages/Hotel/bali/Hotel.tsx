@@ -1,11 +1,70 @@
-import { useEffect } from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Button, Stack, Typography, Input, Checkbox, styled } from '@mui/material';
 import bali from '../../../assets/hotel/bali/up.png';
-import RowAndColumnSpacing from '../../../components/about/dragablealamat';
-import Balimenunggu  from '../../../components/about/ayokunjungi';
-import nusapenida from '../../../assets/about/nusapenida.jpg'
 import '../../../assets/font/telkomselbatik.css'
+import { Icon } from '@iconify/react/dist/iconify.js';
 export default function Hotel() {
+  // Define custom styles for the Checkbox
+  const CustomCheckbox = styled(Checkbox)(() => ({
+    '& .MuiSvgIcon-root': {
+      width: '30px', // Set width of the icon
+      height: '30px', // Set height of the icon
+      color: 'white', // Initially make the icon transparent
+      borderRadius: '40px',
+      fontSize: '26px',
+    },
+    '& .Mui-checked': {
+      '& .MuiSvgIcon-root': {
+        color: '#04214C', // Change icon color when checked
+        borderRadius: '40px'
+      },
+    },
+    '& .MuiCheckbox-root': {
+      padding: '0', // Remove padding to prevent extra space around the icon
+      borderRadius: '10px', // Set border radius for the button
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.04)', // Change background color on hover
+      },
+    },
+  }));
+
+  const customInputStyle = {
+    width: '100%',
+    height: '53px',
+    fontSize: '22px',
+    '& input': {
+      borderRadius: '20px',
+      height: '53px',
+      border: '1px solid #04214C', // Apply border directly to the input
+      outline: 'none',
+      padding: '0px 10px'
+    },
+    '& .MuiInputLabel-root': {
+      color: 'transparent', // Initially make label transparent
+      '&.Mui-focused': {
+        color: 'transparent', // Change label color when focused
+      },
+    },
+  };
+  const [value, setValue] = useState<string>('');
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = event.target.value.replace(/\./g, ''); // Remove all occurrences of periods
+    const formattedValue = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add periods as thousands separators
+    if (!isNaN(Number(rawValue)) && rawValue.length <= 10) { // Check if the value is a valid number
+      setValue(formattedValue);
+    }
+  };
+  const [value2, setValue2] = useState<string>('');
+
+  const handleChange2 = (event: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = event.target.value.replace(/\./g, ''); // Remove all occurrences of periods
+    const formattedValue = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add periods as thousands separators
+    if (!isNaN(Number(rawValue)) && rawValue.length <= 10) { // Check if the value is a valid number
+      setValue2(formattedValue);
+    }
+  };
+
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -33,7 +92,7 @@ export default function Hotel() {
         width: '100%',
         margin: '0',
       }}>
-        <Stack  marginLeft={'145px'} marginTop={'250px'}>
+        <Stack  marginLeft={'100px'} marginRight={'100px'} marginTop={'250px'}>
         <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di Bali!</Typography>
         <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
         <Stack justifyContent={'center'} alignItems={'center'} paddingTop={'275px'}>
@@ -77,55 +136,151 @@ export default function Hotel() {
           }}>
           Rekomendasi kami hanya untuk T-Flyers
           </Typography>
-          <Balimenunggu domisili='bali'/>
+          
+          <Stack direction={'row'} gap={3} marginLeft={'100px'} marginRight={'100px'}>
+            {/* left */}
+            <Stack direction={'column'}  width={'auto'} height={'auto'}  >
+              <Stack sx={{background:'#FF010C'}} marginBottom={'10px'} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'}>
+                <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Filter</Typography>
+              </Stack>
+
+              <Stack gap={5} direction={'column'}>
+              <Stack width={'100%'} height={'210px'} sx={{background:'#04214C'}} borderRadius={'40px'} direction={'column'} alignItems={'center'}>
+              <Typography color={'white'} fontSize={'24px'} fontWeight={500} paddingTop={'8px'} paddingBottom={'16px'}>Rentang Harga</Typography>
+                <Stack direction={'row'} width={'90%'} height={'auto'}>
+                <Stack sx={{background:'#EC000C'}} width={'25%'} height={'56px'} borderRadius={'20px 0px 0px 20px'} justifyContent={'center'} alignItems={'center'}>
+                <Typography color={'white'} fontSize={'22px'} fontWeight={500}>Rp</Typography>
+                </Stack>
+                <Stack sx={{background:'white'}} width={'80%'} height={'56px'} borderRadius={'0px 20px 20px 0px'}>
+                  <Input
+                  value={value}
+                  onChange={handleChange}
+                   style={customInputStyle} disableUnderline sx={{paddingLeft:'10px', font:'26px', color:'#04214C'}} placeholder='Harga Minimal'></Input>
+                </Stack>
+                </Stack>
+
+                <Stack direction={'row'} width={'90%'} height={'auto'} paddingTop={'14px'}>
+                <Stack sx={{background:'#EC000C'}} width={'25%'} height={'56px'} borderRadius={'20px 0px 0px 20px'} justifyContent={'center'} alignItems={'center'}>
+                <Typography color={'white'} fontSize={'22px'} fontWeight={500}>Rp</Typography>
+                </Stack>
+                <Stack sx={{background:'white'}} width={'80%'} height={'56px'} borderRadius={'0px 20px 20px 0px'}>
+                  <Input
+                  value={value2}
+                  onChange={handleChange2}
+                   style={customInputStyle} disableUnderline sx={{paddingLeft:'10px', font:'26px', color:'#04214C'}} placeholder='Harga Maximal'></Input>
+                </Stack>
+                </Stack>
+              </Stack>
+
+            {/* filter bintang */}
+              <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}>
+              <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Bintang</Typography>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+              </Stack>
+              </Stack>
+              </Stack>
+
+              {/* filter fasilitas */}
+              <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}  marginRight={'72px'}>
+              <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Fasilitas</Typography>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>WiFi</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Kolam Renang</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Parkir</Typography>
+              </Stack>
+              </Stack>
+
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Restoran</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>GYM</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Ruang Meeting</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Spa</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Laundry</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500} noWrap>Resepsionis 1x24 jam</Typography>
+              </Stack>
+              </Stack>
+              </Stack>
+
+
+              </Stack>
+            </Stack>
+
+
+            <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'}>
+            <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
+            </Stack>
+          </Stack>
+
+
+
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
-        <Typography sx={{
-            fontWeight: 700,
-            color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
-            paddingBottom: '30px',
-            textAlign: 'center'
-          }}>
-            Area Populer
-          </Typography>
-          <RowAndColumnSpacing domisili='bali' />
-        </Stack>
+    
         </Stack>
       </Stack>
-
-      <Stack sx={{
-        display: 'flex',
-        height: 'auto',
-        width: '100%',
-        margin: '0',
-        borderRadius: '100px 100px 0 0',
-      }}>
-        <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${nusapenida})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        display: 'flex',
-        height: '554px',
-        justifyContent: 'center',
-        width: '100%',
-        margin: '0',
-      }}>
-        <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'90px'} fontFamily={'TelkomselBatikBold'} color={'#04214C'}>Sampai berjumpa di Bali!</Typography>
-        </Stack>
-        
-         
-        </Stack>
-        <Stack width={'100%'} height={'3px'} marginTop={'-2px'} sx={{background:'white'}}>
-        </Stack>
-      </Stack>
-
-
-
     </Stack>
   );
 }
