@@ -66,7 +66,15 @@ export default function Hotel() {
     }
   };
 
-
+  const handleScrollDown = () => {
+    const targetHeight = 1000; // Set the target height in pixels
+    
+    // Teleport to the target height
+    window.scrollTo({
+      top: targetHeight,
+      behavior: 'smooth' // Use smooth scrolling animation
+    });
+  };
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
@@ -97,7 +105,7 @@ export default function Hotel() {
         <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di Bali!</Typography>
         <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
         <Stack justifyContent={'center'} alignItems={'center'} paddingTop={'275px'}>
-        <Button sx={{width:'500px', height:'100px',boxShadow:'0px 4px 4px 0px rgba(0, 0, 0, 0.25)',borderRadius:'100px', color:'white',fontSize:'44px', fontWeight:700,     background: 'linear-gradient(360deg, #fb8c2a, #FF010C)'}}>Cek Rekomendasi</Button>
+        <Button onClick={handleScrollDown} sx={{width:'500px', height:'100px',boxShadow:'0px 4px 4px 0px rgba(0, 0, 0, 0.25)',borderRadius:'100px', color:'white',fontSize:'44px', fontWeight:700,     background: 'linear-gradient(360deg, #fb8c2a, #FF010C)'}}>Cek Rekomendasi</Button>
         </Stack>
         </Stack>
       </Stack>
