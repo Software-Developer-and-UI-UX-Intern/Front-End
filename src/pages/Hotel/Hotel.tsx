@@ -102,7 +102,7 @@ export default function Hotel() {
               fontFamily: 'Poppins',
               fontWeight: 600,
             }}>
-              {harga}
+{harga.split(',').map(Number).sort((a, b) => a - b).map((value, i, array) => (i === 0 ? 'Rp' : '') + value.toLocaleString().replace(/,/g, '.') + (i === 0 ? ' - ' : '') + (i === array.length - 1 ? '' : 'Rp') )}
             </Typography>
           </Stack>
 

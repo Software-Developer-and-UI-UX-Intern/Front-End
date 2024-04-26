@@ -48,6 +48,19 @@ export default function Hotel() {
     },
   };
   const [value, setValue] = useState<string>('');
+  const [selectedStars, setSelectedStars] = useState<number[]>([]);
+
+  const handleStarCheckboxChange = (star: number) => {
+    setSelectedStars(prevSelectedStars => {
+      if (prevSelectedStars.includes(star)) {
+        // If the star is already selected, remove it from the selectedStars array
+        return prevSelectedStars.filter(selectedStar => selectedStar !== star);
+      } else {
+        // If the star is not selected, add it to the selectedStars array
+        return [...prevSelectedStars, star];
+      }
+    });
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const rawValue = event.target.value.replace(/\./g, ''); // Remove all occurrences of periods
@@ -184,32 +197,17 @@ export default function Hotel() {
             {/* filter bintang */}
               <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}>
               <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Bintang</Typography>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
-              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              </Stack>
-              </Stack>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
-              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              </Stack>
-              </Stack>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
-              <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              <Icon icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
-              </Stack>
+              <Stack direction={'column'} width={'90%'} height={'auto'} alignItems={'left'}>
+                {[3, 4, 5].map(star => (
+                  <Stack key={star} direction={'row'} alignItems={'center'} marginLeft={'20px'} paddingBottom={'20px'}>
+                    <CustomCheckbox checked={selectedStars.includes(star)} onChange={() => handleStarCheckboxChange(star)} />
+                    <Stack justifyContent={'center'} alignItems={'center'} direction={'row'} height={'100%'}>
+                      {[...Array(star)].map((_, index) => (
+                        <Icon key={index} icon="fluent:star-16-filled" width="50" height="50" style={{ color: '#FF8702' }} />
+                      ))}
+                    </Stack>
+                  </Stack>
+                ))}
               </Stack>
               </Stack>
 
@@ -282,7 +280,7 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel/>
+            <ListHotel selectedStars={selectedStars} />
             </Stack>
           </Stack>
 
