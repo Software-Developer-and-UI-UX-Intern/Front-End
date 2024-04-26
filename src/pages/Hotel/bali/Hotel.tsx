@@ -3,6 +3,7 @@ import { Button, Stack, Typography, Input, Checkbox, styled } from '@mui/materia
 import bali from '../../../assets/hotel/bali/up.png';
 import '../../../assets/font/telkomselbatik.css'
 import { Icon } from '@iconify/react/dist/iconify.js';
+import ListHotel from '../../../components/hotel/listhotel';
 export default function Hotel() {
   // Define custom styles for the Checkbox
   const CustomCheckbox = styled(Checkbox)(() => ({
@@ -268,9 +269,12 @@ export default function Hotel() {
               </Stack>
             </Stack>
 
-
-            <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'}>
+            {/* right */}
+            <Stack direction={'column'} width={'100%'} height={'auto'}>
+            <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
+            </Stack>
+            <ListHotel/>
             </Stack>
           </Stack>
 
