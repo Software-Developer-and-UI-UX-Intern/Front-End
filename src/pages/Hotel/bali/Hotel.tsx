@@ -280,7 +280,7 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel selectedStars={selectedStars} />
+            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} />
             </Stack>
           </Stack>
 

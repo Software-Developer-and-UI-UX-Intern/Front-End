@@ -15,9 +15,11 @@ interface Hotel {
 
 interface ListHotelProps {
   selectedStars: number[]; // Array of selected star ratings
+  minimal: string;
+  maximal: string;
 }
 
-export default function ListHotel({ selectedStars }: ListHotelProps) {
+export default function ListHotel({ selectedStars, minimal, maximal }: ListHotelProps) {
   const [hotels, setHotels] = useState([] as Hotel[]);
   const navigate = useNavigate();
 
@@ -35,9 +37,22 @@ export default function ListHotel({ selectedStars }: ListHotelProps) {
   
   return (
     <Stack direction={'column'} height={'auto'} gap={5}>
-      {hotels 
-.filter(hotel => selectedStars.length === 0 || selectedStars.includes(Number(hotel.bintang) || 0))
-.map((hotel, index) => (        <Stack key={index} width={'100%'} height={'250px'} borderRadius={'40px 0px'} boxShadow={'0px 0px 20px 0px rgba(0, 0, 0, 0.25)'} direction={'row'} onClick={() => handleItemClick(hotel.nama)}>
+       {hotels
+        .filter(hotel => selectedStars.length === 0 || selectedStars.includes(Number(hotel.bintang) || 0))
+        .filter(hotel => {
+          if (!hotel.harga) {
+            return false; // Skip hotels without a harga value
+          }
+          
+          const hargaValues = hotel.harga.split(',').map(Number); // Split harga string and convert each part to a number
+          const value1 = Math.min(...hargaValues); // Find the minimum value
+          const value2 = Math.max(...hargaValues);
+          const min = Number(minimal.replace(/\./g, ''));
+          const max = Number(maximal.replace(/\./g, ''));
+          return (!minimal || value1 >= min && value2 >= min) && (!maximal || value2 <= max && value1 <= max);
+        })
+        .map((hotel, index) => (
+          <Stack key={index} width={'100%'} height={'250px'} borderRadius={'40px 0px'} boxShadow={'0px 0px 20px 0px rgba(0, 0, 0, 0.25)'} direction={'row'} onClick={() => handleItemClick(hotel.nama)}>
           <Stack width={'55%'} height={'100%'} sx={{ background: '#04214C' }} borderRadius={'40px 0px 0px 0px'} >
             {/* Render hotel image */}
             <img src={hotel.gambar_url1} alt="Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '40px 0px 0px 0px' }} />
