@@ -2,34 +2,44 @@ import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
 interface Hotel {
   gambar_url1: string;
   nama: string;
   harga: string;
-  bintang?: number; // Optional property
-  lokasi?: string; // Optional property
-  telfon?: string; // Optional property
-  jarak?: string; // Optional property
+  bintang?: number;
+  lokasi?: string;
+  telfon?: string;
+  jarak?: string;
+  thumbnailUrl?: string; // New property for thumbnail image URL
 }
 
 interface ListHotelProps {
-  selectedStars: number[]; // Array of selected star ratings
+  selectedStars: number[];
   minimal: string;
   maximal: string;
 }
 
 export default function ListHotel({ selectedStars, minimal, maximal }: ListHotelProps) {
-  const [hotels, setHotels] = useState([] as Hotel[]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch('https://tripselbe.fly.dev/hotels')
       .then(response => response.json())
-      .then(data => setHotels(data))
+      .then(async (data: Hotel[]) => {
+        const hotelsWithThumbnails = await Promise.all(data.map(async (hotel) => {
+          const imagesResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${hotel.nama}`);
+          const imagesData = await imagesResponse.json();
+          const thumbnailImage = imagesData.find((image: { nama: string; }) => image.nama === 'thumbnail');
+          return {
+            ...hotel,
+            thumbnailUrl: thumbnailImage ? thumbnailImage.url : undefined
+          };
+        }));
+        setHotels(hotelsWithThumbnails);
+      })
       .catch(error => console.error('Error fetching hotels:', error));
   }, []);
-
   const handleItemClick = (hotelName: string) => {
     navigate(`/cari-hotel?kesiniyuk=${encodeURIComponent(hotelName)}`);
   };
@@ -55,7 +65,7 @@ export default function ListHotel({ selectedStars, minimal, maximal }: ListHotel
           <Stack key={index} width={'100%'} height={'250px'} borderRadius={'40px 0px'} boxShadow={'0px 0px 20px 0px rgba(0, 0, 0, 0.25)'} direction={'row'} onClick={() => handleItemClick(hotel.nama)}>
           <Stack width={'55%'} height={'100%'} sx={{ background: '#04214C' }} borderRadius={'40px 0px 0px 0px'} >
             {/* Render hotel image */}
-            <img src={hotel.gambar_url1} alt="Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '40px 0px 0px 0px' }} />
+            <img src={hotel.thumbnailUrl} alt="Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '40px 0px 0px 0px' }} />
           </Stack>
           {/* tengah */}
           <Stack width={'60%'} direction={'column'} paddingLeft={'20px'} justifyContent={'center'} paddingTop={'20px'} paddingBottom={'20px'}>
