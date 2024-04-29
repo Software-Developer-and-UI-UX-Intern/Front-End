@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import DragableFasilitas from '../../components/hotel/dragableFasilitas';
 import { Icon } from '@iconify/react';
-
+import Carousel from '../../components/hotel/SwipeableHotelCaraousel'
 interface HotelData {
   gambar_url1: string;
   gambar_url2: string;
@@ -52,23 +52,7 @@ export default function Hotel() {
   return (
     <Stack gap={3}>
       <Stack direction={'row'} gap={3} width={'100%'}>
-        <Stack height={'510px'} width={'50%'} sx={{
-          background: `url(${hotelData.gambar_url1}) center center / cover no-repeat`,
-          backgroundSize: 'cover',
-        }}>
-        </Stack>
-        <Stack direction={'column'} gap={4} width={'50%'}>
-          <Stack height={'240px'} width={'100%'} sx={{
-            background: `url(${hotelData.gambar_url2}) center center / cover no-repeat`,
-            backgroundSize: 'cover',
-          }}>
-          </Stack>
-          <Stack height={'240px'} width={'100%'} sx={{
-            background: `url(${hotelData.gambar_url3}) center center / cover no-repeat`,
-            backgroundSize: 'cover',
-          }}>
-          </Stack>
-        </Stack>
+        <Carousel/>
       </Stack>
 
       <Stack gap={3} marginLeft={'80px'} marginRight={'80px'}>

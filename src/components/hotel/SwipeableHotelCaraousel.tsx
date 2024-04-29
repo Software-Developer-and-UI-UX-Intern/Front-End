@@ -1,0 +1,122 @@
+import { useState, useEffect } from 'react';
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import { Stack, IconButton } from '@mui/material';
+import { Icon } from '@iconify/react/dist/iconify.js';
+
+interface HotelImage {
+    nama: string;
+    url: string;
+}
+
+function SwipeableHotelCarousel() {
+    const [hotelImages, setHotelImages] = useState<HotelImage[]>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [autoplayInterval, setAutoplayInterval] = useState<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const fetchHotelImages = async () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const textContent = searchParams.get('kesiniyuk');
+            if (!textContent) {
+                throw new Error('Text content not found in query parameters');
+            }
+            try {
+                const response = await fetch(`https://tripselbe.fly.dev/hotel-images/${encodeURIComponent(textContent)}`);
+                const data = await response.json();
+                setHotelImages(data);
+            } catch (error) {
+                console.error('Error fetching hotel images:', error);
+            }
+        };
+
+        fetchHotelImages();
+    }, []);
+
+    useEffect(() => {
+        // Start auto-sliding
+        const interval = setInterval(() => {
+            handleNextSlide();
+        }, 5000); // Change the interval time here (5000ms = 5 seconds)
+
+        // Store the interval ID
+        setAutoplayInterval(interval);
+
+        // Clear the interval on component unmount
+        return () => {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+            }
+        };
+    }, [autoplayInterval]); // Include autoplayInterval in the dependency array
+
+    useEffect(() => {
+        // Check if the active index is the last slide, and reset to the first slide
+        if (activeIndex === hotelImages.length - 1) {
+            const timeout = setTimeout(() => {
+                setActiveIndex(0);
+            }, 3000); // Delay the reset to ensure smooth transition
+            return () => clearTimeout(timeout);
+        }
+    }, [activeIndex, hotelImages]);
+
+    const handlePreviousSlide = () => {
+        setActiveIndex((prevIndex) => (prevIndex === 0 ? hotelImages.length - 1 : prevIndex - 1));
+    };
+
+    const handleNextSlide = () => {
+        setActiveIndex((prevIndex) => (prevIndex === hotelImages.length - 1 ? 0 : prevIndex + 1));
+    };    
+    
+    return (
+        <Stack width={'100%'} position="relative">
+            <CarouselProvider
+                naturalSlideWidth={1440}
+                naturalSlideHeight={614}
+                totalSlides={hotelImages.length}
+                visibleSlides={1}
+                currentSlide={activeIndex}
+            >
+                <CarouselContent hotelImages={hotelImages} />
+                <Stack
+                    direction={'row'}
+                    justifyContent={'space-between'}
+                    position="absolute"
+                    left={0}
+                    right={0}
+                    bottom={'50%'}
+                    zIndex={1} // Ensure the buttons are above the slides
+                >
+                    <IconButton onClick={handlePreviousSlide}>
+                        <Icon icon="ic:round-navigate-next" width="50" height="50" style={{ color: '#FFF', transform: 'rotate(180deg)' }}/>
+                    </IconButton>
+                    <IconButton onClick={handleNextSlide}>
+                        <Icon icon="ic:round-navigate-next" width="50" height="50" style={{ color: '#FFF' }} />
+                    </IconButton>
+                </Stack>
+            </CarouselProvider>
+        </Stack>
+    );
+}
+
+interface CarouselContentProps {
+    hotelImages: HotelImage[];
+}
+
+function CarouselContent({ hotelImages }: CarouselContentProps) {
+    return (
+        <Stack>
+            <Slider>
+                {hotelImages.map((image, index) => (
+                    <Slide index={index} key={index}>
+                        <Stack maxHeight={'511px'} key={index} direction={'row'} justifyContent={'center'} alignItems={'center'}>
+                            <img src={image.url} alt={`Hotel ${index}`} style={{ maxHeight: '511px', width: '1440px' }} />
+                        </Stack>
+                    </Slide>
+                ))}
+            </Slider>
+        </Stack>
+    );
+}
+
+export default SwipeableHotelCarousel;
