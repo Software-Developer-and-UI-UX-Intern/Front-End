@@ -49,6 +49,19 @@ export default function Hotel() {
   };
   const [value, setValue] = useState<string>('');
   const [selectedStars, setSelectedStars] = useState<number[]>([]);
+  const [checkedFasilitas, setCheckedFasilitas] = useState<string[]>([]);
+
+   // Function to handle changes in the checked fasilitas
+   const handleFasilitasChange = (fasilitas: string) => {
+    // Check if the fasilitas is already in the checkedFasilitas array
+    if (checkedFasilitas.includes(fasilitas)) {
+      // If it is, remove it
+      setCheckedFasilitas(prevCheckedFasilitas => prevCheckedFasilitas.filter(item => item !== fasilitas));
+    } else {
+      // If it's not, add it
+      setCheckedFasilitas(prevCheckedFasilitas => [...prevCheckedFasilitas, fasilitas]);
+    }
+  };
 
   const handleStarCheckboxChange = (star: number) => {
     setSelectedStars(prevSelectedStars => {
@@ -215,58 +228,52 @@ export default function Hotel() {
               <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}  marginRight={'72px'}>
               <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Fasilitas</Typography>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('wifi')} onChange={() => handleFasilitasChange('wifi')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>WiFi</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('kolam renang')} onChange={() => handleFasilitasChange('kolam renang')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Kolam Renang</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('Parkir')} onChange={() => handleFasilitasChange('Parkir')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Parkir</Typography>
               </Stack>
               </Stack>
 
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('restoran')} onChange={() => handleFasilitasChange('restoran')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Restoran</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('gym')} onChange={() => handleFasilitasChange('gym')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>GYM</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('ruang meeting')} onChange={() => handleFasilitasChange('ruang meeting')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Ruang Meeting</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('spa')} onChange={() => handleFasilitasChange('spa')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Spa</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
+              <CustomCheckbox checked={checkedFasilitas.includes('laundry')} onChange={() => handleFasilitasChange('laundry')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Laundry</Typography>
-              </Stack>
-              </Stack>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox />
-              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500} noWrap>Resepsionis 1x24 jam</Typography>
               </Stack>
               </Stack>
               </Stack>
@@ -280,7 +287,7 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} />
+            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} />
             </Stack>
           </Stack>
 

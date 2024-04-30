@@ -15,7 +15,6 @@ interface HotelData {
   jarak: string;
   alamat: string;
   bintang: string;
-  fasilitas: string;
 }
 
 export default function Hotel() {
