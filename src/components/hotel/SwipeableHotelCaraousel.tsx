@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { Stack, IconButton } from '@mui/material';
@@ -32,23 +32,30 @@ function SwipeableHotelCarousel() {
 
         fetchHotelImages();
     }, []);
+    const handlePreviousSlide = () => {
+        setActiveIndex((prevIndex) => (prevIndex === 0 ? hotelImages.length - 1 : prevIndex - 1));
+    };
 
+    const handleNextSlide = useCallback(() => {
+        setActiveIndex((prevIndex) => (prevIndex === hotelImages.length - 1 ? 0 : prevIndex + 1));
+    }, [hotelImages.length]);
+    
     useEffect(() => {
         // Start auto-sliding
         const interval = setInterval(() => {
             handleNextSlide();
         }, 5000); // Change the interval time here (5000ms = 5 seconds)
-
+    
         // Store the interval ID
         setAutoplayInterval(interval);
-
+    
         // Clear the interval on component unmount
         return () => {
             if (autoplayInterval) {
                 clearInterval(autoplayInterval);
             }
         };
-    }, [autoplayInterval]); // Include autoplayInterval in the dependency array
+    }, [autoplayInterval, handleNextSlide]);// Include autoplayInterval in the dependency array
 
     useEffect(() => {
         // Check if the active index is the last slide, and reset to the first slide
@@ -60,14 +67,6 @@ function SwipeableHotelCarousel() {
         }
     }, [activeIndex, hotelImages]);
 
-    const handlePreviousSlide = () => {
-        setActiveIndex((prevIndex) => (prevIndex === 0 ? hotelImages.length - 1 : prevIndex - 1));
-    };
-
-    const handleNextSlide = () => {
-        setActiveIndex((prevIndex) => (prevIndex === hotelImages.length - 1 ? 0 : prevIndex + 1));
-    };    
-    
     return (
         <Stack width={'100%'} position="relative">
             <CarouselProvider
