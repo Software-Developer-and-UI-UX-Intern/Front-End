@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import DragableFasilitas from '../../components/hotel/dragableFasilitas';
 import { Icon } from '@iconify/react';
 import Carousel from '../../components/hotel/SwipeableHotelCaraousel'
+import ListFasilitas from '../../components/hotel/listFasilitas'
 interface HotelData {
   gambar_url1: string;
   gambar_url2: string;
@@ -131,6 +132,10 @@ export default function Hotel() {
           Detail Hotel
         </Typography>
         <DragableFasilitas/>
+        <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>
+          Fasilitas
+        </Typography>
+        <ListFasilitas/>
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>
           Alamat
         </Typography>
