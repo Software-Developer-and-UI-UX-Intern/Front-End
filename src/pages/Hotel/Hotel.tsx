@@ -4,6 +4,8 @@ import DragableFasilitas from '../../components/hotel/dragableFasilitas';
 import { Icon } from '@iconify/react';
 import Carousel from '../../components/hotel/SwipeableHotelCaraousel'
 import ListFasilitas from '../../components/hotel/listFasilitas'
+import ListKamar from '../../components/hotel/listKamar'
+
 interface HotelData {
   gambar_url1: string;
   gambar_url2: string;
@@ -55,7 +57,7 @@ export default function Hotel() {
         <Carousel/>
       </Stack>
 
-      <Stack gap={3} marginLeft={'80px'} marginRight={'80px'}>
+      <Stack gap={3} marginLeft={'120px'} marginRight={'120px'}>
         <Stack gap={10} direction={'row'} justifyContent={'space-between'}>
           <Typography fontFamily={'TelkomselBatikBold'} fontSize={'50px'} color={'#04214C'}>
             {nama}
@@ -132,6 +134,10 @@ export default function Hotel() {
           Detail Hotel
         </Typography>
         <DragableFasilitas/>
+        <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>
+          Jenis Kamar dan Harga
+        </Typography>
+        <ListKamar/>
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>
           Fasilitas
         </Typography>
