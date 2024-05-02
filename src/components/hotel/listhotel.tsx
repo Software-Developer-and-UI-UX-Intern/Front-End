@@ -128,7 +128,7 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
 
             {/* kanan */}
             <Stack width={'45%'} direction={'row'} justifyContent={'space-between'}>
-              <Stack width={'1px'} height={'100%'} sx={{background:'#04214C'}}/>
+              <Stack width={'1px'} height={'100%'} sx={{background:'rgba(0, 0, 0, 0.12)'}}/>
               <Stack direction={'column'} justifyContent={'center'} paddingRight={'20px'} alignItems={'right'}>
                 <Typography fontSize={'22px'} color={'#FF010C'} fontWeight={500} textAlign={'right'}>Mulai Dari</Typography>
                 <Typography fontSize={'32px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>

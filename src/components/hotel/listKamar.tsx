@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Divider, Stack, Typography } from '@mui/material';
 
@@ -21,6 +21,7 @@ export default function ListHotel() {
   const [hotelKamar, setHotelKamar] = useState<HotelKamar[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
     const fetchHotelData = async () => {
@@ -47,6 +48,29 @@ export default function ListHotel() {
     fetchHotelData();
   }, []);
 
+  useEffect(() => {
+    if (loading) return;
+
+    observer.current = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const lazyImage = entry.target as HTMLImageElement;
+          lazyImage.src = lazyImage.dataset.src || '';
+          observer.current?.unobserve(lazyImage);
+        }
+      });
+    });
+
+    const images = document.querySelectorAll('.lazy-load-image');
+    images.forEach((image) => {
+      observer.current?.observe(image);
+    });
+
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, [loading]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -61,13 +85,15 @@ export default function ListHotel() {
         <Stack key={index} width={'100%'} height={'312px'} borderRadius={'40px 0px'} boxShadow={'0px 0px 20px 0px rgba(0, 0, 0, 0.25)'} direction={'row'}>
           <Stack width={'35%'} height={'100%'} sx={{ background: '#04214C' }} borderRadius={'40px 0px 0px 0px'} >
             {/* Render hotel image */}
-            <img src={hotel.gambar} alt="Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '40px 0px 0px 0px' }} />
+            <img src={hotel.gambar} alt="Hotel" data-src={hotel.gambar} className="lazy-load-image" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '40px 0px 0px 0px' }} />
           </Stack>
           {/* tengah */}
           <Stack width={'37%'} direction={'column'} paddingLeft={'20px'} justifyContent={'center'} paddingTop={'20px'} paddingBottom={'20px'} paddingRight={'20px'} gap={2}>
             {/* Render kamar name */}
             <Stack gap={1}>
-              <Typography fontSize={'32px'} fontWeight={600} color={'#04214C'}>{hotel.nama}</Typography>
+              <Typography fontSize={'32px'} fontWeight={600} color={'#04214C'}>
+              {hotel.nama.length > 20 ? `${hotel.nama.substring(0, 20)}...` : hotel.nama}
+                </Typography>
               {/* render kamar icon */}
               <Stack direction={'row'} gap={2}>
                 <Stack direction={'row'} gap={2}>
@@ -129,7 +155,7 @@ export default function ListHotel() {
             <Stack direction={'column'} justifyContent={'center'} paddingRight={'20px'} alignItems={'right'}>
               <Typography fontSize={'32px'} color={'#FF010C'} fontWeight={500} textAlign={'right'}>Mulai Dari</Typography>
               <Typography fontSize={'48px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>
-              {hotel.harga.split(',').map(Number).sort((a, b) => a - b).map((value, i, array) => (i === 0 ? 'Rp' : '') + value.toLocaleString().replace(/,/g, '.') + (i === 0 ? '  ' : '') + (i === array.length - 1 ? '' : 'Rp') )}
+                {hotel.harga.split(',').map(Number).sort((a, b) => a - b).map((value, i, array) => (i === 0 ? 'Rp' : '') + value.toLocaleString().replace(/,/g, '.') + (i === 0 ? '  ' : '') + (i === array.length - 1 ? '' : 'Rp') )}
               </Typography>
               <Typography fontSize={'18px'} color={'#04214C'} fontWeight={600} textAlign={'right'}>Harga spesial untuk T-Flyers</Typography>
             </Stack>

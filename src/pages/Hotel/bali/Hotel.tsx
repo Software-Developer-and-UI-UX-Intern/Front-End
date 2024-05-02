@@ -259,9 +259,9 @@ export default function Hotel() {
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('ruang meeting')} onChange={() => handleFasilitasChange('ruang meeting')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('ruangan meeting')} onChange={() => handleFasilitasChange('ruangan meeting')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Ruang Meeting</Typography>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Ruangan Meeting</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
