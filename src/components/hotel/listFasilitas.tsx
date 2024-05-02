@@ -33,8 +33,8 @@ export default function ListHotel() {
   return (
     <Grid container spacing={2}>
       {fasilitasData.map((fasilitas, index) => (
-        <Grid item xs={6} sm={3} key={index} justifyContent={'right'}>
-          <Stack direction={'row'}>
+        <Grid item xs={6} sm={3} key={index} justifyContent={'right'} paddingBottom={'16px'}>
+          <Stack direction={'row'} gap={1}>
           <Icon icon={fasilitas.icon} width="35" height="35" style={{ color: '#04214C' }} />
           <Typography color={'#04214C'} fontSize={'22px'} fontWeight={500}>{fasilitas.nama}</Typography>
           </Stack>
