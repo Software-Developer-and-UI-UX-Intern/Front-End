@@ -6,6 +6,7 @@ import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { Register } from './pages/Registrasi';
+import { Profile } from './pages/profile';
 import { About } from './pages/About';
 import { Flores } from './pages/About/flores';
 import { Bali } from './pages/About/bali';
@@ -268,6 +269,17 @@ const router = createBrowserRouter([
           <Navbar/>
           <HotelBali />
           <Footer/>
+        </>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/profile',
+      element: (
+        <ProtectedRoute>
+        <>
+          <Navbarwhite/>
+          <Profile />
         </>
         </ProtectedRoute>
       )
