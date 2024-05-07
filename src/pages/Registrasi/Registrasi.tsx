@@ -5,6 +5,7 @@ import { InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import bg from '../../assets/login.png';
 import logo from '../../assets/Trip-sel.png';
+import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
   width: '100%',
@@ -44,6 +45,7 @@ const customInputStyle = {
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -131,6 +133,7 @@ export default function Register() {
 
       const data = await response.json();
       alert(data.message); // Display success message from the server
+      navigate(`/login`);
     } catch (error) {
       console.error('Error registering user:', error);
       alert(`Failed to register user ${error}`); // Alert the specific error message
@@ -312,11 +315,11 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Nomor Induk Kependudukan*
+                      NIK*
                     </Typography>
                     <Input
                       disableUnderline
-                      placeholder="Contoh: 5178xxxxxxxxx"
+                      placeholder="Contoh: 4321xx"
                       sx={customInputStyle}
                       style={{fontSize:'22px', color:'#04214C'}}
                       inputProps={{

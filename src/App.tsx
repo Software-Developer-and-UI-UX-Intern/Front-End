@@ -28,6 +28,14 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/700.css';
 import '@fontsource/poppins/800.css';
+import ProtectedRoute from './components/login/ProtectedRoute';
+
+// const isAuthenticated = () => {
+//   const token = localStorage.getItem('token');
+//   const tokenExpiration = localStorage.getItem('tokenExpiration') as string; // Type assertion
+//   // Check if token exists and if it's not expired
+//   return token && Date.now() < parseInt(tokenExpiration);
+// };
 
 // Create a custom theme
 const theme = createTheme({
@@ -50,163 +58,220 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <>
-        <Navbar />
-        <Beranda />
-        <Footer/>
-      </>
+      <ProtectedRoute>
+        <>
+          <Navbar />
+          <Beranda />
+          <Footer />
+        </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/cari-wisata',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <About />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/wisata-bali',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <Bali />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/wisata-kupang',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <Kupang />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/wisata-mataram',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <Mataram />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/wisata-flores',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <Flores />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/cari-oleh-oleh',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <Oleh />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/oleh-oleh-bali',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <OlehBali />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/oleh-oleh-mataram',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <OlehMataram />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/oleh-oleh-kupang',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <OlehKupang />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/oleh-oleh-flores',
     element: (
+      <ProtectedRoute>
       <>
         <Navbar />
         <OlehFlores/>
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/cari-restoran',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <Restoran />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/restoran-bali',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <RestoranBali />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/restoran-mataram',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <RestoranMataram />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/restoran-kupang',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <RestoranKupang />
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
   {
     path: '/restoran-flores',
     element: (
+      <ProtectedRoute>
       <>
         <Navbarwhite />
         <RestoranFlores/>
         <Footer/>
       </>
+      </ProtectedRoute>
     )
   },
+  {
+    path: '/cari-hotel',
+    element: (
+    <ProtectedRoute>
+    <>
+    <Navbarwhite />
+    <Hotel/>,
+    <Footer/>
+    </>
+    </ProtectedRoute>
+    )
+  
+    },
+    {
+      path: '/hotel-bali',
+      element: (
+        <ProtectedRoute>
+        <>
+          <Navbar/>
+          <HotelBali />
+          <Footer/>
+        </>
+        </ProtectedRoute>
+      )
+    },
   {
     path: '/login',
     element: <Login />,
@@ -214,28 +279,6 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />,
-  },
-
-  {
-  path: '/cari-hotel',
-  element: (
-  <>
-  <Navbarwhite />
-  <Hotel/>,
-  <Footer/>
-  </>
-  )
-
-  },
-  {
-    path: '/hotel-bali',
-    element: (
-      <>
-        <Navbar/>
-        <HotelBali />
-        <Footer/>
-      </>
-    )
   }
 ]);
 

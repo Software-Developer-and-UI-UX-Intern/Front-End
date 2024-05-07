@@ -10,6 +10,7 @@ import logoTripsel from '../../../assets/Trip-sel.png';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 const menuItemStyle = {
   fontSize: '22px',
@@ -35,6 +36,36 @@ export default function Navbar() {
   const [wisataMenuActive, setWisataMenuActive] = useState(false); // State to track wisata menu activation
   const navigate = useNavigate();
   const [menuActive, setMenuActive] = useState(false);
+  const [userFullName, setUserFullName] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token);
+  
+      if (token) {
+        try {
+          const response = await fetch('https://tripselbe.fly.dev/user', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          console.log(data); // Log the received data
+          if (data && data.full_name) {
+            setUserFullName(data.full_name);
+          } else {
+            console.error('Full name not found in user data');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+  
+    fetchUserData();
+  }, []);
 
   const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
@@ -77,8 +108,8 @@ export default function Navbar() {
   const handleBerandamenu = () => {
     navigate(`/`)
   }
-  const handleLoginmenu = () => {
-    navigate(`/login`)
+  const handleProfilemenu = () => {
+    navigate(`/profile`)
   }
   const handleMenuItemClick = (destination: string) => {
     navigate(`/hotel-${destination}`); // Navigate to the specified route
@@ -402,12 +433,12 @@ export default function Navbar() {
               sx={{
                 height: '54px',
                 width:'54px',
-                color: isOpaque ? '#FF010C' : 'white',
                 borderRadius: '50%',
-                border: isOpaque ? '2px solid #FF010C' : '2px solid white',
                 padding: '0px',
-                '&:hover': { border:'3px solid #FF010C', color:'#FF010C' },
-                transition: 'color 0.75s ease-in-out, border 0.75s ease-in-out'
+                border:(isOpaque ? '2px solid gray' : (menuActive ? '2px solid gray' : '2px solid white')),                  
+                color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
+                  '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red', border: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? '3px solid gray' : '3px solid red'},
+                  transition: 'color 0.75s ease-in-out, border 0.4s ease-in-out'
               }}
             >
               <SearchIcon sx={{ width: 'auto' }} />
@@ -467,27 +498,37 @@ export default function Navbar() {
 )}
               <Stack justifyContent={'center'} alignItems={'center'}>
               <Button 
-              onClick={handleLoginmenu}
-                sx={{
-                  display: 'flex',
-                  width: '127px',
-                  height: '48px',
-                  padding: '10px 20px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '25px',
-                  background: 'var(--Primary-01, linear-gradient(270deg, #ff8702 0%, #FF010C 100%))',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  fontFamily: 'Poppins',
-                  fontWeight: 500,
-                  fontSize: '20px',
-                  '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red', },
-
-                }}
-              >
-                Masuk
-              </Button>
+  disableElevation 
+  disableFocusRipple 
+  disableRipple 
+  disableTouchRipple
+  onClick={handleProfilemenu}
+  sx={{
+    color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    padding:'0px',
+    minWidth:'auto',
+    height:'auto',
+    transition: 'color 0.4s ease-in-out',
+  }}
+>
+<Icon icon="gg:profile" width="40" height="40" style={{ color: 'inherit' }} />
+                   <Typography
+                      sx={{
+                        alignContent: 'center',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        paddingTop: '5px',
+                        fontSize: '22px',
+                        color: 'inherit',
+                        fontWeight: 'inherit',
+                        transition: 'font-weight 0.1s ease-in-out',
+                        textWrap:'nowrap'
+                      }}
+                    >
+                    {userFullName.length > 12 ? `${userFullName.slice(0, 12)}..` : userFullName}
+                    </Typography>
+                </Button>
               </Stack>
           </Stack>
           

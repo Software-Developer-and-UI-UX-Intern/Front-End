@@ -32,30 +32,37 @@ function SwipeableHotelCarousel() {
 
         fetchHotelImages();
     }, []);
+
     const handlePreviousSlide = () => {
+        deactivateAutoplay();
         setActiveIndex((prevIndex) => (prevIndex === 0 ? hotelImages.length - 1 : prevIndex - 1));
     };
 
-    const handleNextSlide = useCallback(() => {
+    const handleNextSlide = () => {
+        deactivateAutoplay();
         setActiveIndex((prevIndex) => (prevIndex === hotelImages.length - 1 ? 0 : prevIndex + 1));
-    }, [hotelImages.length]);
-    
+    };
+
+    const deactivateAutoplay = useCallback(() => {
+        if (autoplayInterval !== null) {
+            clearInterval(autoplayInterval);
+            setAutoplayInterval(null);
+        }
+    }, [autoplayInterval]);
+
     useEffect(() => {
-        // Start auto-sliding
-        const interval = setInterval(() => {
-            handleNextSlide();
-        }, 5000); // Change the interval time here (5000ms = 5 seconds)
+        if (hotelImages.length > 0) {
+            const interval = setInterval(() => {
+                setActiveIndex((prevIndex) => (prevIndex === hotelImages.length - 1 ? 0 : prevIndex + 1));
+            }, 5000); // Change the interval time here (5000ms = 5 seconds)
+            
+            setAutoplayInterval(interval);
     
-        // Store the interval ID
-        setAutoplayInterval(interval);
-    
-        // Clear the interval on component unmount
-        return () => {
-            if (autoplayInterval) {
-                clearInterval(autoplayInterval);
-            }
-        };
-    }, [autoplayInterval, handleNextSlide]);// Include autoplayInterval in the dependency array
+            return () => {
+                clearInterval(interval);
+            };
+        }
+    }, [hotelImages]);
 
     useEffect(() => {
         // Check if the active index is the last slide, and reset to the first slide

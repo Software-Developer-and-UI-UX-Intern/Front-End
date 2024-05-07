@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 
 import bg from '../../assets/login.png';
 import logo from '../../assets/Trip-sel.png'
+import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
   width: '100%',
@@ -50,6 +51,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState(false); // State to manage login error
+  const navigate = useNavigate();
 
   const debouncedHandleLogin = debounce(handleLogin, 1000);
 
@@ -74,14 +76,30 @@ export default function Login() {
       setLoading(true);
       const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
       const { token } = response.data;
-      console.log('Token:', token);
+  
+      // Calculate token expiration time (e.g., 1 hour from now)
+      const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+  
+      // Save token and its expiration time in localStorage
+      saveTokenToLocalStorage(token, expirationTime);
+  
       setLoading(false);
+  
+      // Return Navigate component to redirect to the home page after successful login
+      navigate(`/`);
+
     } catch (error) {
       console.log('Invalid email or password');
       setLoading(false);
       setLoginError(true); // Set loginError state to true on error
     }
   }
+  
+  // Function to save token and its expiration time in localStorage
+  const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('tokenExpiration', expirationTime.toString());
+  };  
 
   return (
     <Box>
