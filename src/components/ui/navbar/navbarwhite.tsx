@@ -10,6 +10,8 @@ import logoTripsel from '../../../assets/Trip-sel.png';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { useLocation } from 'react-router-dom';
 
 const menuItemStyle = {
   fontSize: '22px',
@@ -34,25 +36,68 @@ export default function Navbar() {
   const [olehOlehMenuActive, setOlehOlehMenuActive] = useState(false); // State to track oleh-oleh menu activation
   const [wisataMenuActive, setWisataMenuActive] = useState(false); // State to track wisata menu activation
   const navigate = useNavigate();
+  const [menuActive, setMenuActive] = useState(false);
+  const [userFullName, setUserFullName] = useState('');
+  const location = useLocation();
+  const [isProfilePage, setIsProfilePage] = useState(false);
 
+  useEffect(() => {
+    setIsProfilePage(location.pathname === '/profile');
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token);
   
+      if (token) {
+        try {
+          const response = await fetch('https://tripselbe.fly.dev/user', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          console.log(data); // Log the received data
+          if (data && data.full_name) {
+            setUserFullName(data.full_name);
+          } else {
+            console.error('Full name not found in user data');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+
   const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
     setHotelMenuActive(true); // Set hotel menu as active
+    handleMenuOpen();
   };
 
   const handleRestoranMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setRestoranAnchorEl(event.currentTarget); // Set anchor element when restoran menu button is clicked
     setRestoranMenuActive(true); // Set restoran menu as active
+    handleMenuOpen();
   };
   const handleOlehOlehMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOlehOlehAnchorEl(event.currentTarget); // Set anchor element when oleh-oleh menu button is clicked
     setOlehOlehMenuActive(true); // Set oleh-oleh menu as active
+    handleMenuOpen();
   };
 
   const handleWisataMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setWisataAnchorEl(event.currentTarget); // Set anchor element when wisata menu button is clicked
     setWisataMenuActive(true); // Set wisata menu as active
+    handleMenuOpen();
+  };
+  const handleMenuOpen = () => {
+    setMenuActive(true);
   };
 
   const handleMenuClose = () => {
@@ -64,13 +109,14 @@ export default function Navbar() {
     setRestoranMenuActive(false); // Set restoran menu as inactive
     setOlehOlehMenuActive(false); // Set oleh-oleh menu as inactive
     setWisataMenuActive(false); // Set wisata menu as inactive
+    setMenuActive(false);
   };
 
   const handleBerandamenu = () => {
     navigate(`/`)
   }
-  const handleLoginmenu = () => {
-    navigate(`/login`)
+  const handleProfilemenu = () => {
+    navigate(`/profile`)
   }
   const handleMenuItemClick = (destination: string) => {
     navigate(`/hotel-${destination}`); // Navigate to the specified route
@@ -106,15 +152,12 @@ export default function Navbar() {
     // Function to handle scroll event
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      setIsOpaque(scrollTop > 0); // Set navbar to opaque if not at the top of the page, otherwise transparent
+      setIsOpaque(scrollTop > 0 || menuActive); // Update isOpaque based on scroll position or menu active state
     };
-
-    // Add scroll event listener when component mounts
     window.addEventListener('scroll', handleScroll);
-
-    // Clean up on unmount
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [menuActive]); // Listen for changes in menuActive state
+
 
   const handleSearchButtonClick = () => {
     setShowCategories(prevState => !prevState); // Toggle the state of showCategories
@@ -128,7 +171,7 @@ export default function Navbar() {
         // backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive) ? 'white' : (isOpaque ? 'white' : 'transparent'),
         backgroundColor: (isOpaque ? 'white' : 'white'),
         transition: 'background-color 0.3s ease-in-out', // Add transition effect
-        boxShadow: isOpaque ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
+        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
         margin: '0px 0px',
         padding: '0px 0px',
         height:'105px',
@@ -438,27 +481,37 @@ export default function Navbar() {
 )}
               <Stack justifyContent={'center'} alignItems={'center'}>
               <Button 
-              onClick={handleLoginmenu}
-                sx={{
-                  display: 'flex',
-                  width: '127px',
-                  height: '48px',
-                  padding: '10px 20px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '25px',
-                  background: 'var(--Primary-01, linear-gradient(270deg, #ff8702 0%, #FF010C 100%))',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  fontFamily: 'Poppins',
-                  fontWeight: 500,
-                  fontSize: '20px',
-                  '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red', },
-
-                }}
-              >
-                Masuk
-              </Button>
+      disableElevation 
+      disableFocusRipple 
+      disableRipple 
+      disableTouchRipple
+      onClick={handleProfilemenu}
+      sx={{
+        color: isProfilePage ? 'black' : '#6E6C6C',
+        '&:hover': { fontWeight: 700, color: isProfilePage ? 'black' : 'red' },
+        padding:'0px',
+        minWidth:'auto',
+        height:'auto',
+        transition: 'color 0.4s ease-in-out',
+      }}
+    >
+      <Icon icon="gg:profile" width="40" height="40" style={{ color: 'inherit' }} />
+      <Typography
+        sx={{
+          alignContent: 'center',
+          paddingLeft: '5px',
+          paddingRight: '5px',
+          paddingTop: '5px',
+          fontSize: '22px',
+          color: 'inherit',
+          fontWeight: 'inherit',
+          transition: 'font-weight 0.1s ease-in-out',
+          textWrap:'nowrap'
+        }}
+      >
+        {userFullName.length > 12 ? `${userFullName.slice(0, 12)}..` : userFullName}
+      </Typography>
+    </Button>
               </Stack>
           </Stack>
           
