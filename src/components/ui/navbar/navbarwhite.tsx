@@ -479,8 +479,8 @@ export default function Navbar() {
     </Stack>
   </Stack>
 )}
-              <Stack justifyContent={'center'} alignItems={'center'}>
-              <Button 
+    <Stack justifyContent={'center'} alignItems={'center'}>
+    <Button 
       disableElevation 
       disableFocusRipple 
       disableRipple 

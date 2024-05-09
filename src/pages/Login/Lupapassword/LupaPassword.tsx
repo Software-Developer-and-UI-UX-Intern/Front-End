@@ -1,12 +1,11 @@
 import { ChangeEvent, useState } from 'react';
-import { Grid, Stack, Box, Typography, Input, CircularProgress } from '@mui/material'; // Import CircularProgress
-import { Button, InputAdornment, IconButton, Link } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import axios from 'axios';
+import { Grid, Stack, Box, Typography, Input, CircularProgress} from '@mui/material'; // Import CircularProgress
+import { Button, Link } from '@mui/material';
 import { debounce } from 'lodash';
-import bg from '../../assets/login.png';
-import logo from '../../assets/Trip-sel.png'
+import bg from '../../../assets/login.png';
+import logo from '../../../assets/Trip-sel.png'
 import { useNavigate } from 'react-router-dom';
+
 
 const customInputStyle = {
   width: '100%',
@@ -45,60 +44,54 @@ const customInputStyle = {
 };
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loginError, setLoginError] = useState(false); // State to manage login error
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      if (isValidEmail(email)) {
+        throw new Error('Invalid email format');
+      }
+  
+      setLoading(true);
+  
+      // Send a request to the /resend-otp endpoint to send OTP to the email
+      const response = await fetch('https://tripselbe.fly.dev/resend-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      });
+  
+      if (response.ok) {
+        // If OTP sent successfully, navigate to the verification page with the email in the URL query parameter
+        navigate(`/verifikasi-lupa-password?nihotpemail=${email}`);
+      } else {
+        // Handle HTTP errors
+        console.error('Failed to resend OTP:', response.status);
+      }
+  
+      setLoading(false);
+    } catch (error) {
+      console.error('Error:', error);
+      setLoading(false);
+    }
+  };
+  
 
   const debouncedHandleLogin = debounce(handleLogin, 1000);
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     // Reset loginError state when email changes
-    setLoginError(false);
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    // Reset loginError state when password changes
-    setLoginError(false);
+  const isValidEmail = (email:string) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@telkomsel\.co\.id$/;
+    return emailPattern.test(String(email).toLowerCase());
   };
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-
-  async function handleLogin() {
-    try {
-      setLoading(true);
-      const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
-      const { token } = response.data;
-  
-      // Calculate token expiration time (e.g., 1 hour from now)
-      const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-  
-      // Save token and its expiration time in localStorage
-      saveTokenToLocalStorage(token, expirationTime);
-  
-      setLoading(false);
-  
-      // Return Navigate component to redirect to the home page after successful login
-      navigate(`/`);
-
-    } catch (error) {
-      console.log('Invalid email or password');
-      setLoading(false);
-      setLoginError(true); // Set loginError state to true on error
-    }
-  }
-  
-  // Function to save token and its expiration time in localStorage
-  const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('tokenExpiration', expirationTime.toString());
-  };  
 
   return (
     <Box>
@@ -150,21 +143,23 @@ export default function Login() {
             },
           }}
         >
-          <Stack sx={{ width: '100%' }} spacing={10} maxHeight={'700px'}>
-            <Stack spacing={1}>
+          <Stack sx={{ width: '100%' }} spacing={5} maxHeight={'700px'}>
+            <Stack justifyContent={'center'} alignContent={'center'} gap={5}>
               <Typography sx={{
                 fontWeight: 700,
                 fontSize: '42px',
                 color:'#FF010C',
+                textAlign:'center'
               }}>
-                Masuk
+                Lupa Password
               </Typography>
               <Typography sx={{
                 fontWeight: 500,
-                fontSize: '32px',
-                color:'#FF010C',
+                fontSize: '22px',
+                color:'#04214C',
+                textAlign:'center'
               }}>
-                Selamat datang di Trip-sel
+                Masukkan alamat Email yang terdaftar dengan akun Trip-sel. Kami akan mengirimkan link untuk melakukan reset password.
               </Typography>
             </Stack>
             <Stack spacing={2}>
@@ -193,70 +188,19 @@ export default function Login() {
                   fontSize: '16px',
                   color:'transparent'
                 }}>
-                  *Email atau password salah
+                  *Email salah
                 </Typography>
 
-              <Typography sx={{
-                fontWeight: 500,
-                fontSize: '24px',
-                color:'#04214C'
-              }}>
-                Password
-              </Typography>
-              <Input
-                disableUnderline
-                id="password"
-                placeholder="Password"
-                type={showPassword ? 'text' : 'password'}
-                sx={customInputStyle}
-                style={{fontSize:'22px', color:'#04214C'}}
-                inputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleTogglePasswordVisibility}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  color: loginError ? '#FF010C': 'transparent'
-                }}>
-                  *Email atau password salah
-                </Typography>
-                <Link href='/lupa-password' sx={{
-                  textDecoration: 'underline',
-                  fontWeight: 700,
-                  color: '#04214C',
-                }}>
-                  <Typography sx={{
-                    fontWeight:500,
-                    color:'#04214C',
-                    fontSize:'22px',
-                    textAlign:'right'
-                  }}>
-                    Lupa Password
-                  </Typography>
-                </Link>
             </Stack>
             <Stack spacing={3} alignItems={'center'} width={'100%'}>
               <Button
-                disabled={loading} // Disable the button when loading
+                disabled={loading || !email || isValidEmail(email)} // Disable the button when loading or email is empty or invalid
                 onClick={debouncedHandleLogin} // Use debounced handleLogin
                 sx={{
                   display: 'flex',
-                  width: '200px',
+                  width: 'auto',
                   height: '60px',
-                  padding: '10px 20px',
+                  padding: '10px 30px',
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: '40px',
@@ -269,23 +213,20 @@ export default function Login() {
                   '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
                 }}
               >
-                {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}
+                {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Reset Password'}
               </Button>
               <Stack direction={'row'} spacing={1}>
-                <Typography sx={{fontSize:'22px', fontWeight: 500}}>
-                  Belum punya akun?
-                </Typography>
-                <Link href='/register' sx={{
+                <Link href='/login' sx={{
                   textDecoration: 'underline',
-                  fontWeight: 700,
-                  color: '#FF010C',
+                  fontWeight: 500,
+                  color: '#04214C',
                 }}>
                   <Typography sx={{
-                    fontWeight:700,
-                    color:'#FF010C',
+                    fontWeight:500,
+                    color:'#04214C',
                     fontSize:'22px',
                   }}>
-                    Daftar
+                    Kembali ke Halaman Sign In
                   </Typography>
                 </Link>
               </Stack>

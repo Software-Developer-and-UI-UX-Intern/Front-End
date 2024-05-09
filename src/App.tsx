@@ -5,6 +5,8 @@ import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
+import { LupaPassword } from './pages/Login/Lupapassword';
+import { LupaVerifikasi } from './pages/Login/Lupapassword/Lupaverifikasi';
 import { Register } from './pages/Registrasi';
 import { Profile } from './pages/profile';
 import { About } from './pages/About';
@@ -287,6 +289,14 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/lupa-password',
+    element: <LupaPassword />,
+  },
+  {
+    path: '/Verifikasi-lupa-password',
+    element: <LupaVerifikasi />,
   },
   {
     path: '/register',
