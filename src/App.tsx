@@ -7,6 +7,7 @@ import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
 import { LupaPassword } from './pages/Login/Lupapassword';
 import { LupaVerifikasi } from './pages/Login/Lupapassword/Lupaverifikasi';
+import { Verifikasi } from './pages/Login/verification';
 import { Register } from './pages/Registrasi';
 import { Profile } from './pages/profile';
 import { About } from './pages/About';
@@ -297,6 +298,10 @@ const router = createBrowserRouter([
   {
     path: '/Verifikasi-lupa-password',
     element: <LupaVerifikasi />,
+  },
+  {
+    path: '/Verifikasi',
+    element: <Verifikasi />,
   },
   {
     path: '/register',

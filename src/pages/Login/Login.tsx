@@ -73,19 +73,31 @@ export default function Login() {
   async function handleLogin() {
     try {
       setLoading(true);
-      const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
-      const { token } = response.data;
-  
-      // Calculate token expiration time (e.g., 1 hour from now)
-      const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-  
-      // Save token and its expiration time in localStorage
-      saveTokenToLocalStorage(token, expirationTime);
-  
-      setLoading(false);
-  
-      // Return Navigate component to redirect to the home page after successful login
-      navigate(`/`);
+      
+      // Check user status
+      const userResponse = await axios.get(`https://tripselbe.fly.dev/user/${email}`);
+      const { status } = userResponse.data;
+      
+      if (status !== 'guest') {
+        // User is not a guest, proceed with login
+        const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
+        const { token } = response.data;
+    
+        // Calculate token expiration time (e.g., 1 hour from now)
+        const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+    
+        // Save token and its expiration time in localStorage
+        saveTokenToLocalStorage(token, expirationTime);
+    
+        setLoading(false);
+    
+        // Return Navigate component to redirect to the home page after successful login
+        navigate(`/`);
+      } else {
+        // User is a guest, redirect to verification page
+        setLoading(false);
+        navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
+      }
 
     } catch (error) {
       console.log('Invalid email or password');
@@ -93,6 +105,7 @@ export default function Login() {
       setLoginError(true); // Set loginError state to true on error
     }
   }
+
   
   // Function to save token and its expiration time in localStorage
   const saveTokenToLocalStorage = (token: string, expirationTime: number) => {

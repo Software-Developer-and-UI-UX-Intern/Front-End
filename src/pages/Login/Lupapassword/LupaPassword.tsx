@@ -50,7 +50,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      if (isValidEmail(email)) {
+      if (!isValidEmail(email)) {
         throw new Error('Invalid email format');
       }
   
@@ -194,7 +194,7 @@ export default function Login() {
             </Stack>
             <Stack spacing={3} alignItems={'center'} width={'100%'}>
               <Button
-                disabled={loading || !email || isValidEmail(email)} // Disable the button when loading or email is empty or invalid
+                disabled={loading || !email || !isValidEmail(email)} // Disable the button when loading or email is empty or invalid
                 onClick={debouncedHandleLogin} // Use debounced handleLogin
                 sx={{
                   display: 'flex',
