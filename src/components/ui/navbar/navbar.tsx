@@ -30,10 +30,12 @@ export default function Navbar() {
   const [restoranAnchorEl, setRestoranAnchorEl] = useState<null | HTMLElement>(null); // Separate state for restoran menu
   const [olehOlehAnchorEl, setOlehOlehAnchorEl] = useState<null | HTMLElement>(null); // State for oleh-oleh menu
   const [wisataAnchorEl, setWisataAnchorEl] = useState<null | HTMLElement>(null); // State for wisata menu
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null); // State for wisata menu
   const [hotelMenuActive, setHotelMenuActive] = useState(false); // State to track hotel menu activation
   const [restoranMenuActive, setRestoranMenuActive] = useState(false); // State to track restoran menu activation
   const [olehOlehMenuActive, setOlehOlehMenuActive] = useState(false); // State to track oleh-oleh menu activation
   const [wisataMenuActive, setWisataMenuActive] = useState(false); // State to track wisata menu activation
+  const [profileMenuActive, setProfileMenuActive] = useState(false); // State to track wisata menu activation
   const navigate = useNavigate();
   const [menuActive, setMenuActive] = useState(false);
   const [userFullName, setUserFullName] = useState('');
@@ -67,6 +69,12 @@ export default function Navbar() {
     fetchUserData();
   }, []);
 
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setProfileAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+    setProfileMenuActive(true); // Set hotel menu as active
+    handleMenuOpen();
+  };
+
   const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
     setHotelMenuActive(true); // Set hotel menu as active
@@ -98,10 +106,12 @@ export default function Navbar() {
     setRestoranAnchorEl(null); // Clear restoran anchor element to close the restoran menu
     setOlehOlehAnchorEl(null); // Clear hotel anchor element to close the hotel menu
     setWisataAnchorEl(null);
+    setProfileAnchorEl(null);
     setHotelMenuActive(false); // Set hotel menu as inactive
     setRestoranMenuActive(false); // Set restoran menu as inactive
     setOlehOlehMenuActive(false); // Set oleh-oleh menu as inactive
     setWisataMenuActive(false); // Set wisata menu as inactive
+    setProfileMenuActive(false); // Set wisata menu as inactive
     setMenuActive(false);
   };
 
@@ -110,6 +120,10 @@ export default function Navbar() {
   }
   const handleProfilemenu = () => {
     navigate(`/profile`)
+  }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate(`/login`)
   }
   const handleMenuItemClick = (destination: string) => {
     navigate(`/hotel-${destination}`); // Navigate to the specified route
@@ -161,7 +175,7 @@ export default function Navbar() {
     <AppBar
   position="sticky"
   sx={{
-    backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive) ? 'white' : (isOpaque ? 'white' : 'transparent'),
+    backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive) ? 'white' : (isOpaque ? 'white' : 'transparent'),
     transition: 'background-color 0.3s ease-in-out', // Add transition effect
     boxShadow: isOpaque ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
     margin: '0px 0px',
@@ -187,7 +201,7 @@ export default function Navbar() {
   onClick={handleBerandamenu}
   sx={{
     color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     padding:'0px',
     minWidth:'auto',
     height:'auto',
@@ -218,7 +232,7 @@ export default function Navbar() {
   endIcon={<ExpandMoreIcon sx={{transform: hotelMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: hotelMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
   sx={{
     color: hotelMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (hotelMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     transition: 'color 0.4s ease-in-out',
   }}
 >
@@ -271,7 +285,7 @@ export default function Navbar() {
   endIcon={<ExpandMoreIcon sx={{transform: restoranMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: restoranMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
   sx={{
     color: restoranMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (restoranMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     transition: 'color 0.4s ease-in-out',
   }}
 >
@@ -325,7 +339,7 @@ export default function Navbar() {
   endIcon={<ExpandMoreIcon sx={{transform: olehOlehMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: olehOlehMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
   sx={{
     color: olehOlehMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (olehOlehMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     transition: 'color 0.4s ease-in-out',
   }}
 >
@@ -378,7 +392,7 @@ export default function Navbar() {
   endIcon={<ExpandMoreIcon sx={{transform: wisataMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: wisataMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
   sx={{
     color: wisataMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (wisataMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     transition: 'color 0.4s ease-in-out',
   }}
 >
@@ -437,7 +451,7 @@ export default function Navbar() {
                 padding: '0px',
                 border:(isOpaque ? '2px solid gray' : (menuActive ? '2px solid gray' : '2px solid white')),                  
                 color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
-                  '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red', border: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? '3px solid gray' : '3px solid red'},
+                  '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red', border: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? '3px solid gray' : '3px solid red'},
                   transition: 'color 0.75s ease-in-out, border 0.4s ease-in-out'
               }}
             >
@@ -496,16 +510,16 @@ export default function Navbar() {
     </Stack>
   </Stack>
 )}
-              <Stack justifyContent={'center'} alignItems={'center'}>
+              <Stack direction={'row'}>
               <Button 
   disableElevation 
   disableFocusRipple 
   disableRipple 
   disableTouchRipple
-  onClick={handleProfilemenu}
+  onClick={handleProfileMenuOpen}
   sx={{
-    color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? 'gray' : 'red' },
+    color: profileMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (profileMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     padding:'0px',
     minWidth:'auto',
     height:'auto',
@@ -529,7 +543,29 @@ export default function Navbar() {
                     {userFullName.length > 12 ? `${userFullName.slice(0, 12)}..` : userFullName}
                     </Typography>
                 </Button>
+                <Menu
+                disableScrollLock
+                anchorEl={profileAnchorEl}
+                open={Boolean(profileAnchorEl)}
+                onClose={handleMenuClose}
+                elevation={0}
+                PaperProps={{
+                  style: {
+                    background: isOpaque ? 'white' : 'white',
+                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
+                    width:'270px',
+                    borderRadius:'0px 0px 30px 30px',
+                    transition: 'background 0.2s ease-in-out ',
+                  },
+                }}
+              >
+                    <MenuItem onClick={() => handleProfilemenu()} sx={menuItemStyle}>Profile</MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => handleLogout()} sx={menuItemStyle}>Sign out</MenuItem>
+                </Menu>
               </Stack>
+              
           </Stack>
           
         </Toolbar>
