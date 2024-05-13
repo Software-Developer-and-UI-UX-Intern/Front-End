@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider } from '@mui/material';
+import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, Link } from '@mui/material';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -22,6 +22,31 @@ const menuItemStyle = {
   },
 };
 
+interface Data {
+  oleh: OlehData[];
+  wisata: WisataData[];
+  hotels: HotelData[];
+  restoran: RestoranData[];
+}
+interface OlehData {
+  nama: string;
+  // Add more properties as needed
+}
+
+interface WisataData {
+  nama: string;
+  // Add more properties as needed
+}
+
+interface HotelData {
+  nama: string;
+  // Add more properties as needed
+}
+
+interface RestoranData {
+  nama: string;
+  // Add more properties as needed
+}
 export default function Navbar() {
   const [isOpaque, setIsOpaque] = useState(false);
   const [showCategories, setShowCategories] = useState(true);
@@ -39,6 +64,43 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuActive, setMenuActive] = useState(false);
   const [userFullName, setUserFullName] = useState('');
+  const [data, setData] = useState<Data>({
+    oleh: [],
+    wisata: [],
+    hotels: [],
+    restoran: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const olehResponse = await fetch('https://tripselbe.fly.dev/oleh');
+        const olehData: OlehData[] = await olehResponse.json();
+  
+        const wisataResponse = await fetch('https://tripselbe.fly.dev/wisata');
+        const wisataData: WisataData[] = await wisataResponse.json();
+  
+        const hotelsResponse = await fetch('https://tripselbe.fly.dev/hotels');
+        const hotelsData: HotelData[] = await hotelsResponse.json();
+  
+        const restoranResponse = await fetch('https://tripselbe.fly.dev/restoran');
+        const restoranData: RestoranData[] = await restoranResponse.json();
+  
+        setData({
+          oleh: olehData,
+          wisata: wisataData,
+          hotels: hotelsData,
+          restoran: restoranData,
+        });
+        console.log(hotelsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -171,16 +233,17 @@ export default function Navbar() {
     setSearchValue(''); // Clear search input when toggling visibility
   };
   return (
-
+    
     <AppBar
   position="sticky"
   sx={{
-    backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive) ? 'white' : (isOpaque ? 'white' : 'transparent'),
+    backgroundColor: (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive || !showCategories) ? 'white' : (isOpaque ? 'white' : 'transparent'),
     transition: 'background-color 0.3s ease-in-out', // Add transition effect
     boxShadow: isOpaque ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
     margin: '0px 0px',
     padding: '0px 0px',
     height:'105px',
+    overflow:'visible',
     alignItems:'center',
     justifyContent: 'center',
   }}
@@ -462,8 +525,7 @@ export default function Navbar() {
             )}
             {!showCategories && (
   <Stack
-    direction="row"
-    alignItems="center"
+    direction="column" justifyContent={'center'} alignItems={'center'}
     sx={{
       width: '100%',
       height: '54px',
@@ -476,12 +538,10 @@ export default function Navbar() {
       alignItems="center"
       width={'100%'}
       sx={{
-        position: 'absolute',
-        right: 0, // Initially positioned outside the container
         animation: 'slideIn 0.5s forwards', // Animation for sliding in from right to left
         '@keyframes slideIn': {
-          from: { right: '-100%' }, // Start from outside the container
-          to: { right: 0 }, // Move to the left edge of the container
+          from: { transform: 'translateX(100%)' }, // Start from outside the container
+          to: { transform: 'translateX(0)' }, // Move to the left edge of the container
         },
       }}
     >
@@ -508,6 +568,7 @@ export default function Navbar() {
         }}
       />
     </Stack>
+    
   </Stack>
 )}
               <Stack direction={'row'}>
@@ -518,7 +579,7 @@ export default function Navbar() {
   disableTouchRipple
   onClick={handleProfileMenuOpen}
   sx={{
-    color: profileMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (profileMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+    color: profileMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (profileMenuActive ? 'red' : (menuActive || !showCategories ? 'gray' : 'white'))),
     '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
     padding:'0px',
     minWidth:'auto',
@@ -571,8 +632,82 @@ export default function Navbar() {
         </Toolbar>
         
       </Container>
-
+      <Stack sx={{ backgroundColor: 'white', borderRadius: '0 0 40px 40px', overflowY: 'auto' }} color={'#04214C'} width={'80%'} maxHeight={'calc(100vh - 105px)'} position={'absolute'} top={'105px'}>
+      {searchValue && (
+        <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+          Pencarian
+        </Typography>
+      )}
+      {searchValue && data.hotels && data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Hotel
+          </Typography>
+          {data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).map((hotel, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => navigate(`/cari-hotel?kesiniyuk=${encodeURIComponent(hotel.nama)}`)}>
+                {hotel.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.restoran && data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Restaurant
+          </Typography>
+          {data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).map((restoran, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => navigate(`/cari-restaurant?kesiniyuk=${encodeURIComponent(restoran.nama)}`)}>
+                {restoran.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.oleh && data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Oleh-Oleh
+          </Typography>
+          {data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).map((oleh, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => navigate(`/cari-oleh?kesiniyuk=${encodeURIComponent(oleh.nama)}`)}>
+                {oleh.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.wisata && data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Wisata
+          </Typography>
+          {data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).map((wisata, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => navigate(`/cari-wisata?kesiniyuk=${encodeURIComponent(wisata.nama)}`)}>
+                {wisata.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {!searchValue || 
+        (
+          (data.hotels && data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.restoran && data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.oleh && data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.wisata && data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0)
+        )
+      && (
+        <Typography padding={'30px'} fontSize={'22px'} fontWeight={500}>
+          Tidak ada yang cocok
+        </Typography>
+      )}
+    </Stack>
     </AppBar>
-
+    
   );
 }
