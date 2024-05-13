@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect } from '@mui/material';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
   width: '100%',
@@ -39,6 +40,7 @@ const customInputStyle = {
 };
 
 export default function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -368,7 +370,7 @@ export default function Register() {
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'}>
             <Button
               type="button"
-              onClick={() => console.log('Ubah Password')}
+              onClick={() => navigate('/profile-password', { state: { email: formData.email }})}
               sx={{
                 display: 'flex',
                 justifyContent: 'center',

@@ -10,6 +10,8 @@ import { LupaVerifikasi } from './pages/Login/Lupapassword/Lupaverifikasi';
 import { Verifikasi } from './pages/Login/verification';
 import { Register } from './pages/Registrasi';
 import { Profile } from './pages/profile';
+// import { ProfileLupaPassword } from './pages/profile/Lupapassword';
+import { ProfileLupaVerifikasi } from './pages/profile/Lupapassword/Lupaverifikasi';
 import { About } from './pages/About';
 import { Flores } from './pages/About/flores';
 import { Bali } from './pages/About/bali';
@@ -287,6 +289,17 @@ const router = createBrowserRouter([
         </ProtectedRoute>
       )
     },
+    {
+      path: '/profile-password',
+      element: (
+        <ProtectedRoute>
+        <>
+          <ProfileLupaVerifikasi />
+        </>
+        </ProtectedRoute>
+      )
+    },
+   
   {
     path: '/login',
     element: <Login />,
