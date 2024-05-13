@@ -54,7 +54,8 @@ export default function Register() {
     domisili: '',
     jenisKelamin: '',
     password: '',
-    confirmPassword: '' // New state for confirm password
+    confirmPassword: '',
+    status: '' 
   });
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -113,20 +114,26 @@ export default function Register() {
         // Check if user status is "guest"
         if (userData.status === 'guest') {
           // Update existing user data
+          const updateData = { ...formData };
+          // Check if the user status was guest before
+          if (userData.status === 'guest') {
+            // Set the user status to be the same as before
+            updateData.status = userData.status;
+          }
           const updateResponse = await fetch('https://tripselbe.fly.dev/user', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updateData),
           });
-  
+    
           if (!updateResponse.ok) {
             // Handle non-200 HTTP status codes
             const errorMessage = await updateResponse.text();
             throw new Error(`Server responded with status ${updateResponse.status}: ${errorMessage}`);
           }
-  
+    
           alert('User data updated successfully');
           navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
         } else {
@@ -142,13 +149,13 @@ export default function Register() {
           },
           body: JSON.stringify(formData),
         });
-  
+    
         if (!registerResponse.ok) {
           // Handle non-200 HTTP status codes
           const errorMessage = await registerResponse.text();
           throw new Error(`Server responded with status ${registerResponse.status}: ${errorMessage}`);
         }
-  
+    
         const registerData = await registerResponse.json();
         alert(registerData.message); // Display success message from the server
         navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
@@ -156,7 +163,7 @@ export default function Register() {
     } catch (error) {
       console.error('Error registering user:', error);
       alert(`Failed to register user ${error}`); // Alert the specific error message
-    }
+    }    
   };
   
 
