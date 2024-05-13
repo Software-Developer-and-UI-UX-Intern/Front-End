@@ -156,13 +156,25 @@ export default function Login() {
       setLoading(false);
     }
   };
-  
 
   const handlePasswordUpdate = async () => {
     try {
       setLoading(true);
-
-      // Update password
+  
+      // Fetch user information to check status
+      const response = await fetch(`https://tripselbe.fly.dev/user/${email}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user information');
+      }
+  
+      const userData = await response.json();
+  
+      // Check if user status is 'guest'
+      if (userData.status === 'guest') {
+        throw new Error('Only registered users can change their password');
+      }
+  
+      // Proceed with password update
       const passwordUpdateResponse = await fetch('https://tripselbe.fly.dev/user-password', {
         method: 'PUT',
         headers: {
@@ -173,11 +185,11 @@ export default function Login() {
           password: formData.password // Use the new password from the form data
         })
       });
-
+  
       if (!passwordUpdateResponse.ok) {
         throw new Error('Password update failed');
       }
-
+  
       // Password updated successfully
       const passwordUpdateData = await passwordUpdateResponse.json();
       console.log('Password updated successfully:', passwordUpdateData.message);
@@ -186,8 +198,10 @@ export default function Login() {
     } catch (error) {
       console.error('Error updating password:', error);
       setLoading(false);
+      // Handle error (e.g., display error message)
     }
   };
+  
 
   return (
     <Box>

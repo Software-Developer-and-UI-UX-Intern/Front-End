@@ -62,20 +62,20 @@ export default function Register() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  interface FormDataObject {
-    fullName: string;
-    email: string;
-    nik: string;
-    phoneNumber: string;
-    domisili: string;
-    jenisKelamin: string;
-    password: string;
-  }
+  // interface FormDataObject {
+  //   fullName: string;
+  //   email: string;
+  //   nik: string;
+  //   phoneNumber: string;
+  //   domisili: string;
+  //   jenisKelamin: string;
+  //   password: string;
+  // }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitPressed(true); // Button is pressed
-
+  
     // Check if any of the fields are empty
     if (
       formData.fullName === '' ||
@@ -89,57 +89,76 @@ export default function Register() {
     ) {
       return; // Prevent form submission
     }
-
+  
     // Check if email ends with "@telkomsel.co.id"
     if (!formData.email.endsWith('@telkomsel.co.id')) {
       return; // Prevent form submission
     }
-
+  
     // Check if password has at least 8 characters
     if (formData.password.length < 8) {
       return; // Prevent form submission
     }
-
+  
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
       return; // Prevent form submission
     }
-
-    const formDataCopy = new FormData(e.target as HTMLFormElement);
-    const formDataObject: FormDataObject = {
-      fullName: formDataCopy.get('fullName') as string,
-      email: formDataCopy.get('email') as string,
-      nik: formDataCopy.get('nik') as string,
-      phoneNumber: formDataCopy.get('phoneNumber') as string,
-      domisili: formDataCopy.get('domisili') as string,
-      jenisKelamin: formDataCopy.get('jenisKelamin') as string,
-      password: formDataCopy.get('password') as string,
-    };
-
+  
     try {
-      const response = await fetch('https://tripselbe.fly.dev/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataObject),
-      });
-
-      if (!response.ok) {
-        // Handle non-200 HTTP status codes
-        const errorMessage = await response.text();
-        throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
+      // Check if user with the provided email exists
+      const response = await fetch(`https://tripselbe.fly.dev/user/${formData.email}`);
+      if (response.ok) {
+        const userData = await response.json();
+        // Check if user status is "guest"
+        if (userData.status === 'guest') {
+          // Update existing user data
+          const updateResponse = await fetch('https://tripselbe.fly.dev/user', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+  
+          if (!updateResponse.ok) {
+            // Handle non-200 HTTP status codes
+            const errorMessage = await updateResponse.text();
+            throw new Error(`Server responded with status ${updateResponse.status}: ${errorMessage}`);
+          }
+  
+          alert('User data updated successfully');
+          navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
+        } else {
+          // User already exists, display error message
+          alert('User with provided email already exists');
+        }
+      } else {
+        // User does not exist, proceed with registration
+        const registerResponse = await fetch('https://tripselbe.fly.dev/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (!registerResponse.ok) {
+          // Handle non-200 HTTP status codes
+          const errorMessage = await registerResponse.text();
+          throw new Error(`Server responded with status ${registerResponse.status}: ${errorMessage}`);
+        }
+  
+        const registerData = await registerResponse.json();
+        alert(registerData.message); // Display success message from the server
+        navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
       }
-
-      const data = await response.json();
-      alert(data.message); // Display success message from the server
-      navigate(`/login`);
     } catch (error) {
       console.error('Error registering user:', error);
       alert(`Failed to register user ${error}`); // Alert the specific error message
     }
   };
-
+  
 
   return (
     <Box>
@@ -217,7 +236,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Nama Lengkap (Sesuai KTP)*
+                      Nama Lengkap (Sesuai KTP)<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -266,7 +285,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Email Telkomsel*
+                      Email Telkomsel<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -315,7 +334,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      NIK*
+                      Nomor Induk Kepegawaian<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -366,7 +385,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      No. handphone*
+                      No. handphone<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -415,7 +434,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Domisili*
+                      Domisili<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <MuiSelect
                     displayEmpty
@@ -484,7 +503,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Jenis Kelamin*
+                      Jenis Kelamin<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <MuiSelect
                       displayEmpty
@@ -553,7 +572,7 @@ export default function Register() {
                     fontSize: '24px',
                     color: '#04214C'
                   }}>
-                    Password*
+                    Password<span style={{ color: '#FF010C' }}>*</span>
                   </Typography>
                   <Input
                     disableUnderline
@@ -615,7 +634,7 @@ export default function Register() {
                     fontSize: '24px',
                     color: '#04214C',
                   }}>
-                    konfirmasi Password*
+                    konfirmasi Password<span style={{ color: '#FF010C' }}>*</span>
                   </Typography>
                   <Input
                     disableUnderline

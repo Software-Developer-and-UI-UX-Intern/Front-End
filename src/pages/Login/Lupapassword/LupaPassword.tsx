@@ -50,36 +50,43 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      if (!isValidEmail(email)) {
-        throw new Error('Invalid email format');
-      }
-  
       setLoading(true);
-  
+
+      // Fetch user information to check status
+      const response = await fetch(`https://tripselbe.fly.dev/user/${email}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user information');
+      }
+
+      const userData = await response.json();
+
+      // Check if user status is 'guest'
+      if (userData.status === 'guest') {
+        throw new Error('Only registered users can reset their password');
+      }
+
       // Send a request to the /resend-otp endpoint to send OTP to the email
-      const response = await fetch('https://tripselbe.fly.dev/resend-otp', {
+      const otpResponse = await fetch('https://tripselbe.fly.dev/resend-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email })
       });
-  
-      if (response.ok) {
-        // If OTP sent successfully, navigate to the verification page with the email in the URL query parameter
-        navigate(`/verifikasi-lupa-password?nihotpemail=${email}`);
-      } else {
-        // Handle HTTP errors
-        console.error('Failed to resend OTP:', response.status);
+
+      if (!otpResponse.ok) {
+        throw new Error('Failed to resend OTP');
       }
-  
-      setLoading(false);
+
+      // If OTP sent successfully, navigate to the verification page with the email in the URL query parameter
+      navigate(`/verifikasi-lupa-password?nihotpemail=${email}`);
     } catch (error) {
       console.error('Error:', error);
+      // Handle error (e.g., display error message)
+    } finally {
       setLoading(false);
     }
   };
-  
 
   const debouncedHandleLogin = debounce(handleLogin, 1000);
 

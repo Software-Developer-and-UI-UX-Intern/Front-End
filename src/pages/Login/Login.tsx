@@ -96,7 +96,8 @@ export default function Login() {
       } else {
         // User is a guest, redirect to verification page
         setLoading(false);
-        navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
+        alert('Akun belum terverifikasi, mohon registrasi ulang')
+        // navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
       }
 
     } catch (error) {
