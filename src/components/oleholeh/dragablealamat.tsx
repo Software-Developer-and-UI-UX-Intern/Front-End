@@ -11,7 +11,6 @@ export default function DragableAlamat() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [addresses, setAddresses] = useState<Location[] | null>(null);
   const kesiniyuk = new URLSearchParams(location.search).get('kesiniyuk');
-  const [loading, setLoading] = useState<boolean>(true);
 
   // Variables to handle dragging
   let isDragging = false;
@@ -24,14 +23,14 @@ export default function DragableAlamat() {
         const response = await fetch(`https://tripselbe.fly.dev/addresses/${kesiniyuk}`);
         if (!response.ok) {
           console.error('Error fetching data:', response.statusText);
-          setLoading(false);
+          // setLoading(false);
           return;
         }
         const data: { nama: string, gambar_url: string }[] = await response.json();
         if (data.length === 0) {
           // Handle the case where no data is returned
           console.log('No data found');
-          setLoading(false);
+          // setLoading(false);
           return;
         }
         const updatedAddresses: Location[] = data.map(item => ({
@@ -39,10 +38,10 @@ export default function DragableAlamat() {
           imageUrl: item.gambar_url,
         }));
         setAddresses(updatedAddresses);
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false);
+        // setLoading(false);
       }
     };
   
@@ -75,37 +74,37 @@ export default function DragableAlamat() {
     isDragging = false;
   };
 
-  if (loading || addresses === null) {
-    // Display loading text or gray background items while data is being fetched or if addresses is null
-    return (
-      <Stack direction="row">
-         <Stack
-        ref={containerRef}
-        direction="row"
-        spacing={3}
-        sx={{
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          },
-          '-ms-overflow-style': 'none',
-          scrollbarWidth: 'none',
-          overflowX: 'auto',
-          maxWidth: '100%',
-          width: '100%'
-        }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-          {[...Array(2)].map((_, index) => (
-            <Stack key={index} className='loading' sx={{ backgroundColor: 'lightgray', width: '570px', height: '300px', borderRadius: '40px 0px' }}>
+  // if (loading || addresses === null) {
+  //   // Display loading text or gray background items while data is being fetched or if addresses is null
+  //   return (
+  //     <Stack direction="row">
+  //        <Stack
+  //       ref={containerRef}
+  //       direction="row"
+  //       spacing={3}
+  //       sx={{
+  //         '&::-webkit-scrollbar': {
+  //           display: 'none'
+  //         },
+  //         '-ms-overflow-style': 'none',
+  //         scrollbarWidth: 'none',
+  //         overflowX: 'auto',
+  //         maxWidth: '100%',
+  //         width: '100%'
+  //       }}
+  //       onMouseDown={handleMouseDown}
+  //       onMouseMove={handleMouseMove}
+  //       onMouseUp={handleMouseUp}
+  //     >
+  //         {[...Array(2)].map((_, index) => (
+  //           <Stack key={index} className='loading' sx={{ backgroundColor: 'lightgray', width: '570px', height: '300px', borderRadius: '40px 0px' }}>
               
-            </Stack>
-          ))}
-        </Stack>
-      </Stack>
-    );
-  }
+  //           </Stack>
+  //         ))}
+  //       </Stack>
+  //     </Stack>
+  //   );
+  // }
 
   return (
     <Stack direction="row">
@@ -127,7 +126,7 @@ export default function DragableAlamat() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
-        {addresses.map((address, index) => (
+        {addresses?.map((address, index) => (
           <Stack key={index}>
             <img
               src={address.imageUrl}

@@ -11,6 +11,7 @@ interface OlehData {
   parkir: string;
   description: string;
   domisili: string;
+  single_alamat: string;
 }
 
 export default function Oleh() {
@@ -198,6 +199,17 @@ export default function Oleh() {
           Alamat
         </Typography>
         <Dragablealamat />
+        {data.single_alamat && (
+        <Stack width={'100%'} height={'600px'} className='loading' sx={{
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          borderRadius: '0px 40px',
+          justifyContent: 'center',
+        }}>
+          <iframe src={data.single_alamat}
+            width="100%" height="100%" className='loading' frameBorder={'0px'} style={{ borderRadius: '0px 30px' }}></iframe>
+        </Stack>
+      )}
       </Stack>
     </Stack>
   );

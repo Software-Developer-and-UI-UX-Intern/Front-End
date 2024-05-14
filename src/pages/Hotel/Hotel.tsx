@@ -22,7 +22,12 @@ interface HotelData {
 
 export default function Hotel() {
   const [hotelData, setHotelData] = useState<HotelData | null>(null);
-
+  useEffect(() => {
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.marginTop = '0px';
+    window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     const fetchHotelData = async () => {
       try {
