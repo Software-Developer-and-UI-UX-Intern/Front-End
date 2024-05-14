@@ -127,14 +127,17 @@ export default function Hotel() {
         width: '100%',
         margin: '0',
       }}>
-        <Stack  marginLeft={'100px'} marginRight={'100px'} marginTop={'250px'}>
+        <Stack  marginLeft={'100px'} marginRight={'100px'} marginTop={'250px'} height={'600px'} justifyContent={'space-between'}>
+        <Stack>
         <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di Bali!</Typography>
         <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
-        <Stack justifyContent={'center'} alignItems={'center'} paddingTop={'275px'}>
+        </Stack>
+        <Stack justifyContent={'center'} alignItems={'center'} >
         <Button onClick={handleScrollDown} sx={{width:'500px', height:'100px',boxShadow:'0px 4px 4px 0px rgba(0, 0, 0, 0.25)',borderRadius:'100px', color:'white',fontSize:'44px', fontWeight:700,     background: 'linear-gradient(360deg, #fb8c2a, #FF010C)'}}>Cek Rekomendasi</Button>
         </Stack>
         </Stack>
       </Stack>
+      <Stack width={'100%'} height={'30px'} sx={{backgroundColor:'white'}} marginTop={'-10px'}/>
 
       <Stack sx={{
         display: 'flex',
@@ -287,15 +290,10 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} />
+            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} selectedDomisili={'bali'} />
             </Stack>
           </Stack>
-
-
-
         </Stack>
-
-    
         </Stack>
       </Stack>
     </Stack>

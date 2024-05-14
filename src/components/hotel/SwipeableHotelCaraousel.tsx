@@ -78,7 +78,7 @@ function SwipeableHotelCarousel() {
         <Stack width={'100%'} position="relative">
             <CarouselProvider
                 naturalSlideWidth={1440}
-                naturalSlideHeight={614}
+                naturalSlideHeight={511}
                 totalSlides={hotelImages.length}
                 visibleSlides={1}
                 currentSlide={activeIndex}

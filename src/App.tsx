@@ -20,7 +20,9 @@ import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh';
 import {OlehBali} from './pages/Oleh/OlehBali';
 import {Hotel} from './pages/Hotel';
-import {HotelBali} from './pages/Hotel/bali'
+import {HotelBali} from './pages/Hotel/bali';
+import {HotelNTT} from './pages/Hotel/ntt';
+import {HotelNTB} from './pages/Hotel/ntb';
 import {OlehMataram} from './pages/Oleh/OlehMataram';
 import {OlehKupang} from './pages/Oleh/OlehKupang';
 import {OlehFlores} from './pages/Oleh/OlehFlores';
@@ -210,7 +212,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
       <>
-        <Navbarwhite />
+        <Navbar />
         <RestoranBali />
         <Footer/>
       </>
@@ -222,7 +224,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
       <>
-        <Navbarwhite />
+        <Navbar/>
         <RestoranMataram />
         <Footer/>
       </>
@@ -234,7 +236,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
       <>
-        <Navbarwhite />
+        <Navbar/>
         <RestoranKupang />
         <Footer/>
       </>
@@ -246,7 +248,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
       <>
-        <Navbarwhite />
+        <Navbar/>
         <RestoranFlores/>
         <Footer/>
       </>
@@ -273,6 +275,30 @@ const router = createBrowserRouter([
         <>
           <Navbar/>
           <HotelBali />
+          <Footer/>
+        </>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/hotel-NTT',
+      element: (
+        <ProtectedRoute>
+        <>
+          <Navbar/>
+          <HotelNTT />
+          <Footer/>
+        </>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/hotel-NTB',
+      element: (
+        <ProtectedRoute>
+        <>
+          <Navbar/>
+          <HotelNTB />
           <Footer/>
         </>
         </ProtectedRoute>

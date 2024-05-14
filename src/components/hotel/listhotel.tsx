@@ -13,6 +13,7 @@ interface Hotel {
   jarak?: string;
   thumbnailUrl?: string; // New property for thumbnail image URL
   fasilitas?: string[]; // New property for hotel facilities
+  domisili?:string;
 }
 
 interface ListHotelProps {
@@ -20,9 +21,10 @@ interface ListHotelProps {
   minimal: string;
   maximal: string;
   checkedFasilitas: string[];
+  selectedDomisili: string;
 }
 
-export default function ListHotel({ selectedStars, minimal, maximal, checkedFasilitas }: ListHotelProps) {
+export default function ListHotel({ selectedStars, minimal, maximal, checkedFasilitas, selectedDomisili }: ListHotelProps) {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const navigate = useNavigate();
 
@@ -79,7 +81,8 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
       .filter(hotel => checkedFasilitas.length === 0 || 
         checkedFasilitas.every(fasilitas => hotel.fasilitas && hotel.fasilitas.includes(fasilitas))
       )
-            .map((hotel, index) => (
+      .filter(hotel => selectedDomisili.length === 0 || selectedDomisili.includes(hotel.domisili?.toLocaleLowerCase() || ''))
+        .map((hotel, index) => (
           <Stack key={index} width={'100%'} height={'250px'} borderRadius={'40px 0px'} boxShadow={'0px 0px 20px 0px rgba(0, 0, 0, 0.25)'} direction={'row'} onClick={() => handleItemClick(hotel.nama)}>
             <Stack width={'55%'} height={'100%'} sx={{ background: '#04214C' }} borderRadius={'40px 0px 0px 0px'} >
               {/* Render hotel image */}
