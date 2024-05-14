@@ -155,7 +155,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Nama Lengkap (Sesuai KTP)*
+                  Nama Lengkap (Sesuai KTP)<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <Input
                   disableUnderline
@@ -184,7 +184,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Email Telkomsel*
+                  Email Telkomsel<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <Input
                   disableUnderline
@@ -215,7 +215,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Nomor Induk Kepegawaian*
+                  Nomor Induk Kepegawaian<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <Input
                   disableUnderline
@@ -246,7 +246,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  No. handphone*
+                  No. handphone<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <Input
                   disableUnderline
@@ -275,7 +275,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Domisili*
+                  Domisili<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <MuiSelect
                   displayEmpty
@@ -300,8 +300,8 @@ export default function Register() {
                   value={formData.domisili}
                   onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
                 >
-                  <MenuItem value="">
-                    <em>Pilih Domisili</em>
+                  <MenuItem value={formData.domisili}>
+                    <em>{formData.domisili}</em>
                   </MenuItem>
                   <MenuItem value='Bali'>Bali</MenuItem>
                   <MenuItem value='Kupang'>Kupang</MenuItem>
@@ -323,7 +323,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Jenis Kelamin*
+                  Jenis Kelamin<span style={{ color: '#FF010C' }}>*</span>
                 </Typography>
                 <MuiSelect
                   displayEmpty
@@ -348,8 +348,8 @@ export default function Register() {
                   value={formData.jenisKelamin}
                   onChange={(e) => setFormData({ ...formData, jenisKelamin: e.target.value })}
                 >
-                  <MenuItem value="">
-                    <em>Pilih Jenis Kelamin</em>
+                  <MenuItem value={formData.jenisKelamin}>
+                    <em>{formData.jenisKelamin}</em>
                   </MenuItem>
                   <MenuItem value='Perempuan'>Perempuan</MenuItem>
                   <MenuItem value='Pria'>Pria</MenuItem>
