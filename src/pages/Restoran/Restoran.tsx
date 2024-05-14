@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Link, Stack, Typography } from '@mui/material';
 import './Restoran.css';
 import call from '../../assets/restoran/call.svg';
 import List from '../../components/restoran/list';
@@ -215,10 +215,16 @@ export default function Oleh() {
             }}>
             <img src={call}></img>
             </Stack>
-            
+            <Link
+              href={`https://wa.me/${data.telfon}`}
+              style={{ textDecoration: 'none' }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
             <Typography noWrap fontSize={'32px'} color={'#04214C'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
               {`${data.telfon || 'Loading...'}`}
             </Typography>
+            </Link>
             </Stack>
         </Stack>
         <Typography fontSize={'32px'} textAlign={'justify'} color={'#04214C'}>

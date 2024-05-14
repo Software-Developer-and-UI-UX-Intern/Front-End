@@ -215,7 +215,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  NIK*
+                  Nomor Induk Kepegawaian*
                 </Typography>
                 <Input
                   disableUnderline
@@ -223,7 +223,7 @@ export default function Register() {
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
-                    'aria-label': 'Nomor Induk Kependudukan',
+                    'aria-label': 'Nomor Induk Kepegawaian',
                     name: 'nik',
                     value: formData.nik,
                     onChange: (e) => setFormData({ ...formData, nik: (e.target as HTMLInputElement).value }),

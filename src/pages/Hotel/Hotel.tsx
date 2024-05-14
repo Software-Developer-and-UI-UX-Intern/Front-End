@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Link, Stack, Typography } from '@mui/material';
 import DragableFasilitas from '../../components/hotel/dragableFasilitas';
 import { Icon } from '@iconify/react';
 import Carousel from '../../components/hotel/SwipeableHotelCaraousel'
@@ -120,9 +120,16 @@ export default function Hotel() {
           <Stack>
             <Icon icon="fluent:call-48-filled" width="50" height="50" style={{ color: 'red' }} />
           </Stack>
+          <Link
+              href={`https://wa.me/${telfon}`}
+              style={{ textDecoration: 'none' }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
           <Typography fontWeight={'500'} fontSize={'30px'} color={'#04214C'}>
             {telfon}
           </Typography>
+          </Link>
         </Stack>
         <Stack gap={3} direction={'row'}>
           <Icon icon="solar:route-bold" width="50" height="50" style={{ color: 'red' }} />
