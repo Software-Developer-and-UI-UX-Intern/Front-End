@@ -5,6 +5,7 @@ import '../../pages/Oleh/Oleh.css'
 interface Location {
   name: string;
   imageUrl: string;
+  jarak: string;
 }
 
 export default function DragableAlamat() {
@@ -26,7 +27,7 @@ export default function DragableAlamat() {
           // setLoading(false);
           return;
         }
-        const data: { nama: string, gambar_url: string }[] = await response.json();
+        const data: { nama: string, gambar_url: string, jarak:string }[] = await response.json();
         if (data.length === 0) {
           // Handle the case where no data is returned
           console.log('No data found');
@@ -36,6 +37,7 @@ export default function DragableAlamat() {
         const updatedAddresses: Location[] = data.map(item => ({
           name: item.nama,
           imageUrl: item.gambar_url,
+          jarak: item.jarak,
         }));
         setAddresses(updatedAddresses);
         // setLoading(false);
@@ -128,17 +130,21 @@ export default function DragableAlamat() {
       >
         {addresses?.map((address, index) => (
           <Stack key={index}>
-            <img
-              src={address.imageUrl}
-              alt={address.name}
-              height={'300px'}
-              width={'570px'}
-              style={{ borderRadius: '40px 0px', objectFit: 'cover', pointerEvents: 'none' }} // Disable pointer events on images
-            />
-            <Typography fontSize={'28px'} fontWeight={600} color={'#04214C'}>
-              {address.name}
+          <Stack sx={{
+            width: '580px', height: '325px',
+            backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url('${address.imageUrl}')`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            borderRadius: '50px 0px'
+          }}>
+            <Typography fontSize={'32px'} fontWeight={500} color={'white'} sx={{ marginTop: 33, marginLeft: 3 }}>
+              {address.jarak}
             </Typography>
           </Stack>
+          <Typography fontSize={'28px'} fontWeight={600} color={'#04214C'}>
+              {address.name}
+            </Typography>
+        </Stack>
         ))}
       </Stack>
     </Stack>

@@ -157,6 +157,7 @@ export default function Hotel() {
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>
           Alamat
         </Typography>
+        {((!alamat!=null)) && (
         <Stack width={'100%'} height={'600px'} className='loading' sx={{
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
@@ -166,6 +167,7 @@ export default function Hotel() {
           <iframe src={alamat}
             width="100%" height="100%" className='loading' frameBorder={'0px'} style={{ borderRadius: '0px 30px' }}></iframe>
         </Stack>
+        )}
       </Stack>
     </Stack>
   );
