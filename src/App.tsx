@@ -7,6 +7,9 @@ import Navbaradmin  from './components/ui/navbar/navbaradmin';
 import { AdminRestoran } from './pages/Admin/Restoran';
 import { InputRestoran } from './pages/Admin/Restoran/input';
 import { AddRestoran } from './pages/Admin/Restoran/add';
+import { AdminOleh } from './pages/Admin/Oleh';
+import { InputOleh } from './pages/Admin/Oleh/input';
+import { AddOleh } from './pages/Admin/Oleh/add';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
@@ -346,6 +349,18 @@ const router = createBrowserRouter([
         {
           path: 'add-restoran', 
           element: <AddRestoran />,
+        }, 
+        {
+          path: 'oleh-oleh', 
+          element: <AdminOleh />,
+        },
+        {
+          path: 'input-oleh-oleh', 
+          element: <InputOleh />,
+        },
+        {
+          path: 'add-oleh-oleh', 
+          element: <AddOleh />,
         },
       ],
     },

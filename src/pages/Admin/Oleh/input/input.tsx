@@ -76,18 +76,13 @@ export default function Register() {
     gambar_url1: '',
     gambar_url2: '',
     gambar_url3: '',
-    harga: '',
-    hargatermurah: '',
-    hargatermahal: '',
-    telfon: '',
+    tiket_masuk: '',
+    parkir: '',
     description: '',
     domisili: '',
-    alamat_gbr: '',
-    link_menu: '',
-    makanan: [''],
-    minuman: [''],
-    location: '',
-    halal: '',
+    single_alamat: '',
+    jarak: '',
+    
   });
   const [gambarFiles, setGambarFiles] = useState<File[]>([]);
   const [gambar2, setGambar2] = useState('');
@@ -119,55 +114,6 @@ export default function Register() {
     
   };
 
-  const handleAddInput = () => {
-    setFormData({
-      ...formData,
-      makanan: [...formData.makanan, ''],
-    });
-  };
-  const handleAddInputMinuman = () => {
-    setFormData({
-      ...formData,
-      minuman: [...formData.minuman, ''],
-
-    });
-  };
-  const handleInputChange = (index: number, value: string) => {
-    const newMakanan = formData.makanan.map((item, i) =>
-      i === index ? value : item
-    );
-
-    setFormData({
-      ...formData,
-      makanan: newMakanan,
-    });
-  };
-  const handleInputChangeminuman = (index: number, value: string) => {
-    const newMinuman = formData.minuman.map((item, i) =>
-      i === index ? value : item
-    );
-    setFormData({
-      ...formData,
-      minuman: newMinuman,
-    });
-  };
-
-  const handleDeleteMakanan = (index: number) => {
-    const updatedMakanan = [...formData.makanan];
-    updatedMakanan.splice(index, 1);
-    setFormData({
-      ...formData,
-      makanan: updatedMakanan,
-    });
-  };
-  const handleDeleteMinuman = (index: number) => {
-    const updatedMinuman = [...formData.minuman];
-    updatedMinuman.splice(index, 1);
-    setFormData({
-      ...formData,
-      minuman: updatedMinuman,
-    });
-  };
   useEffect(() => {
     const fetchRestoranData = async () => {
       const { nama } = location.state;
@@ -178,33 +124,18 @@ export default function Register() {
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
-  
-        // Convert makanan and minuman strings back to arrays
-       const makananArray = restoranData.makanan ? restoranData.makanan.split(',') : [];
-       const minumanArray = restoranData.minuman ? restoranData.minuman.split(',') : [];
-   
-       // Split the harga into hargatermurah and hargatermahal
-       const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
-        const hargatermurah = hargaArray[0] || ''; // Get the smallest price
-        const hargatermahal = hargaArray[1] || ''; // Get the largest price
-    
+
         setFormData({
           nama: restoranData.nama || '',
           gambar_url1: restoranData.gambar_url1 || '',
           gambar_url2: restoranData.gambar_url2 || '',
           gambar_url3: restoranData.gambar_url3 || '',
-          harga: restoranData.harga || '',
-          hargatermurah:  hargatermurah,
-          hargatermahal: hargatermahal,
-          telfon: restoranData.telfon || '',
+          tiket_masuk: restoranData.tiket_masuk || '',
+          parkir: restoranData.parkir || '',
           description: restoranData.description || '',
           domisili: restoranData.domisili || '',
-          alamat_gbr: restoranData.alamat_gbr || '',
-          link_menu: restoranData.link_menu || '',
-          makanan: makananArray,
-          minuman: minumanArray,
-          location: restoranData.location || '',
-          halal: restoranData.halal || '',
+          single_alamat: restoranData.single_alamat || '',
+          jarak: restoranData.jarak || '',
         });
       } catch (error) {
         console.error('Error fetching restoran data:', error);
@@ -223,19 +154,12 @@ export default function Register() {
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
-  
-      const makananString = formData.makanan.join(',');
-      const minumanString = formData.minuman.join(',');
-      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
 
       const updatedFormData = {
         ...formData,
-        makanan: makananString,
-        minuman: minumanString,
         gambar_url1: uploadedImages[0] || '', // If uploadedImages[0] is null, use an empty string
         gambar_url2: uploadedImages[1] || '', // If uploadedImages[1] is null, use an empty string
         gambar_url3: uploadedImages[2] || '', // If uploadedImages[2] is null, use an empty string
-        harga: hargaString||'',
       };
   
       const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
@@ -361,7 +285,7 @@ export default function Register() {
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <Stack sx={{ width: 'auto' }} spacing={10} >
           <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
-          Tambah Data Restoran
+          Tambah Data Oleh-oleh
         </Typography>
           <Stack spacing={2} maxWidth={'100%'}>
             <Stack direction={'row'} gap={2}>
@@ -371,15 +295,15 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Restoran
+              Nama Tempat Oleh-Oleh
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama Restoran"
+                  placeholder="Nama Tempat Oleh-Oleh"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Nama Restoran',
+                    'aria-label': 'Nama Tempat Oleh-oleh',
                     name: 'fullName',
                     value: formData.nama,
                     onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
@@ -393,7 +317,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Domisili<span style={{ color: '#FF010C' }}>*</span>
+                  Domisili
                 </Typography>
                 <MuiSelect
                   displayEmpty
@@ -426,42 +350,6 @@ export default function Register() {
                   <MenuItem value='Mataram'>Mataram</MenuItem>
                   <MenuItem value='Flores'>Flores</MenuItem>
                 </MuiSelect>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                  Jenis Restoran
-                </Typography>
-                <MuiSelect
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Jenis Restoran' }}
-                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
-                  sx={{
-                    ...customInputStyle,
-                    '&:focus': {
-                      borderColor: 'transparent !important',
-                    },
-                    '& fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:active fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                  }}
-                  name="domisili"
-                  value={formData.halal}
-                  onChange={(e) => setFormData({ ...formData, halal: e.target.value })}
-                >
-                  <MenuItem value={formData.halal}>
-                    <em>{formData.halal}</em>
-                  </MenuItem>
-                  <MenuItem value='Halal'>Halal</MenuItem>
-                  <MenuItem value='Non Halal'>Non Halal</MenuItem>
-                </MuiSelect>
                 </Stack>
                 <Stack maxWidth={'50%'}>
                 <Typography sx={{
@@ -473,14 +361,14 @@ export default function Register() {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Jarak"
+                  placeholder="Dalam meter"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
                     'aria-label': 'Jarak',
                     name: 'fullName',
-                    value: formData.location,
-                    onChange: (e) => setFormData({ ...formData, location: (e.target as HTMLInputElement).value }),
+                    value: formData.jarak,
+                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
@@ -492,7 +380,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Harga
+                  Harga Tiket
                 </Typography>
                 <Stack alignItems={'center'} direction={'row'} gap={2} justifyContent={'space-between'}>
                 <Stack width={'100%'} maxWidth={'50%'}>
@@ -510,26 +398,26 @@ export default function Register() {
                   </Stack>
                 <Input
                 disableUnderline
-                  placeholder="Termurah"
+                  placeholder="Harga Tiket"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
                     'aria-label': 'Hargatermurah',
                     name: 'email',
-                    value: formData.hargatermurah,
-                    onChange: (e) => setFormData({ ...formData, hargatermurah: (e.target as HTMLInputElement).value }),
+                    value: formData.tiket_masuk,
+                    onChange: (e) => setFormData({ ...formData, tiket_masuk: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
                 </Stack>
                 </Stack>
-                <Typography sx={{
+                {/* <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
                   -
-                </Typography>
+                </Typography> */}
                 <Stack width={'100%'} maxWidth={'50%'}>
 
                 <Stack direction={'row'} alignItems={'center'}>
@@ -545,14 +433,14 @@ export default function Register() {
                   </Stack>
                 <Input
                 disableUnderline
-                  placeholder="Termahal"
+                  placeholder="Harga Parkir"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
-                    'aria-label': 'Hargatermahal',
+                    'aria-label': 'Harga Parkir',
                     name: 'email',
-                    value: formData.hargatermahal,
-                    onChange: (e) => setFormData({ ...formData, hargatermahal: (e.target as HTMLInputElement).value }),
+                    value: formData.parkir,
+                    onChange: (e) => setFormData({ ...formData, parkir: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
@@ -567,21 +455,21 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                No. Handphone
+                Link Alamat Utama
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="No. Handphone"
+                  placeholder="Link Alamat Utama"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'No.Handphone',
-                    name: 'fullName',
-                    value: formData.telfon,
-                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
+                    'aria-label': 'Link Alamat Utama',
+                    name: 'Link Alamat Utama',
+                    value: formData.single_alamat,
+                    onChange: (e) => setFormData({ ...formData, single_alamat: (e.target as HTMLInputElement).value }),
                   }}
                 />
-
+{/* 
                 <Stack gap={2}>
                 <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
                     Makanan
@@ -691,7 +579,7 @@ export default function Register() {
                   >
                     Tambah Minuman
                   </Button>
-                </Stack>
+                </Stack> */}
 
               </Stack>
               <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
@@ -794,50 +682,8 @@ export default function Register() {
               </Stack>
                 </Stack>
                 </Stack>
-                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Link Menu
-                </Typography>
-                <TextField
-                multiline
-                  variant='outlined'
-                  placeholder="Link Menu"
-                  sx={customInputStyle2}
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  inputProps={{
-                    'aria-label': 'Link menu',
-                    name: 'Link Menu',
-                    value: formData.link_menu,
-                    onChange: (e) => setFormData({ ...formData, link_menu: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
-                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Link Alamat
-                </Typography>
-                <TextField
-                multiline
-                  variant='outlined'
-                  placeholder="Link Alamat"
-                  sx={customInputStyle2}
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  inputProps={{
-                    'aria-label': 'Link Alamat',
-                    name: 'Link Alamat',
-                    value: formData.alamat_gbr,
-                    onChange: (e) => setFormData({ ...formData, alamat_gbr: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
+                
+                
               </Stack>
             </Stack>
           </Stack>

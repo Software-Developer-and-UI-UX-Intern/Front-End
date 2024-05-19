@@ -132,7 +132,7 @@ export default function Navbar() {
           {/* Wisata */}
           <Stack gap={2} direction={'row'} justifyContent={'center'} color={'#FFF'} alignItems={'center'}>
           <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
-                      onClick={() => navigate(`/admin-wisata`)}                  
+                      onClick={() => navigate(`/admin/wisata`)}                  
                       sx={{
                       color: '#FFF', // Change text color to gray
                       '&:hover': { fontWeight: 700, color: '#FFF' },
@@ -151,7 +151,7 @@ export default function Navbar() {
           {/* Oleh-oleh */}
           <Stack gap={2} direction={'row'} justifyContent={'center'} color={'#FFF'} alignItems={'center'}>
           <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
-                      onClick={() => navigate(`/admin-oleh-oleh`)}                  
+                      onClick={() => navigate(`/admin/oleh-oleh`)}                  
                       sx={{
                       color: '#FFF', // Change text color to gray
                       '&:hover': { fontWeight: 700, color: '#FFF' },
