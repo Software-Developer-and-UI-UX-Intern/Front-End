@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
-
 const customInputStyle = {
   width: '100%',
   height: '53px',
@@ -65,20 +64,49 @@ export default function Register() {
   const location = useLocation();
   const [formData, setFormData] = useState({
     nama: '',
-    gambarUrl1: '',
-    gambarUrl2: '',
-    gambarUrl3: '',
+    gambar_url1: '',
+    gambar_url2: '',
+    gambar_url3: '',
     harga: '',
     telfon: '',
     description: '',
     domisili: '',
-    alamatGbr: '',
-    linkMenu: '',
+    alamat_gbr: '',
+    link_menu: '',
     makanan: [''],
     minuman: [''],
     location: '',
     halal: '',
   });
+  const [gambarFiles, setGambarFiles] = useState<File[]>([]);
+  const [gambar2, setGambar2] = useState('');
+  const [gambar3, setGambar3] = useState('');
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const files = e.target.files;
+    if (files?.length) {
+      setGambarFiles(prevFiles => {
+        const newFiles = [...prevFiles];
+        newFiles[index - 1] = files[0]; // Index is 1-based, so subtract 1
+        return newFiles;
+      });
+    }
+    if (files) {
+  switch (index) {
+    case 1:
+      setGambar1(URL.createObjectURL(files[0]));
+      break;
+    case 2:
+      setGambar2(URL.createObjectURL(files[0]));
+      break;
+    case 3:
+      setGambar3(URL.createObjectURL(files[0]));
+      break;
+    default:
+      break;
+  }
+}
+    
+  };
 
   const handleAddInput = () => {
     setFormData({
@@ -113,31 +141,50 @@ export default function Register() {
     });
   };
 
-
+  const handleDeleteMakanan = (index: number) => {
+    const updatedMakanan = [...formData.makanan];
+    updatedMakanan.splice(index, 1);
+    setFormData({
+      ...formData,
+      makanan: updatedMakanan,
+    });
+  };
+  const handleDeleteMinuman = (index: number) => {
+    const updatedMinuman = [...formData.minuman];
+    updatedMinuman.splice(index, 1);
+    setFormData({
+      ...formData,
+      minuman: updatedMinuman,
+    });
+  };
   useEffect(() => {
     const fetchRestoranData = async () => {
       const { nama } = location.state;
-
-      
+  
       try {
         const response = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`);
         const restoranData = await response.json();
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
+  
+        // Convert makanan and minuman strings back to arrays
+        const makananArray = restoranData.makanan.split(',');
+        const minumanArray = restoranData.minuman.split(',');
+  
         setFormData({
           nama: restoranData.nama || '',
-          gambarUrl1: restoranData.gambar_url1 || '',
-          gambarUrl2: restoranData.gambar_url2 || '',
-          gambarUrl3: restoranData.gambar_url3 || '',
+          gambar_url1: restoranData.gambar_url1 || '',
+          gambar_url2: restoranData.gambar_url2 || '',
+          gambar_url3: restoranData.gambar_url3 || '',
           harga: restoranData.harga || '',
           telfon: restoranData.telfon || '',
           description: restoranData.description || '',
           domisili: restoranData.domisili || '',
-          alamatGbr: restoranData.alamat_gbr || '',
-          linkMenu: restoranData.link_menu || '',
-          makanan: Array.isArray(restoranData.makanan) ? restoranData.makanan : [''],
-          minuman: Array.isArray(restoranData.minuman) ? restoranData.minuman : [''],
+          alamat_gbr: restoranData.alamat_gbr || '',
+          link_menu: restoranData.link_menu || '',
+          makanan: makananArray,
+          minuman: minumanArray,
           location: restoranData.location || '',
           halal: restoranData.halal || '',
         });
@@ -147,40 +194,30 @@ export default function Register() {
     };
     fetchRestoranData();
   }, [location]);
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Check if any of the form fields are empty
-    // if (
-    //   // formData.nama === '' ||
-    //   // formData.harga === '' ||
-    //   // formData.telfon === '' ||
-    //   // formData.domisili === '' ||
-
-    //   // formData.description === '' ||
-    //   // formData.alamatGbr === '' ||
-    //   // formData.linkMenu === '' ||
-    //   // formData.location === '' ||
-    //   // formData.halal === '' 
-      
-    // ) {
-    //   return;
-    // }
-  
-
-  // Update formData with the strings
- 
+    
     try {
+      const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
+  
+      // Check if all uploads were successful
+      if (uploadedImages.some(image => image === null)) {
+        throw new Error('One or more image uploads failed');
+      }
+  
       const makananString = formData.makanan.join(',');
       const minumanString = formData.minuman.join(',');
   
-      // Update formData with the strings
       const updatedFormData = {
         ...formData,
         makanan: makananString,
         minuman: minumanString,
+        gambar_url1: uploadedImages[0] || '', // If uploadedImages[0] is null, use an empty string
+        gambar_url2: uploadedImages[1] || '', // If uploadedImages[1] is null, use an empty string
+        gambar_url3: uploadedImages[2] || '', // If uploadedImages[2] is null, use an empty string
       };
+  
       const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
         method: 'PUT',
         headers: {
@@ -188,12 +225,13 @@ export default function Register() {
         },
         body: JSON.stringify(updatedFormData),
       });
-
+  
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
-
+  
+      console.log(updatedFormData);
       const data = await response.json();
       alert(data.message);
     } catch (error) {
@@ -201,17 +239,103 @@ export default function Register() {
       alert(`Failed to update restoran: ${error}`);
     }
   };
+  
+
+  const handleFileUpload = async (file: File | null, index: number) => {
+    try {
+      if (!file) return null; // If file is null, return null
+  
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'ml_default');
+  
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!cloudinaryResponse.ok) {
+        throw new Error(`Failed to upload image ${index} to Cloudinary`);
+      }
+      
+      const cloudinaryData = await cloudinaryResponse.json();
+      const imageUrl = cloudinaryData.secure_url;
+  
+      console.log(`Image ${index} uploaded to Cloudinary: ${imageUrl}`);
+      return imageUrl;
+    } catch (error) {
+      console.error(`Error uploading image ${index} to Cloudinary:`, error);
+      return null;
+    }
+  };
+  
+  
+  const [gambar1, setGambar1] = useState('');
+
   const handleImage1 = () => {
-    console.log('Stack clicked!');
+    const fileInput1 = document.getElementById('fileInput1');
+    if (fileInput1) {
+      fileInput1.click();
+    }
   };
+  
   const handleImage2 = () => {
-    console.log('Stack clicked!');
-    // Your custom function logic here
+    const fileInput2 = document.getElementById('fileInput2');
+    if (fileInput2) {
+      fileInput2.click();
+    }
   };
-  const handleImage3= () => {
-    console.log('Stack clicked!');
-    // Your custom function logic here
+  
+  const handleImage3 = () => {
+    const fileInput3 = document.getElementById('fileInput3');
+    if (fileInput3) {
+      fileInput3.click();
+    }
   };
+
+  // const handleFileUpload = async (file: File, nama: string, index: number) => {
+  //   try {
+  //     // Create a FormData object
+  //     const formData = new FormData();
+  //     formData.append('file', file);
+  //     formData.append('upload_preset', 'your_cloudinary_upload_preset'); // Replace 'your_cloudinary_upload_preset' with your actual Cloudinary upload preset
+  
+  //     // Send the file to Cloudinary for upload
+  //     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+      
+  //     if (!cloudinaryResponse.ok) {
+  //       throw new Error(`Failed to upload image ${index} to Cloudinary`);
+  //     }
+      
+  //     // Get the uploaded image URL from the Cloudinary response
+  //     const cloudinaryData = await cloudinaryResponse.json();
+  //     const imageUrl = cloudinaryData.secure_url;
+  
+  //     // Update the restaurant data on the server
+  //     const updatedData = { ...formData, ['gambar_url' + index]: imageUrl, nama }; // Include the 'nama' property
+  //     const updateResponse = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(updatedData),
+  //     });
+  
+  //     if (!updateResponse.ok) {
+  //       throw new Error(`Failed to update restaurant data with image ${index}`);
+  //     }
+  
+  //     // Log success message
+  //     console.log(`Image ${index} uploaded and restaurant data updated successfully`);
+  //   } catch (error) {
+  //     console.error(`Error uploading image ${index} and updating restaurant data:`, error);
+  //     // Handle error as needed
+  //   }
+  // };  
+
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -443,15 +567,35 @@ export default function Register() {
                     Makanan
                   </Typography>
                   {formData.makanan.map((makanan, index) => (
-                    <Input
-                      key={index}
-                      disableUnderline
-                      placeholder={`Makanan ${index + 1}`}
-                      style={{ fontSize: '22px', color: '#04214C' }}
-                      sx={customInputStyle}
-                      value={makanan}
-                      onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
-                    />
+  <Stack direction="row" alignItems="center" key={index} gap={1}>
+  <Input
+    disableUnderline
+    placeholder={`Makanan ${index + 1}`}
+    style={{ fontSize: '22px', color: '#04214C' }}
+    sx={customInputStyle}
+    value={makanan}
+    onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
+  />
+  <Button
+                  type="button"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '60px',
+                    width: '240px',
+                    fontWeight: 500,
+                    fontSize: '22px',
+                    color: '#FFF',
+                    backgroundColor: '#04214C',
+                    borderRadius: '20px',
+                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  }}
+    onClick={() => handleDeleteMakanan(index)}
+  >
+    Delete
+  </Button>
+</Stack>
                   ))}
                   <Button
                     type="button"
@@ -478,15 +622,35 @@ export default function Register() {
                     Minuman
                   </Typography>
                   {formData.minuman.map((minuman, index) => (
-                    <Input
-                      key={index}
-                      disableUnderline
-                      placeholder={`Minuman ${index + 1}`}
-                      style={{ fontSize: '22px', color: '#04214C' }}
-                      sx={customInputStyle}
-                      value={minuman}
-                      onChange={(e) => handleInputChangeminuman(index, (e.target as HTMLInputElement).value)}
-                    />
+  <Stack direction="row" alignItems="center" key={index} gap={1}>
+  <Input
+    disableUnderline
+    placeholder={`Makanan ${index + 1}`}
+    style={{ fontSize: '22px', color: '#04214C' }}
+    sx={customInputStyle}
+    value={minuman}
+    onChange={(e) => handleInputChangeminuman(index, (e.target as HTMLInputElement).value)}
+  />
+  <Button
+                  type="button"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '60px',
+                    width: '240px',
+                    fontWeight: 500,
+                    fontSize: '22px',
+                    color: '#FFF',
+                    backgroundColor: '#04214C',
+                    borderRadius: '20px',
+                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  }}
+    onClick={() => handleDeleteMinuman(index)}
+  >
+    Delete
+  </Button>
+</Stack>
                   ))}
                   <Button
                     type="button"
@@ -541,30 +705,34 @@ export default function Register() {
                 </Typography>
                 <Stack height={'190px'} gap={2} direction={'row'} justifyContent={'space-between'}>
                 <Stack
-                justifyContent={'center'}
-                alignItems={'center'}
-                borderRadius={'20px'}
-                sx={{
-                  background: '#D9D9D9',
-                  // backgroundImage: `url(${makanan})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                }}
-                height={'100%'}
-                width={'100%'}
-                maxWidth={'33%'}
-                onClick={handleImage1}
-              >
-                
+  justifyContent={'center'}
+  alignItems={'center'}
+  borderRadius={'20px'}
+  sx={{
+    background: `${gambar1 ? `url(${gambar1})` : formData.gambar_url1 ? `url(${formData.gambar_url1})` : '#D9D9D9'}`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+  height={'100%'}
+  width={'100%'}
+  maxWidth={'33%'}
+  onClick={handleImage1}
+>
+                {/* File input for image 1 */}
+                <input
+                  type="file"
+                  id="fileInput1"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileInputChange(e, 1)}
+                  />
               </Stack>
               <Stack
                 justifyContent={'center'}
                 alignItems={'center'}
                 borderRadius={'20px'}
                 sx={{
-                  background: '#D9D9D9',
-                  // backgroundImage: `url(${makanan})`,
+                  background: `${gambar2 ? `url(${gambar2})` : formData.gambar_url2 ? `url(${formData.gambar_url2})` : '#D9D9D9'}`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -574,15 +742,20 @@ export default function Register() {
                 maxWidth={'33%'}
                 onClick={handleImage2}
               >
-                
+                {/* File input for image 1 */}
+                <input
+                  type="file"
+                  id="fileInput2"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileInputChange(e, 2)}
+                  />
               </Stack>
               <Stack
                 justifyContent={'center'}
                 alignItems={'center'}
                 borderRadius={'20px'}
                 sx={{
-                  background: '#D9D9D9',
-                  // backgroundImage: `url(${makanan})`,
+                  background: `${gambar3 ? `url(${gambar3})` : formData.gambar_url3 ? `url(${formData.gambar_url3})` : '#D9D9D9'}`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -592,10 +765,17 @@ export default function Register() {
                 maxWidth={'33%'}
                 onClick={handleImage3}
               >
-                
+                {/* File input for image 1 */}
+                <input
+                  type="file"
+                  id="fileInput3"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileInputChange(e, 3)}
+                  />
               </Stack>
                 </Stack>
                 </Stack>
+                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -603,18 +783,21 @@ export default function Register() {
                 }}>
                 Link Menu
                 </Typography>
-                <Input
-                  disableUnderline
-                  placeholder="Contoh : https://example.com"
+                <TextField
+                multiline
+                  variant='outlined'
+                  placeholder="Link Menu"
+                  sx={customInputStyle2}
                   style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Link Menu',
-                    name: 'fullName',
-                    value: formData.linkMenu,
-                    onChange: (e) => setFormData({ ...formData, linkMenu: (e.target as HTMLInputElement).value }),
+                    'aria-label': 'Link menu',
+                    name: 'Link Menu',
+                    value: formData.link_menu,
+                    onChange: (e) => setFormData({ ...formData, link_menu: (e.target as HTMLInputElement).value }),
                   }}
                 />
+                </Stack>
+                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -622,18 +805,20 @@ export default function Register() {
                 }}>
                 Link Alamat
                 </Typography>
-                <Input
-                  disableUnderline
+                <TextField
+                multiline
+                  variant='outlined'
                   placeholder="Link Alamat"
+                  sx={customInputStyle2}
                   style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
                   inputProps={{
                     'aria-label': 'Link Alamat',
-                    name: 'fullName',
-                    value: formData.alamatGbr,
-                    onChange: (e) => setFormData({ ...formData, alamatGbr: (e.target as HTMLInputElement).value }),
+                    name: 'Link Alamat',
+                    value: formData.alamat_gbr,
+                    onChange: (e) => setFormData({ ...formData, alamat_gbr: (e.target as HTMLInputElement).value }),
                   }}
                 />
+                </Stack>
               </Stack>
             </Stack>
           </Stack>
