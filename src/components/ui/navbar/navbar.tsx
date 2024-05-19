@@ -191,7 +191,6 @@ export default function Navbar() {
     navigate(`/hotel-${destination}`); // Navigate to the specified route
     handleMenuClose(); // Close the menu after clicking on a menu item
   };
-
  
   const handleRestoranMenuItemClick = (destination: string) => {
     navigate(`/restoran-${destination}`); // Navigate to the specified route for restoran
@@ -571,8 +570,8 @@ export default function Navbar() {
     
   </Stack>
 )}
-              <Stack direction={'row'}>
-              <Button 
+  <Stack direction={'row'}>
+  <Button 
   disableElevation 
   disableFocusRipple 
   disableRipple 

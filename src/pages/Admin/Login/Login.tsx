@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 import { Grid, Stack, Box, Typography, Input, CircularProgress } from '@mui/material'; // Import CircularProgress
-import { Button, InputAdornment, IconButton, Link } from '@mui/material';
+import { Button, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { debounce } from 'lodash';
-import bg from '../../assets/login.png';
-import logo from '../../assets/Trip-sel.png'
+import bg from '../../../assets/login.png';
+import logo from '../../../assets/Trip-sel.png'
 import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
@@ -14,7 +14,7 @@ const customInputStyle = {
   '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '2px solid #04214C', // Apply border directly to the input
+    border: '1px solid #04214C', // Apply border directly to the input
     outline: 'none',
     padding: '0px 10px'
   },
@@ -73,12 +73,12 @@ export default function Login() {
   async function handleLogin() {
     try {
       setLoading(true);
-      
+
       // Check user status
       const userResponse = await axios.get(`https://tripselbe.fly.dev/user/${email}`);
       const { status } = userResponse.data;
       
-      if (status !== 'guest') {
+      if (status === 'admin' || status === 'superadmin') {
         // User is not a guest, proceed with login
         const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
         const { token } = response.data;
@@ -96,7 +96,7 @@ export default function Login() {
       } else {
         // User is a guest, redirect to verification page
         setLoading(false);
-        alert('Akun belum terverifikasi, mohon registrasi ulang')
+        alert('Hanya Admin yang boleh masuk!')
         // navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
       }
 
@@ -107,12 +107,11 @@ export default function Login() {
     }
   }
 
-  
   // Function to save token and its expiration time in localStorage
   const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
     localStorage.setItem('token', token);
     localStorage.setItem('tokenExpiration', expirationTime.toString());
-  };  
+  };
 
   return (
     <Box>
@@ -178,7 +177,7 @@ export default function Login() {
                 fontSize: '32px',
                 color:'#FF010C',
               }}>
-                Selamat datang di Trip-sel
+                Selamat datang di Dashboard Trip-sel
               </Typography>
             </Stack>
             <Stack spacing={2}>
@@ -247,20 +246,7 @@ export default function Login() {
                 }}>
                   *Email atau password salah
                 </Typography>
-                <Link href='/lupa-password' sx={{
-                  textDecoration: 'underline',
-                  fontWeight: 700,
-                  color: '#04214C',
-                }}>
-                  <Typography sx={{
-                    fontWeight:500,
-                    color:'#04214C',
-                    fontSize:'22px',
-                    textAlign:'right'
-                  }}>
-                    Lupa Password
-                  </Typography>
-                </Link>
+                
             </Stack>
             <Stack spacing={3} alignItems={'center'} width={'100%'}>
               <Button
@@ -285,24 +271,6 @@ export default function Login() {
               >
                 {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}
               </Button>
-              <Stack direction={'row'} spacing={1}>
-                <Typography sx={{fontSize:'22px', fontWeight: 500}}>
-                  Belum punya akun?
-                </Typography>
-                <Link href='/register' sx={{
-                  textDecoration: 'underline',
-                  fontWeight: 700,
-                  color: '#FF010C',
-                }}>
-                  <Typography sx={{
-                    fontWeight:700,
-                    color:'#FF010C',
-                    fontSize:'22px',
-                  }}>
-                    Daftar
-                  </Typography>
-                </Link>
-              </Stack>
             </Stack>
           </Stack>
         </Grid>

@@ -13,7 +13,7 @@ const customInputStyle = {
   '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '1px solid #04214C', // Apply border directly to the input
+    border: '2px solid #04214C', // Apply border directly to the input
     outline: 'none',
     padding: '0px 10px'
   },

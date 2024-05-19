@@ -2,9 +2,14 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Navbar  from './components/ui/navbar/navbar';
 import Navbarwhite  from './components/ui/navbar/navbarwhite';
+import Navbaradmin  from './components/ui/navbar/navbaradmin';
+// import Adminlayout  from './pages/Admin/Login/adminlayout';
+import { AdminRestoran } from './pages/Admin/Restoran';
+import { InputRestoran } from './pages/Admin/Restoran/input';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
+// import { AdminLogin } from './pages/Admin/Login';
 import { LupaPassword } from './pages/Login/Lupapassword';
 import { LupaVerifikasi } from './pages/Login/Lupapassword/Lupaverifikasi';
 import { Verifikasi } from './pages/Login/verification';
@@ -325,7 +330,24 @@ const router = createBrowserRouter([
         </ProtectedRoute>
       )
     },
-   
+    {
+      path: '/admin',
+      element: <Navbaradmin />,
+      children: [
+        {
+          path: 'restoran', 
+          element: <AdminRestoran />,
+        },
+        {
+          path: 'input-restoran', 
+          element: <InputRestoran />,
+        },
+      ],
+    },
+    {
+      path: '/test',
+      element: <AdminRestoran />,
+    },
   {
     path: '/login',
     element: <Login />,
