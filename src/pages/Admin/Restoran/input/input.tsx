@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
 import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 
 const customInputStyle = {
   width: '100%',
@@ -62,16 +62,22 @@ const customInputStyle2 = {
 };
 
 export default function Register() {
-  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    nik: '',
-    phoneNumber: '',
+    nama: '',
+    gambarUrl1: '',
+    gambarUrl2: '',
+    gambarUrl3: '',
+    harga: '',
+    telfon: '',
+    description: '',
     domisili: '',
-    jenisKelamin: '',
+    alamatGbr: '',
+    linkMenu: '',
     makanan: [''],
     minuman: [''],
+    location: '',
+    halal: '',
   });
 
   const handleAddInput = () => {
@@ -106,83 +112,95 @@ export default function Register() {
       minuman: newMinuman,
     });
   };
+
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-  
-      if (token) {
-        try {
-          const response = await fetch('https://tripselbe.fly.dev/user', {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const userData = await response.json();
-          console.log(userData); // Log the received user data
-          
-          // Update the form data with user data
-          setFormData({
-            fullName: userData.full_name || '',
-            email: userData.email || '',
-            nik: userData.nik || '',
-            phoneNumber: userData.phone_number || '',
-            domisili: userData.domisili || '',
-            jenisKelamin: userData.jenis_kelamin || '',
-            makanan: Array.isArray(userData.makanan) ? userData.makanan : [''],
-            minuman: Array.isArray(userData.minuman) ? userData.minuman : [''],
-          });
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+    const fetchRestoranData = async () => {
+      const { nama } = location.state;
+
+      
+      try {
+        const response = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`);
+        const restoranData = await response.json();
+        if (!response.ok) {
+          throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
+        setFormData({
+          nama: restoranData.nama || '',
+          gambarUrl1: restoranData.gambar_url1 || '',
+          gambarUrl2: restoranData.gambar_url2 || '',
+          gambarUrl3: restoranData.gambar_url3 || '',
+          harga: restoranData.harga || '',
+          telfon: restoranData.telfon || '',
+          description: restoranData.description || '',
+          domisili: restoranData.domisili || '',
+          alamatGbr: restoranData.alamat_gbr || '',
+          linkMenu: restoranData.link_menu || '',
+          makanan: Array.isArray(restoranData.makanan) ? restoranData.makanan : [''],
+          minuman: Array.isArray(restoranData.minuman) ? restoranData.minuman : [''],
+          location: restoranData.location || '',
+          halal: restoranData.halal || '',
+        });
+      } catch (error) {
+        console.error('Error fetching restoran data:', error);
       }
     };
-  
-    fetchUserData();
-  }, []);
+    fetchRestoranData();
+  }, [location]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     // Check if any of the form fields are empty
-    if (
-      formData.fullName === '' ||
-      formData.email === '' ||
-      formData.nik === '' ||
-      formData.phoneNumber === '' ||
-      formData.domisili === '' ||
-      formData.jenisKelamin === ''
-    ) {
-      return;
-    }
+    // if (
+    //   // formData.nama === '' ||
+    //   // formData.harga === '' ||
+    //   // formData.telfon === '' ||
+    //   // formData.domisili === '' ||
+
+    //   // formData.description === '' ||
+    //   // formData.alamatGbr === '' ||
+    //   // formData.linkMenu === '' ||
+    //   // formData.location === '' ||
+    //   // formData.halal === '' 
+      
+    // ) {
+    //   return;
+    // }
   
-    // Check additional conditions (e.g., email format)
-    if (!formData.email.endsWith('@telkomsel.co.id')) {
-      return;
-    }
-  
+
+  // Update formData with the strings
+ 
     try {
-      const response = await fetch('https://tripselbe.fly.dev/user', {
+      const makananString = formData.makanan.join(',');
+      const minumanString = formData.minuman.join(',');
+  
+      // Update formData with the strings
+      const updatedFormData = {
+        ...formData,
+        makanan: makananString,
+        minuman: minumanString,
+      };
+      const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
-  
+
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
-  
+
       const data = await response.json();
       alert(data.message);
     } catch (error) {
-      console.error('Error updating user:', error);
-      alert(`Failed to update user: ${error}`);
+      console.error('Error updating restoran:', error);
+      alert(`Failed to update restoran: ${error}`);
     }
-  };  
-
+  };
   const handleImage1 = () => {
     console.log('Stack clicked!');
   };
@@ -194,7 +212,6 @@ export default function Register() {
     console.log('Stack clicked!');
     // Your custom function logic here
   };
-
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -220,8 +237,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'fullName',
-                    value: formData.fullName,
-                    onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
+                    value: formData.nama,
+                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
 
@@ -292,11 +309,11 @@ export default function Register() {
                     },
                   }}
                   name="domisili"
-                  value={formData.domisili}
-                  onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
+                  value={formData.halal}
+                  onChange={(e) => setFormData({ ...formData, halal: e.target.value })}
                 >
-                  <MenuItem value={formData.domisili}>
-                    <em>{formData.domisili}</em>
+                  <MenuItem value={formData.halal}>
+                    <em>{formData.halal}</em>
                   </MenuItem>
                   <MenuItem value='Halal'>Halal</MenuItem>
                   <MenuItem value='Non Halal'>Non Halal</MenuItem>
@@ -318,8 +335,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Jarak',
                     name: 'fullName',
-                    value: formData.fullName,
-                    onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
+                    value: formData.location,
+                    onChange: (e) => setFormData({ ...formData, location: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
@@ -355,8 +372,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Harga',
                     name: 'email',
-                    value: formData.email,
-                    onChange: (e) => setFormData({ ...formData, email: (e.target as HTMLInputElement).value }),
+                    value: formData.harga,
+                    onChange: (e) => setFormData({ ...formData, harga: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
@@ -390,8 +407,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Harga',
                     name: 'email',
-                    value: formData.email,
-                    onChange: (e) => setFormData({ ...formData, email: (e.target as HTMLInputElement).value }),
+                    value: formData.harga,
+                    onChange: (e) => setFormData({ ...formData, harga: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
@@ -416,8 +433,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'No.Handphone',
                     name: 'fullName',
-                    value: formData.fullName,
-                    onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
+                    value: formData.telfon,
+                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
                   }}
                 />
 
@@ -510,8 +527,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Maksimal 255 huruf',
                     name: 'deskripsi',
-                    value: formData.phoneNumber,
-                    onChange: (e) => setFormData({ ...formData, phoneNumber: (e.target as HTMLInputElement).value }),
+                    value: formData.description,
+                    onChange: (e) => setFormData({ ...formData, description: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 <Stack>
@@ -594,8 +611,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Link Menu',
                     name: 'fullName',
-                    value: formData.fullName,
-                    onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
+                    value: formData.linkMenu,
+                    onChange: (e) => setFormData({ ...formData, linkMenu: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 <Typography sx={{
@@ -613,42 +630,14 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Link Alamat',
                     name: 'fullName',
-                    value: formData.fullName,
-                    onChange: (e) => setFormData({ ...formData, fullName: (e.target as HTMLInputElement).value }),
+                    value: formData.alamatGbr,
+                    onChange: (e) => setFormData({ ...formData, alamatGbr: (e.target as HTMLInputElement).value }),
                   }}
                 />
               </Stack>
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'}>
-            <Button
-              type="button"
-              onClick={() => navigate('/profile-password', { state: { email: formData.email }})}
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '60px',
-                width: 'auto',
-                fontWeight: 'bold',
-                fontSize: '24px',
-                color: 'red',
-                backgroundColor: '#FFF',
-                borderRadius: '40px',
-                paddingLeft: '60px',
-                paddingRight: '60px',
-                boxShadow: '0px 0px 0px 2px red',
-                '&:active': {
-                  backgroundColor: '#FF010C',
-                },
-                '&:focus': {
-                  backgroundColor: '#FF010C',
-                },
-                '&:hover': { background: 'red', color: 'white', boxShadow: '0px 0px 0px 2px red', }
-              }}
-            >
-              Ubah Password
-            </Button>
             <Button
               type="submit"
               sx={{

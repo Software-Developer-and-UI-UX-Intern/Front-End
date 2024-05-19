@@ -113,7 +113,7 @@ export default function Navbar() {
           {/* Restaurant */}
         <Stack gap={2} direction={'row'} justifyContent={'center'} color={'#FFF'} alignItems={'center'}>
           <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
-                      onClick={() => navigate(`/admin-restoran`)}                  
+                      onClick={() => navigate(`/admin/restoran`)}                  
                       sx={{
                       color: '#FFF', // Change text color to gray
                       '&:hover': { fontWeight: 700, color: '#FFF' },

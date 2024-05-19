@@ -40,7 +40,7 @@ export default function RestoranPage() {
   }, []);
 
   const handleEdit = (nama: string) => {
-    navigate(`/edit/${nama}`);
+    navigate(`/admin/input-restoran`, { state: { nama } });
   };
 
   const handleDelete = async (nama: string) => {
