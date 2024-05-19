@@ -215,7 +215,7 @@ export default function Register() {
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+  
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
   
@@ -223,27 +223,26 @@ export default function Register() {
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
-  
+      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
       const makananString = formData.makanan.join(',');
       const minumanString = formData.minuman.join(',');
-      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
-
-      const updatedFormData = {
+  
+      const newFormData = {
         ...formData,
         makanan: makananString,
         minuman: minumanString,
         gambar_url1: uploadedImages[0] || '', // If uploadedImages[0] is null, use an empty string
         gambar_url2: uploadedImages[1] || '', // If uploadedImages[1] is null, use an empty string
         gambar_url3: uploadedImages[2] || '', // If uploadedImages[2] is null, use an empty string
-        harga: hargaString||'',
+        harga: hargaString, 
       };
   
-      const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
-        method: 'PUT',
+      const response = await fetch('https://tripselbe.fly.dev/restoran', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatedFormData),
+        body: JSON.stringify(newFormData),
       });
   
       if (!response.ok) {
@@ -251,12 +250,12 @@ export default function Register() {
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
   
-      console.log(updatedFormData);
+      console.log('New restaurant data created successfully');
       const data = await response.json();
       alert(data.message);
     } catch (error) {
-      console.error('Error updating restoran:', error);
-      alert(`Failed to update restoran: ${error}`);
+      console.error('Error creating new restoran:', error);
+      alert(`Failed to create new restoran: ${error}`);
     }
   };
   
@@ -874,3 +873,4 @@ export default function Register() {
     </Stack>
   );
 }
+

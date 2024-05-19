@@ -13,9 +13,9 @@ interface Restoran {
   harga: string;
   telepon: string;
   description: string;
-  gambar1: string;
-  gambar2: string;
-  gambar3: string;
+  gambar_url1: string;
+  gambar_url2: string;
+  gambar_url3: string;
   link_menu: string;
   makanan: string;
   minuman: string;
@@ -42,6 +42,9 @@ export default function RestoranPage() {
   const handleEdit = (nama: string) => {
     navigate(`/admin/input-restoran`, { state: { nama } });
   };
+  const handleAdd = () => {
+    navigate(`/admin/add-restoran`);
+  };
 
   const handleDelete = async (nama: string) => {
     try {
@@ -64,6 +67,7 @@ export default function RestoranPage() {
         </Typography>
 
         <Button 
+        onClick={handleAdd}
           disableElevation 
           disableFocusRipple 
           disableRipple 
@@ -241,17 +245,17 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.gambar1 && (restoran.gambar1.length > 22 ? restoran.gambar1.slice(0, 22) + '...' : restoran.gambar1)}
+          {restoran.gambar_url1 && (restoran.gambar_url1.length > 22 ? restoran.gambar_url1.slice(0, 22) + '...' : restoran.gambar_url1)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.gambar2 && (restoran.gambar2.length > 22 ? restoran.gambar2.slice(0, 22) + '...' : restoran.gambar2)}
+          {restoran.gambar_url2 && (restoran.gambar_url2.length > 22 ? restoran.gambar_url2.slice(0, 22) + '...' : restoran.gambar_url2)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.gambar3 && (restoran.gambar3.length > 22 ? restoran.gambar3.slice(0, 22) + '...' : restoran.gambar3)}
+          {restoran.gambar_url3 && (restoran.gambar_url3.length > 22 ? restoran.gambar_url3.slice(0, 22) + '...' : restoran.gambar_url3)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>

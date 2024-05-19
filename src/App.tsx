@@ -6,6 +6,7 @@ import Navbaradmin  from './components/ui/navbar/navbaradmin';
 // import Adminlayout  from './pages/Admin/Login/adminlayout';
 import { AdminRestoran } from './pages/Admin/Restoran';
 import { InputRestoran } from './pages/Admin/Restoran/input';
+import { AddRestoran } from './pages/Admin/Restoran/add';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
@@ -341,6 +342,10 @@ const router = createBrowserRouter([
         {
           path: 'input-restoran', 
           element: <InputRestoran />,
+        },
+        {
+          path: 'add-restoran', 
+          element: <AddRestoran />,
         },
       ],
     },
