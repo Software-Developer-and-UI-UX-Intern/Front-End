@@ -4,7 +4,6 @@ import '../../../assets/font/telkomselbatik.css'
 import GridOrange from '../../../components/oleholeh/gridorange'
 import kupangthumb from '../../../assets/oleholeh/kupang/kupangup.png';
 import loading from '../../../assets/restoran/comingsoongray.png';
-
 interface OlehDataItem {
   nama: string;
   gambar_url1: string;
@@ -14,10 +13,13 @@ interface OlehDataItem {
   parkir: string;
   description: string;
   domisili: string;
+  jarak: string;
 }
 interface OrangewithimageProps {
   imageSrc: string;
   textContent: string;
+  jarak: string;
+  domisili: string;
 }
 
 const Oleh = () => {
@@ -37,7 +39,9 @@ const Oleh = () => {
         const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'flores');
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
           imageSrc: item.gambar_url1,
-          textContent: item.nama
+          textContent: item.nama,
+          jarak: item.jarak,
+          domisili:item.domisili
         }));
         setOlehData(transformedData);
       } catch (error) {

@@ -14,10 +14,13 @@ interface OlehDataItem {
   parkir: string;
   description: string;
   domisili: string;
+  jarak: string;
 }
 interface OrangewithimageProps {
   imageSrc: string;
   textContent: string;
+  jarak: string;
+  domisili: string;
 }
 
 const Oleh = () => {
@@ -37,7 +40,9 @@ const Oleh = () => {
         const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'flores');
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
           imageSrc: item.gambar_url1,
-          textContent: item.nama
+          textContent: item.nama,
+          jarak: item.jarak,
+          domisili:item.domisili
         }));
         setOlehData(transformedData);
       } catch (error) {

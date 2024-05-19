@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Import useHistory
-import Item from '../../components/beranda/orangewithimage';
+import Item from './orangewithimage';
 
 interface OrangewithimageProps {
   imageSrc: string;
   textContent: string;
+  domisili: string
+  jarak: string
 }
 
 interface GridProps {
@@ -39,7 +41,7 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
         <Grid item key={index} alignItems='center' justifyContent='center'>
           {/* Wrap the Item component inside a div and attach an onClick event */}
           <div style={{ cursor: 'pointer' }} onClick={() => handleItemClick(orangedata.textContent)}>
-            <Item imageSrc={orangedata.imageSrc} textContent={orangedata.textContent} width='579px' height='600px' fontsize='42px' imgheight='90px' />
+            <Item imageSrc={orangedata.imageSrc} domisili={orangedata.domisili} location={orangedata.jarak} textContent={orangedata.textContent} width='579px' height='600px' fontsize='42px' imgheight='90px' />
           </div>
         </Grid>
       ))}
