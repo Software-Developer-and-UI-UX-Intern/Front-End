@@ -67,8 +67,14 @@ const customInputStyle2 = {
     
   },
 };
-
-
+type Address = {
+  gambar_url?: string;
+  gambar_preview?: string;
+  gambar_file?: File;
+  google_map_url: string;
+  nama: string;
+  jarak: string;
+};
 export default function Register() {
   const location = useLocation();
   const [formData, setFormData] = useState({
@@ -84,9 +90,109 @@ export default function Register() {
     jarak: '',
     
   });
+  const [addresses, setAddress] = useState<Address[]>([]);
+
   const [gambarFiles, setGambarFiles] = useState<File[]>([]);
   const [gambar2, setGambar2] = useState('');
   const [gambar3, setGambar3] = useState('');
+
+  // const uploadImageToCloudinary = async (file: File): Promise<string | null> => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('file', file);
+  //     formData.append('upload_preset', 'ml_default');
+  
+  //     const response = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error('Failed to upload image');
+  //     }
+  
+  //     const cloudinaryData = await response.json();
+  //     return cloudinaryData.secure_url; // Return the URL of the uploaded image
+  //   } catch (error) {
+  //     console.error('Error uploading image:', error);
+  //     return null; // Return null if there was an error
+  //   }
+  // };  
+  const postDataToServer = async (address: Address) => {
+    const { nama, google_map_url, jarak, gambar_file } = address;
+    try {
+      let gambar_url = '';
+
+      if (gambar_file) {
+        const formData = new FormData();
+        formData.append('file', gambar_file);
+        formData.append('upload_preset', 'ml_default');
+
+        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!cloudinaryResponse.ok) {
+          throw new Error('Failed to upload image');
+        }
+
+        const cloudinaryData = await cloudinaryResponse.json();
+        gambar_url = cloudinaryData.secure_url;
+      }
+
+      const response = await fetch(`https://tripselbe.fly.dev/addresses/${formData.nama}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nama,
+          gambar_url,
+          google_map_url,
+          jarak,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to post data');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+  };
+
+  const handleFileInputChangeAlamat = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setAddress((prevAddresses) => {
+        const updatedAddresses = [...prevAddresses];
+        updatedAddresses[index] = {
+          ...updatedAddresses[index],
+          gambar_preview: imageUrl,
+          gambar_file: file,
+        };
+        return updatedAddresses;
+      });
+    }
+  };
+
+  const handleImageAlamat = (index: number) => {
+    const fileInput = document.getElementById(`fileInputalamat${index}`) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleAddInput = () => {
+    const newAddress: Address = { google_map_url: '', nama: '', jarak: '', gambar_url: '', gambar_preview: '', gambar_file: undefined };
+    setAddress((prevAddresses) => [...prevAddresses, newAddress]);
+  };
+  
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const files = e.target.files;
     if (files?.length) {
@@ -113,14 +219,53 @@ export default function Register() {
 }
     
   };
+  const getAddresses = async (nama:string) => {
+    try {
+      const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}`);
+  
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
+  
+      const addresses = await response.json();
+      return addresses;
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+      throw new Error(`Failed to fetch addresses: ${error}`);
+    }
+  };
+  const handleDeleteAddress = async (nama: string, oleh_nama: string) => {
+    if (!nama || !oleh_nama) {
+      setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
+      return;
+    }
 
+    try {
+      const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}/${oleh_nama}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
+      alert(data.message); // Optionally, you can show a message to the user upon successful deletion
+    } catch (error) {
+      console.error('Error deleting address:', error);
+      alert('Failed to delete address');
+    }
+  };
+  
   useEffect(() => {
     const fetchRestoranData = async () => {
       const { nama } = location.state;
-  
+
       try {
-        const response = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`);
+        const response = await fetch(`https://tripselbe.fly.dev/oleh/${nama}`);
         const restoranData = await response.json();
+   
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
@@ -137,6 +282,9 @@ export default function Register() {
           single_alamat: restoranData.single_alamat || '',
           jarak: restoranData.jarak || '',
         });
+        const fetchedAddresses = await getAddresses(restoranData.nama);
+        setAddress(fetchedAddresses);
+
       } catch (error) {
         console.error('Error fetching restoran data:', error);
       }
@@ -144,6 +292,26 @@ export default function Register() {
     fetchRestoranData();
   }, [location]);
   
+  const deleteAllAddresses = async (oleh_nama: string) => {
+    try {
+      const response = await fetch(`https://tripselbe.fly.dev/addresses/${oleh_nama}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Failed to delete addresses: ${response.status}: ${errorMessage}`);
+      }
+  
+      const data = await response.json();
+      console.log(data.message); // Optionally log the message from the server
+    } catch (error) {
+      console.error('Error deleting addresses:', error);
+      throw error;
+    }
+  };
+  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -162,7 +330,7 @@ export default function Register() {
         gambar_url3: uploadedImages[2] || '', // If uploadedImages[2] is null, use an empty string
       };
   
-      const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
+      const response = await fetch(`https://tripselbe.fly.dev/oleh/${formData.nama}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -177,6 +345,8 @@ export default function Register() {
   
       console.log(updatedFormData);
       const data = await response.json();
+      await deleteAllAddresses(formData.nama);
+      await Promise.all(addresses.map(address => postDataToServer(address)));
       alert(data.message);
     } catch (error) {
       console.error('Error updating restoran:', error);
@@ -237,49 +407,10 @@ export default function Register() {
     }
   };
 
-  // const handleFileUpload = async (file: File, nama: string, index: number) => {
-  //   try {
-  //     // Create a FormData object
-  //     const formData = new FormData();
-  //     formData.append('file', file);
-  //     formData.append('upload_preset', 'your_cloudinary_upload_preset'); // Replace 'your_cloudinary_upload_preset' with your actual Cloudinary upload preset
   
-  //     // Send the file to Cloudinary for upload
-  //     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-      
-  //     if (!cloudinaryResponse.ok) {
-  //       throw new Error(`Failed to upload image ${index} to Cloudinary`);
-  //     }
-      
-  //     // Get the uploaded image URL from the Cloudinary response
-  //     const cloudinaryData = await cloudinaryResponse.json();
-  //     const imageUrl = cloudinaryData.secure_url;
   
-  //     // Update the restaurant data on the server
-  //     const updatedData = { ...formData, ['gambar_url' + index]: imageUrl, nama }; // Include the 'nama' property
-  //     const updateResponse = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(updatedData),
-  //     });
   
-  //     if (!updateResponse.ok) {
-  //       throw new Error(`Failed to update restaurant data with image ${index}`);
-  //     }
   
-  //     // Log success message
-  //     console.log(`Image ${index} uploaded and restaurant data updated successfully`);
-  //   } catch (error) {
-  //     console.error(`Error uploading image ${index} and updating restaurant data:`, error);
-  //     // Handle error as needed
-  //   }
-  // };  
-
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -469,119 +600,130 @@ export default function Register() {
                     onChange: (e) => setFormData({ ...formData, single_alamat: (e.target as HTMLInputElement).value }),
                   }}
                 />
-{/* 
-                <Stack gap={2}>
+<Stack spacing={4}>
+      {addresses.map((address, index) => (
+        <Stack gap={2} key={index}>
+          <Stack direction={'row'} gap={2} justifyContent={'space-between'}>
+            <Stack maxWidth={'50%'} gap={2}>
+              <Stack gap={1}>
                 <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
-                    Makanan
-                  </Typography>
-                  {formData.makanan.map((makanan, index) => (
-  <Stack direction="row" alignItems="center" key={index} gap={1}>
-  <Input
-    disableUnderline
-    placeholder={`Makanan ${index + 1}`}
-    style={{ fontSize: '22px', color: '#04214C' }}
-    sx={customInputStyle}
-    value={makanan}
-    onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
-  />
-  <Button
-                  type="button"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '60px',
-                    width: '240px',
-                    fontWeight: 500,
-                    fontSize: '22px',
-                    color: '#FFF',
-                    backgroundColor: '#04214C',
-                    borderRadius: '20px',
-                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  Link Alamat Cabang {index + 1}
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Alamat Cabang"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  value={address.google_map_url}
+                  onChange={(e) => {
+                    const updatedAddresses = [...addresses];
+                    updatedAddresses[index].google_map_url = e.target.value;
+                    setAddress(updatedAddresses);
                   }}
-    onClick={() => handleDeleteMakanan(index)}
-  >
-    Delete
-  </Button>
-</Stack>
-                  ))}
-                  <Button
-                    type="button"
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '60px',
-                      width: '240px',
-                      fontWeight: 500,
-                      fontSize: '22px',
-                      color: '#FFF',
-                      backgroundColor: '#04214C',
-                      borderRadius: '20px',
-                      '&:hover': { background: '#04214C', color: '#FFF'}
-                    }}
-                    onClick={handleAddInput}
-                  >
-                    Tambah Makanan
-                  </Button>
-                </Stack>
-                <Stack gap={2}>
+                />
                 <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
-                    Minuman
-                  </Typography>
-                  {formData.minuman.map((minuman, index) => (
-  <Stack direction="row" alignItems="center" key={index} gap={1}>
-  <Input
-    disableUnderline
-    placeholder={`Makanan ${index + 1}`}
-    style={{ fontSize: '22px', color: '#04214C' }}
-    sx={customInputStyle}
-    value={minuman}
-    onChange={(e) => handleInputChangeminuman(index, (e.target as HTMLInputElement).value)}
-  />
-  <Button
-                  type="button"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '60px',
-                    width: '240px',
-                    fontWeight: 500,
-                    fontSize: '22px',
-                    color: '#FFF',
-                    backgroundColor: '#04214C',
-                    borderRadius: '20px',
-                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  Nama Cabang {index + 1}
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Nama Cabang"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  value={address.nama}
+                  onChange={(e) => {
+                    const updatedAddresses = [...addresses];
+                    updatedAddresses[index].nama = e.target.value;
+                    setAddress(updatedAddresses);
                   }}
-    onClick={() => handleDeleteMinuman(index)}
-  >
-    Delete
-  </Button>
-</Stack>
-                  ))}
-                  <Button
-                    type="button"
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '60px',
-                      width: '240px',
-                      fontWeight: 500,
-                      fontSize: '22px',
-                      color: '#FFF',
-                      backgroundColor: '#04214C',
-                      borderRadius: '20px',
-                      '&:hover': { background: '#04214C', color: '#FFF'}
-                    }}
-                    onClick={handleAddInputMinuman}
-                  >
-                    Tambah Minuman
-                  </Button>
-                </Stack> */}
-
+                />
+                <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
+                  Jarak Cabang {index + 1}
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Jarak Cabang"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  value={address.jarak}
+                  onChange={(e) => {
+                    const updatedAddresses = [...addresses];
+                    updatedAddresses[index].jarak = e.target.value;
+                    setAddress(updatedAddresses);
+                  }}
+                />
               </Stack>
+              <Button
+                type="button"
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '60px',
+                  width: '100%',
+                  fontWeight: 500,
+                  fontSize: '22px',
+                  color: '#FFF',
+                  backgroundColor: '#FF010C',
+                  borderRadius: '20px',
+                  '&:hover': { background: '#FF010C', color: '#FFF' }
+                }}
+                onClick={() => handleDeleteAddress(address.nama, formData.nama)}
+              >
+                Hapus Cabang
+              </Button>
+            </Stack>
+            <Stack maxWidth={'50%'} width={'100%'}>
+              <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
+                Gambar Cabang {index+1}
+              </Typography>
+              <Stack
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'20px'}
+                sx={{
+                  background: `${address.gambar_preview ? `url(${address.gambar_preview})` : address.gambar_url ? `url(${address.gambar_url})` : '#D9D9D9'}`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
+                height={'100%'}
+                width={'100%'}
+                onClick={() => handleImageAlamat(index)}
+                >
+                {/* File input for image 1 */}
+                <input
+                  type="file"
+                  id={`fileInputalamat${index}`}
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileInputChangeAlamat(e, index)}
+                  />
+              </Stack>
+            </Stack>
+          </Stack>
+        </Stack>
+      ))}
+      <Button
+        type="button"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '60px',
+          width: '100%',
+          fontWeight: 500,
+          fontSize: '22px',
+          color: '#FFF',
+          backgroundColor: '#04214C',
+          borderRadius: '20px',
+          '&:hover': { background: '#04214C', color: '#FFF' }
+        }}
+        onClick={handleAddInput}
+      >
+        Tambah Cabang
+      </Button>
+    </Stack>
+              </Stack>
+                 
               <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
                 <Typography sx={{
                   fontWeight: 500,
@@ -612,20 +754,20 @@ export default function Register() {
                 </Typography>
                 <Stack height={'190px'} gap={2} direction={'row'} justifyContent={'space-between'}>
                 <Stack
-  justifyContent={'center'}
-  alignItems={'center'}
-  borderRadius={'20px'}
-  sx={{
-    background: `${gambar1 ? `url(${gambar1})` : formData.gambar_url1 ? `url(${formData.gambar_url1})` : '#D9D9D9'}`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }}
-  height={'100%'}
-  width={'100%'}
-  maxWidth={'33%'}
-  onClick={handleImage1}
->
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'20px'}
+                sx={{
+                  background: `${gambar1 ? `url(${gambar1})` : formData.gambar_url1 ? `url(${formData.gambar_url1})` : '#D9D9D9'}`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
+                height={'100%'}
+                width={'100%'}
+                maxWidth={'33%'}
+                onClick={handleImage1}
+              >
                 {/* File input for image 1 */}
                 <input
                   type="file"
