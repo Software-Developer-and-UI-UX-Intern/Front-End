@@ -297,7 +297,7 @@ export default function Register() {
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <Stack sx={{ width: 'auto' }} spacing={10} >
           <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
-          Tambah Data Restoran
+          Tambah Data Wisata
         </Typography>
           <Stack spacing={2} maxWidth={'100%'}>
             <Stack direction={'row'} gap={2}>
@@ -307,7 +307,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Restoran
+                nama Wisata
                 </Typography>
                 <Input
                   disableUnderline
@@ -329,7 +329,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Domisili<span style={{ color: '#FF010C' }}>*</span>
+                  Domisili
                 </Typography>
                 <MuiSelect
                   displayEmpty

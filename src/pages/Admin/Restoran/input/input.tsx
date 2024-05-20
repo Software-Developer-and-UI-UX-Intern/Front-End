@@ -400,7 +400,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Domisili<span style={{ color: '#FF010C' }}>*</span>
+                  Domisili
                 </Typography>
                 <MuiSelect
                   displayEmpty
