@@ -7,6 +7,9 @@ import Navbaradmin  from './components/ui/navbar/navbaradmin';
 import { AdminRestoran } from './pages/Admin/Restoran';
 import { InputRestoran } from './pages/Admin/Restoran/input';
 import { AddRestoran } from './pages/Admin/Restoran/add';
+import { AdminWisata } from './pages/Admin/Wisata';
+import { InputWisata } from './pages/Admin/Wisata/input';
+import { AddWisata } from './pages/Admin/Wisata/add';
 import { AdminOleh } from './pages/Admin/Oleh';
 import { InputOleh } from './pages/Admin/Oleh/input';
 import { AddOleh } from './pages/Admin/Oleh/add';
@@ -349,6 +352,18 @@ const router = createBrowserRouter([
         {
           path: 'add-restoran', 
           element: <AddRestoran />,
+        }, 
+        {
+          path: 'wisata', 
+          element: <AdminWisata />,
+        },
+        {
+          path: 'input-wisata', 
+          element: <InputWisata />,
+        },
+        {
+          path: 'add-wisata', 
+          element: <AddWisata />,
         }, 
         {
           path: 'oleh-oleh', 
