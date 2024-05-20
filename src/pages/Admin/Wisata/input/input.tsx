@@ -307,7 +307,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Wisata
+                nama Restoran
                 </Typography>
                 <Input
                   disableUnderline
