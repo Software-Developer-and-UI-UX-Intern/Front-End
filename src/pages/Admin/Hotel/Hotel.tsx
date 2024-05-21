@@ -6,14 +6,14 @@ import axios from 'axios';
 
 // Define the Restoran type
 interface Restoran {
-  full_name: string;
-  email: string;
-  nik: string;
-  phone_number: string;
+  nama: string;
   domisili: string;
-  jenis_kelamin: string;
-  password: string;
-  status: string;
+  harga: string;
+  lokasi: string;
+  telfon: string;
+  jarak: string;
+  alamat: string;
+  bintang: string;
 }
 
 export default function RestoranPage() {
@@ -23,32 +23,32 @@ export default function RestoranPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<Restoran[]>('https://tripselbe.fly.dev/');
+        const response = await axios.get<Restoran[]>('https://tripselbe.fly.dev/hotels');
         setRestorans(response.data);
       } catch (error) {
-        console.error('Error fetching data from Wisata table:', error);
+        console.error('Error fetching data from Restoran table:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleEdit = (email: string) => {
-    navigate(`/admin/input-user`, { state: { email } });
+  const handleEdit = (nama: string) => {
+    navigate(`/admin/input-hotel`, { state: { nama } });
   };
   const handleAdd = () => {
-    navigate(`/admin/add-user`);
+    navigate(`/admin/add-hotel`);
   };
 
-  const handleDelete = async (email: string) => {
+  const handleDelete = async (nama: string) => {
     try {
-      await axios.delete(`https://tripselbe.fly.dev/user/${email}`);
+      await axios.delete(`https://tripselbe.fly.dev/hotels/${nama}`);
       // Refresh the list of restorans after deletion
-      const response = await axios.get<Restoran[]>('https://tripselbe.fly.dev/');
+      const response = await axios.get<Restoran[]>('https://tripselbe.fly.dev/hotels');
       setRestorans(response.data);
       alert('data telah terhapus');
     } catch (error) {
-      console.error('Error deleting data from Wisata table:', error);
+      console.error('Error deleting data from Restoran table:', error);
     }
   };
 
@@ -57,7 +57,7 @@ export default function RestoranPage() {
       {/* restoran and create button */}
       <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
         <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
-          User
+          Hotel
         </Typography>
 
         <Button 
@@ -85,7 +85,7 @@ export default function RestoranPage() {
       </Stack>
       
       <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
-  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 8) + 100px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 9) + 100px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
     
     {/* header container with horizontal scroll */}
     <Stack direction={'row'} sx={{ overflowX: 'none' }}>
@@ -96,25 +96,28 @@ export default function RestoranPage() {
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Action</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama lengkap</Typography>
-      </Stack>
-      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>email</Typography>
-      </Stack>
-      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>NIK</Typography>
-      </Stack>
-      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nomor Telfon</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Domisili</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>password</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Harga</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>status</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Lokasi</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Telfon</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Jarak ke TSO</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Alamat</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Bintang</Typography>
       </Stack>
     </Stack>
     
@@ -123,11 +126,11 @@ export default function RestoranPage() {
     {restorans.map((restoran, index) => (
     <Stack 
       direction={'row'} 
-      borderRight={'none'} 
+      borderRight={'2px solid #04214C'} 
       borderTop={'none'} 
-      borderBottom={'2px solid #04214C'}
       borderLeft={'2px solid #04214C'}
-      key={restoran.email}
+      borderBottom={'2px solid #04214C'}
+      key={restoran.nama}
       sx={{
         '&:hover': {
           backgroundColor: '#f0f0f0',
@@ -144,7 +147,7 @@ export default function RestoranPage() {
             disableFocusRipple 
             disableRipple 
             disableTouchRipple
-            onClick={() => handleEdit(restoran.email)}
+            onClick={() => handleEdit(restoran.nama)}
             sx={{
               color: 'white',
               fontSize: '26px',
@@ -165,7 +168,7 @@ export default function RestoranPage() {
             disableFocusRipple 
             disableRipple 
             disableTouchRipple
-            onClick={() => handleDelete(restoran.email)}
+            onClick={() => handleDelete(restoran.nama)}
             sx={{
               color: 'white',
               fontSize: '26px',
@@ -185,22 +188,7 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.full_name && (restoran.full_name.length > 22 ? restoran.full_name.slice(0, 22) + '...' : restoran.full_name)}
-        </Typography>
-      </Stack>
-      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
-        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.email && (restoran.email.length > 22 ? restoran.email.slice(0, 22) + '...' : restoran.email)}
-        </Typography>
-      </Stack>
-      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
-        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.nik && (restoran.nik.length > 22 ? restoran.nik.slice(0, 22) + '...' : restoran.nik)}
-        </Typography>
-      </Stack>
-      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
-        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.phone_number && (restoran.phone_number.length > 22 ? restoran.phone_number.slice(0, 22) + '...' : restoran.phone_number)}
+          {restoran.nama && (restoran.nama.length > 22 ? restoran.nama.slice(0, 22) + '...' : restoran.nama)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
@@ -208,19 +196,34 @@ export default function RestoranPage() {
           {restoran.domisili && (restoran.domisili.length > 22 ? restoran.domisili.slice(0, 22) + '...' : restoran.domisili)}
         </Typography>
       </Stack>
-      {/* <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
-        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.alamat_gbr && (restoran.alamat_gbr.length > 22 ? restoran.alamat_gbr.slice(0, 22) + '...' : restoran.alamat_gbr)}
-        </Typography>
-      </Stack> */}
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.password && (restoran.password.length > 22 ? restoran.password.slice(0, 22) + '...' : restoran.password)}
+          {restoran.harga && (restoran.harga.length > 22 ? restoran.harga.slice(0, 22) + '...' : restoran.harga)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.status && (restoran.status.length > 22 ? restoran.status.slice(0, 22) + '...' : restoran.status)}
+          {restoran.lokasi && (restoran.lokasi.length > 22 ? restoran.lokasi.slice(0, 22) + '...' : restoran.lokasi)}
+        </Typography>
+      </Stack>
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {restoran.telfon && (restoran.telfon.length > 22 ? restoran.telfon.slice(0, 22) + '...' : restoran.harga)}
+        </Typography>
+      </Stack>
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {restoran.jarak && (restoran.jarak.length > 22 ? restoran.jarak.slice(0, 22) + '...' : restoran.jarak)}
+        </Typography>
+      </Stack>
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {restoran.alamat && (restoran.alamat.length > 22 ? restoran.alamat.slice(0, 22) + '...' : restoran.alamat)}
+        </Typography>
+      </Stack>
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {restoran.bintang && (restoran.bintang.length > 22 ? restoran.bintang.slice(0, 22) + '...' : restoran.bintang)}
         </Typography>
       </Stack>
     </Stack>

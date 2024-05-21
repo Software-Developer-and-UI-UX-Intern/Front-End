@@ -4,6 +4,9 @@ import Navbar  from './components/ui/navbar/navbar';
 import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Navbaradmin  from './components/ui/navbar/navbaradmin';
 // import Adminlayout  from './pages/Admin/Login/adminlayout';
+import { AdminHotel } from './pages/Admin/Hotel';
+import { InputHotel } from './pages/Admin/Hotel/input';
+import { AddHotel } from './pages/Admin/Hotel/add';
 import { AdminRestoran } from './pages/Admin/Restoran';
 import { InputRestoran } from './pages/Admin/Restoran/input';
 import { AddRestoran } from './pages/Admin/Restoran/add';
@@ -344,6 +347,18 @@ const router = createBrowserRouter([
       path: '/admin',
       element: <Navbaradmin />,
       children: [
+        {
+          path: 'hotel', 
+          element: <AdminHotel />,
+        },
+        {
+          path: 'input-hotel', 
+          element: <InputHotel />,
+        },
+        {
+          path: 'add-hotel', 
+          element: <AddHotel />,
+        }, 
         {
           path: 'restoran', 
           element: <AdminRestoran />,

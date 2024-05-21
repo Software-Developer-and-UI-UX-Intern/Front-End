@@ -87,7 +87,7 @@ export default function RestoranPage() {
       </Stack>
       
       <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
-  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 11) + 100px)'} height={'auto'} border={'2px solid #04214C'} borderRadius={'30px 30px 0 0'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 11) + 100px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
     
     {/* header container with horizontal scroll */}
     <Stack direction={'row'} sx={{ overflowX: 'none' }}>
@@ -135,7 +135,9 @@ export default function RestoranPage() {
     <Stack 
       direction={'row'} 
       borderRight={'none'} 
-      borderTop={'none'} 
+      borderTop={'none'}
+      borderBottom={'2px solid #04214C'}
+      borderLeft={'2px solid #04214C'} 
       key={restoran.nama}
       sx={{
         '&:hover': {
