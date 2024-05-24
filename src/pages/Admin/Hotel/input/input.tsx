@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
+import { Icon } from '@iconify/react/dist/iconify.js';
 const customInputStyle = {
   width: '100%',
   height: '53px',
@@ -38,347 +39,419 @@ const customInputStyle = {
     },
   },
 };
-const customInputStyle2 = {
-  width: '100%',
-  height: 'auto',
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '20px',
-    '& fieldset': {
-      borderColor: '#04214C', // Apply border color here
-      border: '2px solid #04214C', 
-    },
-    '&:hover fieldset': {
-      borderColor: '#04214C',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#04214C',
-    },
-  },
-  '& .MuiInputLabel-root': {
-    color: '#04214C',
-    '&.Mui-focused': {
-      color: 'transparent',
-    },
-  },
-  '& .MuiInputBase-input': {
-    fontWeight: 500, // Change font weight here
-    color:'#04214C',
-    fontSize: '22px', // Change font size here
+// const customInputStyle2 = {
+//   width: '100%',
+//   height: 'auto',
+//   '& .MuiOutlinedInput-root': {
+//     borderRadius: '20px',
+//     '& fieldset': {
+//       borderColor: '#04214C', // Apply border color here
+//       border: '2px solid #04214C', 
+//     },
+//     '&:hover fieldset': {
+//       borderColor: '#04214C',
+//     },
+//     '&.Mui-focused fieldset': {
+//       borderColor: '#04214C',
+//     },
+//   },
+//   '& .MuiInputLabel-root': {
+//     color: '#04214C',
+//     '&.Mui-focused': {
+//       color: 'transparent',
+//     },
+//   },
+//   '& .MuiInputBase-input': {
+//     fontWeight: 500, // Change font weight here
+//     color:'#04214C',
+//     fontSize: '22px', // Change font size here
     
-  },
-};
+//   },
+// };
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-
+interface Gambar_hotel {
+  nama: string;
+  url: string;
+}
+interface Gambar_fasilitas {
+  nama: string;
+  gambar_url: string;
+}
+// type Kamar = {
+//   gambar_url?: string;
+//   gambar_preview?: string;
+//   gambar_file?: File;
+//   google_map_url: string;
+//   nama: string;
+//   jarak: string;
+// };
 export default function Register() {
+  // const [kamar, setKamar] = useState<Kamar[]>([]);
+  const [gambarhotel, setGambarHotel] = useState<Gambar_hotel[]>([
+    { nama: '', url: '' }, // Default first element
+    { nama: '', url: '' }  // Default second element
+  ]);  const [datafasilitas, setFasilitas] = useState<Gambar_fasilitas[]>([]);
+  const [selectedImages, setSelectedImages] = useState<number[]>([]);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedImagesFasilitas, setSelectedImagesFasilitas] = useState<number[]>([]);
+  const [isSelectionModeFasilitas, setIsSelectionModeFasilitas] = useState(false);
   const location = useLocation();
   const [formData, setFormData] = useState({
     nama: '',
-    gambar_url1: '',
-    gambar_url2: '',
-    gambar_url3: '',
     harga: '',
+    lokasi: '',
+    domisili: '',
+    telfon: '',
+    jarak: '',
     hargatermurah: '',
     hargatermahal: '',
-    telfon: '',
-    description: '',
-    domisili: '',
-    alamat_gbr: '',
-    link_menu: '',
-    makanan: [''],
-    minuman: [''],
-    location: '',
-    halal: '',
+    alamat: '',
+    bintang: '',
+    fasilitas: [''],
   });
-  const [gambarFiles, setGambarFiles] = useState<File[]>([]);
-  const [gambar2, setGambar2] = useState('');
-  const [gambar3, setGambar3] = useState('');
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const files = e.target.files;
-    if (files?.length) {
-      setGambarFiles(prevFiles => {
-        const newFiles = [...prevFiles];
-        newFiles[index - 1] = files[0]; // Index is 1-based, so subtract 1
-        return newFiles;
-      });
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+  
+      // Create a closure to capture the current index
+      reader.onload = () => {
+        const newGambarHotel = [...gambarhotel];
+        const nama = file.name; // Customize this based on your requirements
+        newGambarHotel[index] = { nama, url: reader.result as string }; // Replace the old image at the correct index
+        setGambarHotel(newGambarHotel);
+        console.log(index)
+      };
     }
-    if (files) {
-  switch (index) {
-    case 1:
-      setGambar1(URL.createObjectURL(files[0]));
-      break;
-    case 2:
-      setGambar2(URL.createObjectURL(files[0]));
-      break;
-    case 3:
-      setGambar3(URL.createObjectURL(files[0]));
-      break;
-    default:
-      break;
-  }
-}
-    
+  };
+  const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const newFasilitas = [...datafasilitas];
+        const nama = file.name; // You can customize this based on your requirements
+        newFasilitas[index] = { nama, gambar_url: reader.result as string }; // Replace the old image
+        setFasilitas(newFasilitas);
+      };
+    }
   };
 
-  const handleAddInput = () => {
-    setFormData({
-      ...formData,
-      makanan: [...formData.makanan, ''],
-    });
-  };
-  const handleAddInputMinuman = () => {
-    setFormData({
-      ...formData,
-      minuman: [...formData.minuman, ''],
-
-    });
-  };
-  const handleInputChange = (index: number, value: string) => {
-    const newMakanan = formData.makanan.map((item, i) =>
-      i === index ? value : item
-    );
-
-    setFormData({
-      ...formData,
-      makanan: newMakanan,
-    });
-  };
-  const handleInputChangeminuman = (index: number, value: string) => {
-    const newMinuman = formData.minuman.map((item, i) =>
-      i === index ? value : item
-    );
-    setFormData({
-      ...formData,
-      minuman: newMinuman,
-    });
-  };
-
-  const handleDeleteMakanan = (index: number) => {
-    const updatedMakanan = [...formData.makanan];
-    updatedMakanan.splice(index, 1);
-    setFormData({
-      ...formData,
-      makanan: updatedMakanan,
-    });
-  };
-  const handleDeleteMinuman = (index: number) => {
-    const updatedMinuman = [...formData.minuman];
-    updatedMinuman.splice(index, 1);
-    setFormData({
-      ...formData,
-      minuman: updatedMinuman,
-    });
-  };
   useEffect(() => {
     const fetchRestoranData = async () => {
       const { nama } = location.state;
   
       try {
-        const response = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`);
+        const response = await fetch(`https://tripselbe.fly.dev/hotels/${nama}`);
         const restoranData = await response.json();
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
-  
-        // Convert makanan and minuman strings back to arrays
-       const makananArray = restoranData.makanan ? restoranData.makanan.split(',') : [];
-       const minumanArray = restoranData.minuman ? restoranData.minuman.split(',') : [];
-   
-       // Split the harga into hargatermurah and hargatermahal
-       const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
-        const hargatermurah = hargaArray[0] || ''; // Get the smallest price
-        const hargatermahal = hargaArray[1] || ''; // Get the largest price
-    
+    // Split the harga into hargatermurah and hargatermahal
+    const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
+    const hargatermurah = hargaArray[0] || ''; // Get the smallest price
+    const hargatermahal = hargaArray[1] || ''; // Get the largest price
+
         setFormData({
           nama: restoranData.nama || '',
-          gambar_url1: restoranData.gambar_url1 || '',
-          gambar_url2: restoranData.gambar_url2 || '',
-          gambar_url3: restoranData.gambar_url3 || '',
           harga: restoranData.harga || '',
+          lokasi:  restoranData.lokasi || '',
+          domisili: restoranData.domisili || '',
+          telfon: restoranData.telfon || '',
           hargatermurah:  hargatermurah,
           hargatermahal: hargatermahal,
-          telfon: restoranData.telfon || '',
-          description: restoranData.description || '',
-          domisili: restoranData.domisili || '',
-          alamat_gbr: restoranData.alamat_gbr || '',
-          link_menu: restoranData.link_menu || '',
-          makanan: makananArray,
-          minuman: minumanArray,
-          location: restoranData.location || '',
-          halal: restoranData.halal || '',
+          jarak: restoranData.jarak || '',
+          alamat: restoranData.alamat || '',
+          bintang: restoranData.bintang || '',
+          fasilitas: restoranData.location || [''],
+
         });
+        // Fetch the gambar_hotel data
+        const imagesResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${nama}`);
+        const imagesData = await imagesResponse.json();
+        if (Array.isArray(imagesData) && imagesData.length > 0) {
+          setGambarHotel(imagesData);
+        }
+        // Fetch the Fasilitas data
+        const fasilitasResponse = await fetch(`https://tripselbe.fly.dev/kamar/${nama}`);
+        const fasilitasData = await fasilitasResponse.json();
+        setFasilitas(Array.isArray(fasilitasData) ? fasilitasData : []);
       } catch (error) {
         console.error('Error fetching restoran data:', error);
       }
     };
     fetchRestoranData();
   }, [location]);
-  
+  // const gambarhotelout = () => {
+  //   console.log(gambarhotel)
+  // };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     try {
-      const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
-  
-      // Check if all uploads were successful
-      if (uploadedImages.some(image => image === null)) {
-        throw new Error('One or more image uploads failed');
-      }
-  
-      const makananString = formData.makanan.join(',');
-      const minumanString = formData.minuman.join(',');
-      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
+        const existingResponse = await fetch(`https://tripselbe.fly.dev/hotels/${formData.nama}`);
+        if (!existingResponse.ok) {
+            const errorMessage = await existingResponse.text();
+            throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
+        }
+        const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
 
-      const existingResponse = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`);
-      if (!existingResponse.ok) {
-          const errorMessage = await existingResponse.text();
-          throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
-      }
+        const updatedFormData = {
+            ...formData,
+            harga: hargaString || '',
+        };
 
-      const existingData = await existingResponse.json();
-      const updatedFormData = {
-        ...formData,
-        makanan: makananString,
-        minuman: minumanString,
-        gambar_url1: uploadedImages[0] || existingData.gambar_url1,
-        gambar_url2: uploadedImages[1] || existingData.gambar_url2,
-        gambar_url3: uploadedImages[2] || existingData.gambar_url3,
-        harga: hargaString||'',
-      };
-  
-      const response = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedFormData),
-      });
-  
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
-      }
-  
-      console.log(updatedFormData);
-      const data = await response.json();
-      alert(data.message);
+        const response = await fetch(`https://tripselbe.fly.dev/hotel/${formData.nama}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedFormData),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            console.log(updatedFormData);
+            throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
+        }
+
+        console.log(updatedFormData);
+
+        const data = await response.json(); // Read the response body once
+
+        await uploadImagesToCloudinary(gambarhotel,formData.nama);
+        const datafasilitasresponse = data; // Reuse the parsed JSON data
+
+        await uploadImagesToCloudinaryFasilitas(datafasilitas,formData.nama);
+        console.log(datafasilitasresponse);
+        alert(data.message);
     } catch (error) {
-      console.error('Error updating restoran:', error);
-      alert(`Failed to update restoran: ${error}`);
+        console.error('Error updating restoran:', error);
+        alert(`Failed to update restoran: ${error}`);
     }
-  };
-  
+};
 
-  const handleFileUpload = async (file: File | null, index: number) => {
+  const deleteHotelImages = async (hotelName: string) => {
     try {
-      if (!file) return null; // If file is null, return null
-  
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'ml_default');
-  
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
-        method: 'POST',
-        body: formData,
+      const deleteResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${hotelName}`, {
+        method: 'DELETE',
       });
-      
-      if (!cloudinaryResponse.ok) {
-        throw new Error(`Failed to upload image ${index} to Cloudinary`);
+  
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text();
+        throw new Error(`Failed to delete existing images: ${deleteResponse.status} - ${errorText}`);
       }
-      
-      const cloudinaryData = await cloudinaryResponse.json();
-      const imageUrl = cloudinaryData.secure_url;
   
-      console.log(`Image ${index} uploaded to Cloudinary: ${imageUrl}`);
-      return imageUrl;
+      console.log(`All images for hotel ${hotelName} deleted successfully.`);
     } catch (error) {
-      console.error(`Error uploading image ${index} to Cloudinary:`, error);
-      return null;
+      console.error('Error deleting images:', error);
+      throw error;  // Re-throw the error to stop the process if deleting images fails
+    }
+  };
+  const deleteFasilitasImages = async (fasilitasName: string) => {
+    try {
+      const deleteResponse = await fetch(`https://tripselbe.fly.dev/kamar/${fasilitasName}`, {
+        method: 'DELETE',
+      });
+  
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text();
+        throw new Error(`Failed to delete existing images: ${deleteResponse.status} - ${errorText}`);
+      }
+  
+      console.log(`All images for hotel ${fasilitasName} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting images:', error);
+      throw error;  // Re-throw the error to stop the process if deleting images fails
+    }
+  };
+  const uploadImagesToCloudinary = async (images: Gambar_hotel[], hotelName: string) => {
+    try {
+      // Step 1: Delete all existing images for the hotel
+      try {
+        await deleteHotelImages(hotelName);
+      } catch (error) {
+        console.warn('Failed to delete existing images, proceeding to upload new images:', error);
+      }
+  
+      // Step 2: Upload new images
+      await Promise.all(
+        images.map(async (image, index) => {
+          try {
+            // Upload the image to Cloudinary
+            const imageResponse = await fetch(image.url);
+            if (!imageResponse.ok) {
+              throw new Error(`Failed to fetch image ${index}: ${imageResponse.status}`);
+            }
+            const blob = await imageResponse.blob();
+            const formData = new FormData();
+            formData.append('file', blob);
+            formData.append('upload_preset', 'ml_default');
+  
+            const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+              method: 'POST',
+              body: formData,
+            });
+  
+            if (!cloudinaryResponse.ok) {
+              throw new Error(`Failed to upload image ${index} to Cloudinary`);
+            }
+  
+            const cloudinaryData = await cloudinaryResponse.json();
+            const imageUrl = cloudinaryData.secure_url;
+  
+            // Store the image URL and hotel name in the database
+            const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-images', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                nama: image.nama,
+                url: imageUrl,
+                hotel_name: hotelName,
+              }),
+            });
+  
+            if (!storeResponse.ok) {
+              throw new Error(`Failed to store image ${index} URL to database`);
+            }
+  
+            console.log(`Image ${index} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+          } catch (error) {
+            console.error(`Error uploading and storing image ${index}:`, error);
+            // Handle error...
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      // Handle error...
+    }
+  };
+  
+  const uploadImagesToCloudinaryFasilitas = async (images: Gambar_fasilitas[], fasilitasName: string) => {
+    try {
+      // Step 1: Delete all existing images for the facility
+      try {
+        await deleteFasilitasImages(fasilitasName);
+      } catch (error) {
+        console.warn('Failed to delete existing facility images, proceeding to upload new images:', error);
+      }
+  
+      // Step 2: Upload new images
+      await Promise.all(
+        images.map(async (image, index) => {
+          try {
+            // Upload the image to Cloudinary
+            const imageResponse = await fetch(image.gambar_url);
+            if (!imageResponse.ok) {
+              throw new Error(`Failed to fetch image ${index}: ${imageResponse.status}`);
+            }
+            const blob = await imageResponse.blob();
+            const formData = new FormData();
+            formData.append('file', blob);
+            formData.append('upload_preset', 'ml_default');
+  
+            const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+              method: 'POST',
+              body: formData,
+            });
+  
+            if (!cloudinaryResponse.ok) {
+              throw new Error(`Failed to upload image ${index} to Cloudinary`);
+            }
+  
+            const cloudinaryData = await cloudinaryResponse.json();
+            const imageUrl = cloudinaryData.secure_url;
+  
+            // Store the image URL and facility name in the database
+            const storeResponse = await fetch('https://tripselbe.fly.dev/kamar', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                nama: image.nama,
+                gambar_url: imageUrl,
+                hotel_nama: fasilitasName,
+              }),
+            });
+  
+            if (!storeResponse.ok) {
+              throw new Error(`Failed to store image ${index} URL to database`);
+            }
+  
+            console.log(`Image ${index} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+          } catch (error) {
+            console.error(`Error uploading and storing image ${index}:`, error);
+            // Handle error...
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      // Handle error...
     }
   };
   
   
-  const [gambar1, setGambar1] = useState('');
+  
+  const handleCheckboxChange = (index: number) => {
+    if (selectedImages.includes(index)) {
+      setSelectedImages(selectedImages.filter((item) => item !== index));
+    } else {
+      setSelectedImages([...selectedImages, index]);
+    }
+  };
+  
+  const handleDeleteImages = () => {
+    setGambarHotel(prevState => prevState.filter((_, index) => !selectedImages.includes(index)));
+    setSelectedImages([]);
+  };
 
-  const handleImage1 = () => {
-    const fileInput1 = document.getElementById('fileInput1');
-    if (fileInput1) {
-      fileInput1.click();
-    }
-  };
-  
-  const handleImage2 = () => {
-    const fileInput2 = document.getElementById('fileInput2');
-    if (fileInput2) {
-      fileInput2.click();
-    }
-  };
-  
-  const handleImage3 = () => {
-    const fileInput3 = document.getElementById('fileInput3');
-    if (fileInput3) {
-      fileInput3.click();
-    }
+  const toggleSelectionMode = () => {
+    setIsSelectionMode(!isSelectionMode);
+    setSelectedImages([]); // Clear selected images when toggling
   };
 
-  // const handleFileUpload = async (file: File, nama: string, index: number) => {
-  //   try {
-  //     // Create a FormData object
-  //     const formData = new FormData();
-  //     formData.append('file', file);
-  //     formData.append('upload_preset', 'your_cloudinary_upload_preset'); // Replace 'your_cloudinary_upload_preset' with your actual Cloudinary upload preset
+  const handleCheckboxChangeFasilitas = (index: number) => {
+    if (selectedImagesFasilitas.includes(index)) {
+      setSelectedImagesFasilitas(selectedImagesFasilitas.filter((item) => item !== index));
+    } else {
+      setSelectedImagesFasilitas([...selectedImagesFasilitas, index]);
+    }
+  };
   
-  //     // Send the file to Cloudinary for upload
-  //     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-      
-  //     if (!cloudinaryResponse.ok) {
-  //       throw new Error(`Failed to upload image ${index} to Cloudinary`);
-  //     }
-      
-  //     // Get the uploaded image URL from the Cloudinary response
-  //     const cloudinaryData = await cloudinaryResponse.json();
-  //     const imageUrl = cloudinaryData.secure_url;
-  
-  //     // Update the restaurant data on the server
-  //     const updatedData = { ...formData, ['gambar_url' + index]: imageUrl, nama }; // Include the 'nama' property
-  //     const updateResponse = await fetch(`https://tripselbe.fly.dev/restoran/${nama}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(updatedData),
-  //     });
-  
-  //     if (!updateResponse.ok) {
-  //       throw new Error(`Failed to update restaurant data with image ${index}`);
-  //     }
-  
-  //     // Log success message
-  //     console.log(`Image ${index} uploaded and restaurant data updated successfully`);
-  //   } catch (error) {
-  //     console.error(`Error uploading image ${index} and updating restaurant data:`, error);
-  //     // Handle error as needed
-  //   }
-  // };  
+  const handleDeleteImagesFasilitas = () => {
+    setFasilitas(prevState => prevState.filter((_, index) => !selectedImagesFasilitas.includes(index)));
+    setSelectedImagesFasilitas([]);
+  };
+
+  const toggleSelectionModeFasilitas = () => {
+    setIsSelectionModeFasilitas(!isSelectionModeFasilitas);
+    setSelectedImagesFasilitas([]); // Clear selected images when toggling
+  };
 
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <Stack sx={{ width: 'auto' }} spacing={10} >
           <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
-          Tambah Data Restoran
+          Tambah Data Hotel
         </Typography>
           <Stack spacing={2} maxWidth={'100%'}>
             <Stack direction={'row'} gap={2}>
-              <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
+              <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Restoran
+                nama Hotel
                 </Typography>
                 <Input
                   disableUnderline
@@ -395,6 +468,82 @@ export default function Register() {
 
                 <Stack direction={'row'} justifyContent={'space-between'} gap={2}>
                 <Stack maxWidth={'50%'} width={'50%'}>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  Bintang
+                </Typography>
+                <MuiSelect
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Domisili' }}
+                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C' }}
+                  sx={{
+                    ...customInputStyle,
+                    '&:focus': {
+                      borderColor: 'transparent !important',
+                    },
+                    '& fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:active fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                  }}
+                  name="bintang"
+                  value={formData.bintang}
+                  onChange={(e) => setFormData({ ...formData, bintang: e.target.value })}
+                >
+                  <MenuItem value={formData.bintang} sx={{justifyContent:'center'}}>
+                                {/* Render star icons */}
+            {Array.from({ length: parseInt(formData.bintang, 10) }).map((_, starIndex) => (
+              <Icon key={starIndex} icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+            ))}
+                  </MenuItem>
+                  <MenuItem value='5'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                  <MenuItem value='4'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                  <MenuItem value='3'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                </MuiSelect>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Telfon
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Nomor Telfon"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nama Restoran',
+                    name: 'fullName',
+                    value: formData.telfon,
+                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+                </Stack>
+                <Stack maxWidth={'50%'}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -438,62 +587,23 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Jenis Restoran
-                </Typography>
-                <MuiSelect
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Jenis Restoran' }}
-                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
-                  sx={{
-                    ...customInputStyle,
-                    '&:focus': {
-                      borderColor: 'transparent !important',
-                    },
-                    '& fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:active fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                  }}
-                  name="domisili"
-                  value={formData.halal}
-                  onChange={(e) => setFormData({ ...formData, halal: e.target.value })}
-                >
-                  <MenuItem value={formData.halal}>
-                    <em>{formData.halal}</em>
-                  </MenuItem>
-                  <MenuItem value='Halal'>Halal</MenuItem>
-                  <MenuItem value='Non Halal'>Non Halal</MenuItem>
-                </MuiSelect>
-                </Stack>
-                <Stack maxWidth={'50%'}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
                 Jarak
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Jarak"
+                  placeholder="Nama Restoran"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Jarak',
+                    'aria-label': 'Nama Restoran',
                     name: 'fullName',
-                    value: formData.location,
-                    onChange: (e) => setFormData({ ...formData, location: (e.target as HTMLInputElement).value }),
+                    value: formData.nama,
+                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
                 </Stack>
-
-
+                
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -501,6 +611,7 @@ export default function Register() {
                 }}>
                   Harga
                 </Typography>
+                
                 <Stack alignItems={'center'} direction={'row'} gap={2} justifyContent={'space-between'}>
                 <Stack width={'100%'} maxWidth={'50%'}>
 
@@ -540,7 +651,7 @@ export default function Register() {
                 <Stack width={'100%'} maxWidth={'50%'}>
 
                 <Stack direction={'row'} alignItems={'center'}>
-                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'30px 0 0 30px'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
                   <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -566,286 +677,489 @@ export default function Register() {
                 </Stack>
                 </Stack>
                 </Stack>
+                
 
-
-
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                No. Handphone
-                </Typography>
-                <Input
-                  disableUnderline
-                  placeholder="No. Handphone"
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
-                  inputProps={{
-                    'aria-label': 'No.Handphone',
-                    name: 'fullName',
-                    value: formData.telfon,
-                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-
-                <Stack gap={2}>
-                <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
-                    Makanan
-                  </Typography>
-                  {formData.makanan.map((makanan, index) => (
-  <Stack direction="row" alignItems="center" key={index} gap={1}>
-  <Input
-    disableUnderline
-    placeholder={`Makanan ${index + 1}`}
-    style={{ fontSize: '22px', color: '#04214C' }}
-    sx={customInputStyle}
-    value={makanan}
-    onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
-  />
-  <Button
-                  type="button"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '60px',
-                    width: '240px',
-                    fontWeight: 500,
-                    fontSize: '22px',
-                    color: '#FFF',
-                    backgroundColor: '#04214C',
-                    borderRadius: '20px',
-                    '&:hover': { background: '#04214C', color: '#FFF'}
-                  }}
-    onClick={() => handleDeleteMakanan(index)}
-  >
-    Delete
-  </Button>
-</Stack>
-                  ))}
-                  <Button
-                    type="button"
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '60px',
-                      width: '240px',
-                      fontWeight: 500,
-                      fontSize: '22px',
-                      color: '#FFF',
-                      backgroundColor: '#04214C',
-                      borderRadius: '20px',
-                      '&:hover': { background: '#04214C', color: '#FFF'}
-                    }}
-                    onClick={handleAddInput}
-                  >
-                    Tambah Makanan
-                  </Button>
-                </Stack>
-                <Stack gap={2}>
-                <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
-                    Minuman
-                  </Typography>
-                  {formData.minuman.map((minuman, index) => (
-  <Stack direction="row" alignItems="center" key={index} gap={1}>
-  <Input
-    disableUnderline
-    placeholder={`Makanan ${index + 1}`}
-    style={{ fontSize: '22px', color: '#04214C' }}
-    sx={customInputStyle}
-    value={minuman}
-    onChange={(e) => handleInputChangeminuman(index, (e.target as HTMLInputElement).value)}
-  />
-  <Button
-                  type="button"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '60px',
-                    width: '240px',
-                    fontWeight: 500,
-                    fontSize: '22px',
-                    color: '#FFF',
-                    backgroundColor: '#04214C',
-                    borderRadius: '20px',
-                    '&:hover': { background: '#04214C', color: '#FFF'}
-                  }}
-    onClick={() => handleDeleteMinuman(index)}
-  >
-    Delete
-  </Button>
-</Stack>
-                  ))}
-                  <Button
-                    type="button"
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '60px',
-                      width: '240px',
-                      fontWeight: 500,
-                      fontSize: '22px',
-                      color: '#FFF',
-                      backgroundColor: '#04214C',
-                      borderRadius: '20px',
-                      '&:hover': { background: '#04214C', color: '#FFF'}
-                    }}
-                    onClick={handleAddInputMinuman}
-                  >
-                    Tambah Minuman
-                  </Button>
-                </Stack>
-
-              </Stack>
-              <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Deskripsi
-                </Typography>
-                <TextField
-                multiline
-                  variant='outlined'
-                  placeholder="Maksimal 255 huruf"
-                  sx={customInputStyle2}
-                  inputProps={{
-                    'aria-label': 'Maksimal 255 huruf',
-                    name: 'deskripsi',
-                    value: formData.description,
-                    onChange: (e) => setFormData({ ...formData, description: (e.target as HTMLInputElement).value }),
-                  }}
-                />
+                {/* kamar render */}
+                <Stack>
+                <Stack justifyContent={'space-between'} direction={'row'} gap={2}>
+                  <Stack width={'100%'} maxWidth={'50%'} gap={2}>
                 <Stack>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Gambar
+                Nama Kamar 1
                 </Typography>
-                <Stack height={'190px'} gap={2} direction={'row'} justifyContent={'space-between'}>
+                <Input
+                  disableUnderline
+                  placeholder="Nama kamar"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nama Restoran',
+                    name: 'fullName',
+                    value: formData.nama,
+                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+                </Stack>
+                <Stack>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Ukuran Kamar 1
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Nama kamar"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nama Restoran',
+                    name: 'fullName',
+                    value: formData.nama,
+                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+                </Stack>
+                <Stack>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                harga Kamar 1
+                </Typography>
+                <Stack direction={'row'} alignItems={'center'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
+                <Input
+                disableUnderline
+                  placeholder="Termahal"
+                  sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Hargatermahal',
+                    name: 'email',
+                    value: formData.hargatermahal,
+                    onChange: (e) => setFormData({ ...formData, hargatermahal: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
+                  }}
+                />
+                </Stack>
+                </Stack>
+                </Stack>
+                <Stack width={'100%'} maxWidth={'50%'}>
                 <Stack
+    justifyContent={'start'}
+    alignItems={'end'}
+    borderRadius={'20px'}
+    sx={{
+      backgroundColor:'#D9D9D9',
+      // background: image.gambar_url ? `url(${image.gambar_url})` : '#D9D9D9',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      cursor: isSelectionModeFasilitas ? 'pointer' : 'default',
+    }}
+    height={'100%'}
+    width={'100%'}
+    onClick={() => isSelectionModeFasilitas ? handleCheckboxChangeFasilitas(index) : document.getElementById(`fileInput${index}fasilitas`)?.click()} // Adjusted index here
+  >
+      <input
+        type="file"
+        // id={`fileInput${index}fasilitas`} // Adjusted index here
+        style={{ display: 'none' }}
+        // onChange={(e) => handleFileInputChangeFasilitas(e, index)} // Adjusted index here
+      />
+      <Stack
+        height={'auto'}
+        width={'auto'}
+        sx={{ backgroundColor: 'white', borderRadius: '100px', margin: '10px' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+      </Stack>
+  </Stack>
+                </Stack>
+                </Stack>
+                {/* ac kasur dan fasilitas kamar */}
+                <Stack justifyContent={'space-between'} direction={'row'} gap={2} >
+                <Stack width={'100%'} maxWidth={'50%'}>
+                
+                </Stack>
+                </Stack>
+                </Stack>
+
+              </Stack>
+              <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
+      <Typography
+        sx={{
+          fontWeight: 500,
+          fontSize: '24px',
+          color: '#04214C',
+        }}
+      >
+        Gambar
+      </Typography>
+      <Stack height={'190px'} gap={2} direction={'row'} justifyContent={'space-between'}>
+        <Stack
+          justifyContent={'center'}
+          alignItems={'center'}
+          borderRadius={'20px'}
+          sx={{
+            background: gambarhotel[0] ? `url(${gambarhotel[0].url})` : '#D9D9D9',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+          height={'100%'}
+          width={'100%'}
+          maxWidth={'100%'}
+          onClick={() => document.getElementById('fileInput0')?.click()}
+        >
+          <input
+            type="file"
+            id="fileInput0"
+            style={{ display: 'none' }}
+            onChange={(e) => handleFileInputChange(e, 0)}
+          />
+        </Stack>
+      </Stack>
+      <Stack gap={2}>
+        
+        <Stack width={'100%'} overflow="auto">
+
+      <Stack gap={2}>
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: '24px',
+            color: '#04214C',
+          }}
+        >
+          Detail Gambar Hotel
+        </Typography>
+        <Stack width={'100%'} overflow="auto">
+          <Stack direction={'row'} gap={2} width={'max-content'} height={'190px'}>
+          {gambarhotel.map((image, index) => {
+  // Skip the first element
+  if (index === 0) return null;
+
+  return (  <Stack
+    key={index}
+    justifyContent={'start'}
+    alignItems={'end'}
+    borderRadius={'20px'}
+    sx={{
+      background: image.url ? `url(${image.url})` : '#D9D9D9',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      cursor: isSelectionMode ? 'pointer' : 'default',
+    }}
+    height={'100%'}
+    minWidth={'370px'}
+    onClick={() => isSelectionMode ? handleCheckboxChange(index) : document.getElementById(`fileInput${index}`)?.click()} // Adjusted index here
+  >
+    {!isSelectionMode && ( // Render file input only when not in selection mode
+      <input
+        type="file"
+        id={`fileInput${index}`} // Adjusted index here
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileInputChange(e, index)} // Adjusted index here
+      />
+    )}
+    {isSelectionMode && (
+      <Stack
+        height={'auto'}
+        width={'auto'}
+        sx={{ backgroundColor: 'white', borderRadius: '100px', margin: '10px' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Checkbox
+          {...label}
+          icon={<Icon icon="ph:trash-light" width="27" height="27" style={{ color: '#04214C' }} />}
+          checkedIcon={<Icon icon="ph:trash-fill" width="27" height="27" style={{ color: '#04214C' }} />}
+          checked={selectedImages.includes(index)}
+          onChange={() => handleCheckboxChange(index)}
+          />
+        </Stack>
+      )}
+    </Stack>
+  );
+})}
+
+
+<Stack
   justifyContent={'center'}
   alignItems={'center'}
   borderRadius={'20px'}
   sx={{
-    background: `${gambar1 ? `url(${gambar1})` : formData.gambar_url1 ? `url(${formData.gambar_url1})` : '#D9D9D9'}`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
+    backgroundColor:'#D9D9D9'
   }}
   height={'100%'}
-  width={'100%'}
-  maxWidth={'33%'}
-  onClick={handleImage1}
+  minWidth={'370px'}
+  onClick={() => {
+    const newGambarHotel = [...gambarhotel];
+    const index = newGambarHotel.length;
+    newGambarHotel.push({ nama: `gambar_${index}`, url: '' }); // Add a new image object with nama based on index
+    setGambarHotel(newGambarHotel);
+    document.getElementById(`fileInput${index + 1}`)?.click(); // Adjusted index here
+  }}
 >
-                {/* File input for image 1 */}
-                <input
-                  type="file"
-                  id="fileInput1"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileInputChange(e, 1)}
-                  />
-              </Stack>
-              <Stack
-                justifyContent={'center'}
-                alignItems={'center'}
-                borderRadius={'20px'}
-                sx={{
-                  background: `${gambar2 ? `url(${gambar2})` : formData.gambar_url2 ? `url(${formData.gambar_url2})` : '#D9D9D9'}`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                }}
-                height={'100%'}
-                width={'100%'}
-                maxWidth={'33%'}
-                onClick={handleImage2}
-              >
-                {/* File input for image 1 */}
-                <input
-                  type="file"
-                  id="fileInput2"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileInputChange(e, 2)}
-                  />
-              </Stack>
-              <Stack
-                justifyContent={'center'}
-                alignItems={'center'}
-                borderRadius={'20px'}
-                sx={{
-                  background: `${gambar3 ? `url(${gambar3})` : formData.gambar_url3 ? `url(${formData.gambar_url3})` : '#D9D9D9'}`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                }}
-                height={'100%'}
-                width={'100%'}
-                maxWidth={'33%'}
-                onClick={handleImage3}
-              >
-                {/* File input for image 1 */}
-                <input
-                  type="file"
-                  id="fileInput3"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileInputChange(e, 3)}
-                  />
-              </Stack>
-                </Stack>
-                </Stack>
-                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Link Menu
-                </Typography>
-                <TextField
-                multiline
-                  variant='outlined'
-                  placeholder="Link Menu"
-                  sx={customInputStyle2}
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  inputProps={{
-                    'aria-label': 'Link menu',
-                    name: 'Link Menu',
-                    value: formData.link_menu,
-                    onChange: (e) => setFormData({ ...formData, link_menu: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
-                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Link Alamat
-                </Typography>
-                <TextField
-                multiline
-                  variant='outlined'
-                  placeholder="Link Alamat"
-                  sx={customInputStyle2}
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  inputProps={{
-                    'aria-label': 'Link Alamat',
-                    name: 'Link Alamat',
-                    value: formData.alamat_gbr,
-                    onChange: (e) => setFormData({ ...formData, alamat_gbr: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
-              </Stack>
+  <Stack width={'100px'} height={'100px'} borderRadius={'100px'} sx={{backgroundColor:'white'}} justifyContent={'center'} alignItems={'center'}>
+    <Icon icon="fluent:add-16-filled" width="70" height="70" style={{ color: '#FF010C' }} />
+  </Stack>
+</Stack>
+
+          </Stack>
+        </Stack>
+        </Stack>
+        </Stack>
+        <Stack direction={'row'} gap={2}>
+          <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#04214C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={toggleSelectionMode}
+          >
+            Pilih Gambar
+          </Button>
+          <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#FF010C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={handleDeleteImages}
+          >
+            Hapus Gambar
+          </Button>
+        </Stack>
+      </Stack>
+      <Stack gap={2}>
+        
+        <Stack width={'100%'} overflow="auto">
+
+      <Stack gap={2}>
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: '24px',
+            color: '#04214C',
+          }}
+        >
+          Detail Gambar Fasilitas Hotel
+        </Typography>
+        <Stack width={'100%'} overflow="auto">
+          <Stack direction={'row'} gap={2} width={'max-content'} height={'190px'}>
+          {datafasilitas.map((image, index) => ( // Adjusted to skip the first image
+  <Stack
+    key={index}
+    justifyContent={'start'}
+    alignItems={'end'}
+    borderRadius={'20px'}
+    sx={{
+      background: image.gambar_url ? `url(${image.gambar_url})` : '#D9D9D9',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      cursor: isSelectionModeFasilitas ? 'pointer' : 'default',
+    }}
+    height={'100%'}
+    minWidth={'370px'}
+    onClick={() => isSelectionModeFasilitas ? handleCheckboxChangeFasilitas(index) : document.getElementById(`fileInput${index}fasilitas`)?.click()} // Adjusted index here
+  >
+    {!isSelectionModeFasilitas && ( // Render file input only when not in selection mode
+      <input
+        type="file"
+        id={`fileInput${index}fasilitas`} // Adjusted index here
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileInputChangeFasilitas(e, index)} // Adjusted index here
+      />
+    )}
+    {isSelectionModeFasilitas && (
+      <Stack
+        height={'auto'}
+        width={'auto'}
+        sx={{ backgroundColor: 'white', borderRadius: '100px', margin: '10px' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Checkbox
+          {...label}
+          icon={<Icon icon="ph:trash-light" width="27" height="27" style={{ color: '#04214C' }} />}
+          checkedIcon={<Icon icon="ph:trash-fill" width="27" height="27" style={{ color: '#04214C' }} />}
+          checked={selectedImagesFasilitas.includes(index)}
+          onChange={() => handleCheckboxChangeFasilitas(index)}
+        />
+      </Stack>
+    )}
+  </Stack>
+))}
+
+
+<Stack
+  justifyContent={'center'}
+  alignItems={'center'}
+  borderRadius={'20px'}
+  sx={{
+    backgroundColor:'#D9D9D9'
+  }}
+  height={'100%'}
+  minWidth={'370px'}
+  onClick={() => {
+    const newGambarHotel = [...datafasilitas];
+    const index = newGambarHotel.length;
+    newGambarHotel.push({ nama: `gambar_${index}`, gambar_url: '' }); // Add a new image object with nama based on index
+    setFasilitas(newGambarHotel);
+    document.getElementById(`fileInput${index}fasilitas`)?.click(); // Adjusted index here
+  }}
+>
+  <Stack width={'100px'} height={'100px'} borderRadius={'100px'} sx={{backgroundColor:'white'}} justifyContent={'center'} alignItems={'center'}>
+    <Icon icon="fluent:add-16-filled" width="70" height="70" style={{ color: '#FF010C' }} />
+  </Stack>
+</Stack>
+
+          </Stack>
+        </Stack>
+        </Stack>
+        </Stack>
+        <Stack direction={'row'} gap={2}>
+          <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#04214C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={toggleSelectionModeFasilitas}
+          >
+            Pilih Gambar
+          </Button>
+          <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#FF010C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={handleDeleteImagesFasilitas}
+          >
+            Hapus Gambar
+          </Button>
+        </Stack>
+      </Stack>
+     {/* Render input field to edit facility name */}
+     {datafasilitas.map((image, index) => (
+          <Stack
+            key={index}
+            justifyContent={'start'}
+            alignItems={'start'}
+          >
+            <Typography
+              sx={{
+                fontWeight: 500,
+                fontSize: '24px',
+                color: '#04214C',
+              }}
+            >
+              {`Nama Detail Fasilitas Hotel ${index + 1}`}
+            </Typography>
+            <Input
+  disableUnderline
+  placeholder={`Nama Fasilitas ${index + 1}`}
+  style={{ fontSize: '22px', color: '#04214C' }}
+  sx={customInputStyle}
+  inputProps={{
+    'aria-label': 'Nama Restoran',
+    name: `nama-fasilitas-${index}`,
+    value: image.nama,
+    onChange: (e) => {
+      const inputElement = e.target as HTMLInputElement; // Explicitly type event target
+      const newFasilitas = [...datafasilitas];
+      newFasilitas[index].nama = inputElement.value;
+      setFasilitas(newFasilitas);
+    },
+  }}
+/>
+          </Stack>
+        ))}
+        <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#04214C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={() => {
+              const newFasilitas = [...datafasilitas];
+              newFasilitas.push({ nama: '', gambar_url: '' }); // Add a new image object with empty nama
+              setFasilitas(newFasilitas);
+            }}
+                >
+            Tambah Data
+          </Button>
+    </Stack>
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
