@@ -103,7 +103,7 @@ export default function ListHotel() {
                       {hotel.ukuran} m<span style={{ fontSize: '14px', verticalAlign: 'super' }}>2</span>
                     </Typography>
                   </Stack>
-                  {hotel.ac_up && (
+                  {hotel.ac_up ==='true' && (
                     <Stack direction={'row'} gap={1}>
                       <Stack sx={{background:'#0E336C'}} direction={'row'} borderRadius={'15px'} justifyContent={'center'} alignItems={'center'} gap={1} padding={' 1px 15px'}>
                         <Icon icon="material-symbols:meeting-room" width="20" height="20" style={{ color: '#FFF' }} />
@@ -135,18 +135,38 @@ export default function ListHotel() {
             {/* balkon dan sarapan */}
             <Divider/>
             <Stack direction={'column'} gap={1}>
+            {hotel.var1 ==='true' && (
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
-                <Icon icon={hotel.var1icon} width="20" height="20" style={{ color: '#FF010C' }} />
+                <Icon icon="material-symbols:balcony-rounded" width="20" height="20" style={{ color: '#FF010C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
                   {hotel.var1}
                 </Typography>
               </Stack>
+            )}
+             {hotel.var1 ==='false' && (
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
-                <Icon icon={hotel.var2icon} width="20" height="20" style={{ color: '#FF010C' }} />
+                <Icon icon="material-symbols:balcony-rounded" width="20" height="20" style={{ color: '#6E6C6C' }} />
+                <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
+                  {hotel.var1}
+                </Typography>
+              </Stack>
+            )}
+            {hotel.var2 ==='true' && (
+              <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
+                <Icon icon="mingcute:fork-spoon-fill" width="20" height="20" style={{ color: '#FF010C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
                   {hotel.var2}
                 </Typography>
               </Stack>
+            )}
+            {hotel.var2 ==='false' && (
+              <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
+                <Icon icon="mingcute:fork-spoon-fill" width="20" height="20" style={{ color: '#6E6C6C' }} />
+                <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
+                  {hotel.var2}
+                </Typography>
+              </Stack>
+            )}
             </Stack>
           </Stack>
           {/* kanan */}

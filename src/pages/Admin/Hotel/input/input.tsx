@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -39,6 +39,20 @@ const customInputStyle = {
     },
   },
 };
+interface CustomLabelProps {
+  icon: React.ReactNode;
+  text: string;
+}
+const CustomLabel: React.FC<CustomLabelProps> = ({ icon, text }) => (
+  <Stack alignItems={'center'} direction={'row'}>
+    <Stack>
+    {icon}
+    </Stack>
+    <Typography sx={{ fontSize: 18, fontWeight: 400, marginLeft: 1 }}>
+      {text}
+    </Typography>
+  </Stack>
+);
 // const customInputStyle2 = {
 //   width: '100%',
 //   height: 'auto',
@@ -78,16 +92,22 @@ interface Gambar_fasilitas {
   nama: string;
   gambar_url: string;
 }
-// type Kamar = {
-//   gambar_url?: string;
-//   gambar_preview?: string;
-//   gambar_file?: File;
-//   google_map_url: string;
-//   nama: string;
-//   jarak: string;
-// };
+interface Kamar {
+  nama: string;
+  gambar: string;
+  ukuran: string;
+  ac_up: string;
+  bed: string;
+  tamu: string;
+  harga: string;
+  hotel_nama: string;
+  var1: string;
+  var2: string;
+  var1icon: string;
+  var2icon: string;
+}
 export default function Register() {
-  // const [kamar, setKamar] = useState<Kamar[]>([]);
+  const [kamar, setKamar] = useState<Kamar[]>([]);
   const [gambarhotel, setGambarHotel] = useState<Gambar_hotel[]>([
     { nama: '', url: '' }, // Default first element
     { nama: '', url: '' }  // Default second element
@@ -110,6 +130,65 @@ export default function Register() {
     bintang: '',
     fasilitas: [''],
   });
+  // Function to handle room changes
+  const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
+    const newKamar = [...kamar];
+  
+    // Convert boolean values to strings
+    const sanitizedValue = typeof value === 'boolean' ? value.toString() : value;
+  
+    newKamar[index][field] = sanitizedValue;
+  
+    // If var1 is being changed and its value becomes 'true', set var1icon to true
+    if (field === 'var1' && sanitizedValue === 'true') {
+      newKamar[index]['var1icon'] = 'true';
+    }
+  
+    // If var2 is being changed and its value becomes 'true', set var2icon to true
+    if (field === 'var2' && sanitizedValue === 'true') {
+      newKamar[index]['var2icon'] = 'true';
+    }
+  
+    setKamar(newKamar);
+  };
+  const addRoom = () => {
+    setKamar([
+      ...kamar,
+      {
+        nama: '',
+        gambar: '',
+        ukuran: '',
+        ac_up: '',
+        bed: '',
+        tamu: '',
+        harga: '',
+        hotel_nama: formData.nama,
+        var1:'',
+        var2: '',
+        var1icon: '',
+        var2icon: '',
+      },
+    ]);
+  };
+  const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+            setKamar(prevKamar => {
+                const newKamar = [...prevKamar];
+                newKamar[index] = {
+                    ...newKamar[index], // Preserve other properties of the kamar
+                    gambar: reader.result as string // Update the gambar property with the new image
+                };
+                return newKamar;
+            });
+        };
+    }
+};
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -175,12 +254,16 @@ export default function Register() {
         if (Array.isArray(imagesData) && imagesData.length > 0) {
           setGambarHotel(imagesData);
         }
+          // Fetch the kamar data
+          const imagesResponse2 = await fetch(`https://tripselbe.fly.dev/hotel-kamar/${nama}`);
+          const imagesData2 = await imagesResponse2.json();
+          setKamar(imagesData2);
         // Fetch the Fasilitas data
         const fasilitasResponse = await fetch(`https://tripselbe.fly.dev/kamar/${nama}`);
         const fasilitasData = await fasilitasResponse.json();
         setFasilitas(Array.isArray(fasilitasData) ? fasilitasData : []);
       } catch (error) {
-        console.error('Error fetching restoran data:', error);
+        console.error('Error fetching kamar data:', error);
       }
     };
     fetchRestoranData();
@@ -188,55 +271,79 @@ export default function Register() {
   // const gambarhotelout = () => {
   //   console.log(gambarhotel)
   // };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    try {
-        const existingResponse = await fetch(`https://tripselbe.fly.dev/hotels/${formData.nama}`);
-        if (!existingResponse.ok) {
-            const errorMessage = await existingResponse.text();
-            throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
-        }
-        const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
+//   const addKamarData = async () => {
+//     try {
+//         // Iterate through each room (kamar) and add it to the database
+//         await Promise.all(
+//             kamar.map(async (kamar) => {
+//                 const response = await fetch('https://tripselbe.fly.dev/hotel-kamar', {
+//                     method: 'POST',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                     },
+//                     body: JSON.stringify(kamar), // Send each room separately in the body
+//                 });
 
-        const updatedFormData = {
-            ...formData,
-            harga: hargaString || '',
-        };
+//                 if (!response.ok) {
+//                     const errorMessage = await response.text();
+//                     throw new Error(`Failed to add kamar data: ${response.status}: ${errorMessage}`);
+//                 }
+//             })
+//         );
+//     } catch (error) {
+//         console.error('Error adding kamar data:', error);
+//         throw error;
+//     }
+// };
 
-        const response = await fetch(`https://tripselbe.fly.dev/hotel/${formData.nama}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedFormData),
-        });
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            console.log(updatedFormData);
-            throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
-        }
+  try {
+      const response = await fetch(`https://tripselbe.fly.dev/hotel/${formData.nama}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+      });
 
-        console.log(updatedFormData);
+      if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
+      }
 
-        const data = await response.json(); // Read the response body once
+      await uploadImagesToCloudinary(gambarhotel, formData.nama);
+      await uploadImagesToCloudinaryKamar(kamar, formData.nama);
+      await uploadImagesToCloudinaryFasilitas(datafasilitas, formData.nama);
 
-        await uploadImagesToCloudinary(gambarhotel,formData.nama);
-        const datafasilitasresponse = data; // Reuse the parsed JSON data
-
-        await uploadImagesToCloudinaryFasilitas(datafasilitas,formData.nama);
-        console.log(datafasilitasresponse);
-        alert(data.message);
-    } catch (error) {
-        console.error('Error updating restoran:', error);
-        alert(`Failed to update restoran: ${error}`);
+      alert('Hotel information updated successfully!');
+  } catch (error) {
+      console.error('Error updating hotel information:', error);
     }
 };
+
 
   const deleteHotelImages = async (hotelName: string) => {
     try {
       const deleteResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${hotelName}`, {
+        method: 'DELETE',
+      });
+  
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text();
+        throw new Error(`Failed to delete existing images: ${deleteResponse.status} - ${errorText}`);
+      }
+  
+      console.log(`All images for hotel ${hotelName} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting images:', error);
+      throw error;  // Re-throw the error to stop the process if deleting images fails
+    }
+  };
+  const deleteKamarImages = async (hotelName: string) => {
+    try {
+      const deleteResponse = await fetch(`https://tripselbe.fly.dev/hotel-kamar/${hotelName}`, {
         method: 'DELETE',
       });
   
@@ -332,7 +439,68 @@ export default function Register() {
       // Handle error...
     }
   };
-  
+  const uploadImagesToCloudinaryKamar = async (kamarList: Kamar[], hotelName: string) => {
+    try {
+        // Delete existing images first
+        try {
+            await deleteKamarImages(hotelName);
+        } catch (error) {
+            console.warn('Failed to delete existing images, proceeding to upload new images:', error);
+        }
+
+        // Upload new images
+        await Promise.all(
+            kamarList.map(async (kamar, index) => {
+                try {
+                    const response = await fetch(kamar.gambar);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch image ${index}: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    const formData = new FormData();
+                    formData.append('file', blob);
+                    formData.append('upload_preset', 'ml_default');
+
+                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!cloudinaryResponse.ok) {
+                        throw new Error(`Failed to upload image ${index} to Cloudinary`);
+                    }
+
+                    const cloudinaryData = await cloudinaryResponse.json();
+                    const imageUrl = cloudinaryData.secure_url;
+
+                    // Store image URL in the database
+                    const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-kamar', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...kamar,
+                            gambar: imageUrl,
+                            hotel_nama: hotelName, // Ensure to send hotel name
+                        }),
+                    });
+
+                    if (!storeResponse.ok) {
+                        throw new Error(`Failed to store image ${index} URL to database`);
+                    }
+
+                    console.log(`Image ${index} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+                } catch (error) {
+                    console.error(`Error uploading and storing image ${index}:`, error);
+                }
+            })
+        );
+    } catch (error) {
+        console.error('Error uploading images:', error);
+    }
+};
+
   const uploadImagesToCloudinaryFasilitas = async (images: Gambar_fasilitas[], fasilitasName: string) => {
     try {
       // Step 1: Delete all existing images for the facility
@@ -451,7 +619,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Hotel
+                Nama Hotel
                 </Typography>
                 <Input
                   disableUnderline
@@ -528,7 +696,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                Telfon
+                Nomor Telepon
                 </Typography>
                 <Input
                   disableUnderline
@@ -597,8 +765,8 @@ export default function Register() {
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'fullName',
-                    value: formData.nama,
-                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
+                    value: formData.jarak,
+                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
@@ -681,6 +849,10 @@ export default function Register() {
 
                 {/* kamar render */}
                 <Stack>
+                {kamar.map((room, index) => (
+                  <Stack key={index}>
+                <Stack>
+                
                 <Stack justifyContent={'space-between'} direction={'row'} gap={2}>
                   <Stack width={'100%'} maxWidth={'50%'} gap={2}>
                 <Stack>
@@ -689,18 +861,18 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                Nama Kamar 1
+                Nama Kamar {index+1}
                 </Typography>
                 <Input
                   disableUnderline
                   placeholder="Nama kamar"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
+                  onChange={(e) => handleRoomChange(index, 'nama', e.target.value)}
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'fullName',
-                    value: formData.nama,
-                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
+                    value: room.nama,
                   }}
                 />
                 </Stack>
@@ -710,18 +882,19 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                Ukuran Kamar 1
+                Ukuran Kamar {index+1}
                 </Typography>
                 <Input
                   disableUnderline
                   placeholder="Nama kamar"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
+                  onChange={(e) => handleRoomChange(index, 'ukuran', e.target.value)}
                   inputProps={{
                     'aria-label': 'Nama Restoran',
-                    name: 'fullName',
-                    value: formData.nama,
-                    onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
+                    name: 'Ukuran',
+                    value: room.ukuran
+                    // onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
@@ -731,7 +904,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                harga Kamar 1
+                harga Kamar {index+1}
                 </Typography>
                 <Stack direction={'row'} alignItems={'center'}>
                   <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
@@ -749,11 +922,12 @@ export default function Register() {
                   placeholder="Termahal"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
+                  onChange={(e) => handleRoomChange(index, 'harga', e.target.value)}
                   inputProps={{
-                    'aria-label': 'Hargatermahal',
-                    name: 'email',
-                    value: formData.hargatermahal,
-                    onChange: (e) => setFormData({ ...formData, hargatermahal: (e.target as HTMLInputElement).value }),
+                    'aria-label': 'Harga',
+                    name: 'harga',
+                    value: room.harga,
+                    // onChange: (e) => setFormData({ ...formData, hargatermahal: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
@@ -767,7 +941,7 @@ export default function Register() {
     borderRadius={'20px'}
     sx={{
       backgroundColor:'#D9D9D9',
-      // background: image.gambar_url ? `url(${image.gambar_url})` : '#D9D9D9',
+      background: room.gambar ? `url(${room.gambar})` : '#D9D9D9',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -775,13 +949,13 @@ export default function Register() {
     }}
     height={'100%'}
     width={'100%'}
-    onClick={() => isSelectionModeFasilitas ? handleCheckboxChangeFasilitas(index) : document.getElementById(`fileInput${index}fasilitas`)?.click()} // Adjusted index here
+    onClick={() =>  document.getElementById(`fileInput${index}kamar`)?.click()} // Adjusted index here
   >
       <input
         type="file"
-        // id={`fileInput${index}fasilitas`} // Adjusted index here
+        id={`fileInput${index}kamar`} // Adjusted index here
         style={{ display: 'none' }}
-        // onChange={(e) => handleFileInputChangeFasilitas(e, index)} // Adjusted index here
+        onChange={(e) => handleFileInputChangeKamar(e, index)} // Adjusted index here
       />
       <Stack
         height={'auto'}
@@ -794,14 +968,168 @@ export default function Register() {
                 </Stack>
                 </Stack>
                 {/* ac kasur dan fasilitas kamar */}
-                <Stack justifyContent={'space-between'} direction={'row'} gap={2} >
-                <Stack width={'100%'} maxWidth={'50%'}>
+                <Stack justifyContent={'space-between'} direction={'row'} gap={2} > 
                 
+                <Stack width={'100%'} maxWidth={'50%'}>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  AC
+                </Typography>
+                <MuiSelect
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'AC' }}
+                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
+                  sx={{
+                    ...customInputStyle,
+                    '&:focus': {
+                      borderColor: 'transparent !important',
+                    },
+                    '& fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:active fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                  }}
+                  name="Ac"
+                  value={room.ac_up}
+                  onChange={(e) => handleRoomChange(index, 'ac_up', e.target.value)}
+                >
+                  <MenuItem value={room.ac_up}>
+                    <em>{room.ac_up}</em>
+                  </MenuItem>
+                  <MenuItem value='true'>Ada AC</MenuItem>
+                  <MenuItem value='false'>Tidak Ada AC</MenuItem>
+                </MuiSelect>
+                </Stack>
+                <Stack width={'100%'} maxWidth={'50%'}>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  Jenis Kasur
+                </Typography>
+                <MuiSelect
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'bed' }}
+                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
+                  sx={{
+                    ...customInputStyle,
+                    '&:focus': {
+                      borderColor: 'transparent !important',
+                    },
+                    '& fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:active fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                  }}
+                  name="Ac"
+                  value={room.bed}
+                  onChange={(e) => handleRoomChange(index, 'bed', e.target.value)}
+                >
+                  <MenuItem value={room.bed}>
+                    <em>{room.bed}</em>
+                  </MenuItem>
+                  <MenuItem value='King Bed'>King Bed</MenuItem>
+                  <MenuItem value='Queen bed'>Queen bed</MenuItem>
+                </MuiSelect>
                 </Stack>
                 </Stack>
                 </Stack>
+                <Stack justifyContent={'space-between'} direction={'row'} gap={2} > 
+                <Stack width={'100%'} maxWidth={'50%'}>
+                <FormControl>
+  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
+  <RadioGroup
+      aria-labelledby="demo-radio-buttons-group-label"
+      defaultValue={room.var1}
+      name={`var1_${index}`} // Add index to make the name unique for each room
+      onChange={(e) => handleRoomChange(index, 'var1', e.target.value)} // Update the onChange handler
+    >
+
+    <FormControlLabel value="false" 
+   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+   label={<CustomLabel icon={ <Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#6E6C6C' }} />
+  } text="Tidak ada Balkon" />}
+   sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
+ />
+ <FormControlLabel value="true" 
+   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+   label={<CustomLabel icon={ <Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#FF010C' }} />
+  } text="Ada Balkon" />}
+   sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
+ />
+  </RadioGroup>
+  </FormControl>
+                </Stack>
+                <Stack width={'100%'} maxWidth={'50%'}>
+                <FormControl>
+  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
+  <RadioGroup
+      aria-labelledby="demo-radio-buttons-group-label"
+      defaultValue={room.var2}
+      name={`var2_${index}`} // Add index to make the name unique for each room
+      onChange={(e) => handleRoomChange(index, 'var2', e.target.value)} // Update the onChange handler
+    >
+
+    <FormControlLabel value="false" 
+   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+   label={<CustomLabel icon={ <Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#6E6C6C' }} />
+  } text="Tidak termasuk Sarapan" />}
+   sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
+ />
+ <FormControlLabel value="true" 
+   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+   label={<CustomLabel icon={ <Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#FF010C' }} />
+  } text="Termasuk Sarapan" />}
+   sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
+ />
+  </RadioGroup>
+  </FormControl>
+                </Stack>
+                </Stack>
+                </Stack>
+                ))}
+                <Button
+            type="button"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '44px',
+              width: '300px',
+              padding: '0 20px',
+              fontWeight: 500,
+              fontSize: '22px',
+              color: '#FFF',
+              backgroundColor: '#04214C',
+              borderRadius: '20px',
+              '&:hover': { background: '#04214C', color: '#FFF' },
+            }}
+            onClick={addRoom}
+          >
+            Tambah Kamar
+          </Button>
+          </Stack>
 
               </Stack>
+
+
+
+
+
               <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
       <Typography
         sx={{
@@ -818,7 +1146,7 @@ export default function Register() {
           alignItems={'center'}
           borderRadius={'20px'}
           sx={{
-            background: gambarhotel[0] ? `url(${gambarhotel[0].url})` : '#D9D9D9',
+            background: gambarhotel[0] && gambarhotel[0].url !== '' ? `url(${gambarhotel[0].url})` : '#D9D9D9',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
