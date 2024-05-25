@@ -67,14 +67,13 @@ const customInputStyle2 = {
     
   },
 };
-type Address = {
-  gambar_url?: string;
-  gambar_preview?: string;
-  gambar_file?: File;
+interface Address  {
+  gambar_url: string;
   google_map_url: string;
   nama: string;
   jarak: string;
-};
+  oleh_nama:string;
+}
 export default function Register() {
   const location = useLocation();
   const [formData, setFormData] = useState({
@@ -118,77 +117,142 @@ export default function Register() {
   //     return null; // Return null if there was an error
   //   }
   // };  
-  const postDataToServer = async (address: Address) => {
-    const { nama, google_map_url, jarak, gambar_file } = address;
+  // const postDataToServer = async (address: Address) => {
+  //   const { nama, google_map_url, jarak, gambar_file } = address;
+  //   try {
+  //     let gambar_url = '';
+
+  //     if (gambar_file) {
+  //       const formData = new FormData();
+  //       formData.append('file', gambar_file);
+  //       formData.append('upload_preset', 'ml_default');
+
+  //       const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+
+  //       if (!cloudinaryResponse.ok) {
+  //         throw new Error('Failed to upload image');
+  //       }
+
+  //       const cloudinaryData = await cloudinaryResponse.json();
+  //       gambar_url = cloudinaryData.secure_url;
+  //     }
+
+  //     const response = await fetch(`https://tripselbe.fly.dev/addresses/${formData.nama}`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         nama,
+  //         gambar_url,
+  //         google_map_url,
+  //         jarak,
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Failed to post data');
+  //     }
+
+  //     return response.json();
+  //   } catch (error) {
+  //     console.error('Error posting data:', error);
+  //   }
+  // };
+  const uploadImagesToCloudinaryKamar = async (cabang: Address[], olehName: string) => {
     try {
-      let gambar_url = '';
-
-      if (gambar_file) {
-        const formData = new FormData();
-        formData.append('file', gambar_file);
-        formData.append('upload_preset', 'ml_default');
-
-        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!cloudinaryResponse.ok) {
-          throw new Error('Failed to upload image');
+        // Delete existing images first
+        try {
+            await deleteAddress(olehName);
+        } catch (error) {
+          console.log(olehName)
+            console.warn('Failed to delete existing images, proceeding to upload new images:', error);
         }
 
-        const cloudinaryData = await cloudinaryResponse.json();
-        gambar_url = cloudinaryData.secure_url;
-      }
+        // Upload new images
+        await Promise.all(
+            cabang.map(async (oleh, index) => {
+                try {
+                    const response = await fetch(oleh.gambar_url);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch image ${index}: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    const formaddress = new FormData();
+                    formaddress.append('file', blob);
+                    formaddress.append('upload_preset', 'ml_default');
+                    console.log(blob)
+                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+                        method: 'POST',
+                        body: formaddress,
+                    });
 
-      const response = await fetch(`https://tripselbe.fly.dev/addresses/${formData.nama}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nama,
-          gambar_url,
-          google_map_url,
-          jarak,
-        }),
-      });
+                    if (!cloudinaryResponse.ok) {
+                        throw new Error(`Failed to upload image ${index} to Cloudinary`);
+                    }
 
-      if (!response.ok) {
-        throw new Error('Failed to post data');
-      }
+                    const cloudinaryData = await cloudinaryResponse.json();
+                    const imageUrl = cloudinaryData.secure_url;
+                    console.log(imageUrl)
 
-      return response.json();
+                    // Store image URL in the database
+                    const storeResponse = await fetch('https://tripselbe.fly.dev/addresses', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            gambar_url: imageUrl,
+                            oleh_nama: olehName,
+                            nama:oleh.nama,
+                            google_map_url:oleh.google_map_url,
+                            jarak:oleh.jarak
+                        }),
+                    });
+
+                    if (!storeResponse.ok) {
+                        throw new Error(`Failed to store image ${index} URL to database`);
+                    }
+                    console.log(`Image ${index} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+                } catch (error) {
+                  console.log(addresses)
+                    console.error(`Error uploading and storing image ${index}:`, error);
+                }
+            })
+        );
     } catch (error) {
-      console.error('Error posting data:', error);
+        console.error('Error uploading images:', error);
     }
-  };
+};
 
-  const handleFileInputChangeAlamat = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAddress((prevAddresses) => {
-        const updatedAddresses = [...prevAddresses];
-        updatedAddresses[index] = {
-          ...updatedAddresses[index],
-          gambar_preview: imageUrl,
-          gambar_file: file,
-        };
-        return updatedAddresses;
-      });
-    }
-  };
+  // const handleFileInputChangeAlamat = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const imageUrl = URL.createObjectURL(file);
+  //     setAddress((prevAddresses) => {
+  //       const updatedAddresses = [...prevAddresses];
+  //       updatedAddresses[index] = {
+  //         ...updatedAddresses[index],
+  //         gambar_preview: imageUrl,
+  //         gambar_file: file,
+  //       };
+  //       return updatedAddresses;
+  //     });
+  //   }
+  // };
 
-  const handleImageAlamat = (index: number) => {
-    const fileInput = document.getElementById(`fileInputalamat${index}`) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
-  };
+  // const handleImageAlamat = (index: number) => {
+  //   const fileInput = document.getElementById(`fileInputalamat${index}`) as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.click();
+  //   }
+  // };
 
   const handleAddInput = () => {
-    const newAddress: Address = { google_map_url: '', nama: '', jarak: '', gambar_url: '', gambar_preview: '', gambar_file: undefined };
+    const newAddress: Address = { google_map_url: '', nama: '',oleh_nama: '', jarak: '', gambar_url: '' };
     setAddress((prevAddresses) => [...prevAddresses, newAddress]);
   };
   
@@ -219,44 +283,85 @@ export default function Register() {
 }
     
   };
-  const getAddresses = async (nama:string) => {
-    try {
-      const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}`);
-  
-      if (!response.ok) {
-        throw new Error(`Server responded with status ${response.status}`);
-      }
-  
-      const addresses = await response.json();
-      return addresses;
-    } catch (error) {
-      console.error('Error fetching addresses:', error);
-      throw new Error(`Failed to fetch addresses: ${error}`);
-    }
-  };
-  const handleDeleteAddress = async (nama: string, oleh_nama: string) => {
-    if (!nama || !oleh_nama) {
-      setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
-      return;
-    }
 
+  const handleFileInputChangeAddress = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+            setAddress(prevKamar => {
+                const newKamar = [...prevKamar];
+                newKamar[index] = {
+                    ...newKamar[index], // Preserve other properties of the kamar
+                    gambar_url: reader.result as string // Update the gambar property with the new image
+                };
+                return newKamar;
+            });
+        };
+    }
+};
+  // const getAddresses = async (nama:string) => {
+  //   try {
+  //     const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}`);
+  
+  //     if (!response.ok) {
+  //       throw new Error(`Server responded with status ${response.status}`);
+  //     }
+  
+  //     const addresses = await response.json();
+  //     return addresses;
+  //   } catch (error) {
+  //     console.error('Error fetching addresses:', error);
+  //     throw new Error(`Failed to fetch addresses: ${error}`);
+  //   }
+  // };
+  const removeAddress = (index:number) => {
+    const newKamar = [...addresses];
+    newKamar.splice(index, 1);
+    setAddress(newKamar);
+  };
+  const deleteAddress = async (olehName: string) => {
     try {
-      const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}/${oleh_nama}`, {
+      const deleteResponse = await fetch(`https://tripselbe.fly.dev/addresses/${olehName}`, {
         method: 'DELETE',
       });
-
-      if (!response.ok) {
-        throw new Error(`Server responded with status ${response.status}`);
+  
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text();
+        throw new Error(`Failed to delete existing fasilitas: ${deleteResponse.status} - ${errorText}`);
       }
-
-      const data = await response.json();
-      setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
-      alert(data.message); // Optionally, you can show a message to the user upon successful deletion
+  
+      console.log(`All images for hotel ${olehName} deleted successfully.`);
     } catch (error) {
-      console.error('Error deleting address:', error);
-      alert('Failed to delete address');
+      console.error('Error deleting images:', error);
+      throw error;  // Re-throw the error to stop the process if deleting images fails
     }
   };
+  // const handleDeleteAddress = async (nama: string, oleh_nama: string) => {
+  //   if (!nama || !oleh_nama) {
+  //     setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`https://tripselbe.fly.dev/addresses/${nama}/${oleh_nama}`, {
+  //       method: 'DELETE',
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`Server responded with status ${response.status}`);
+  //     }
+
+  //     const data = await response.json();
+  //     setAddress(prevAddresses => prevAddresses.filter(address => address.nama !== nama));
+  //     alert(data.message); // Optionally, you can show a message to the user upon successful deletion
+  //   } catch (error) {
+  //     console.error('Error deleting address:', error);
+  //     alert('Failed to delete address');
+  //   }
+  // };
   
   useEffect(() => {
     const fetchRestoranData = async () => {
@@ -282,8 +387,12 @@ export default function Register() {
           single_alamat: restoranData.single_alamat || '',
           jarak: restoranData.jarak || '',
         });
-        const fetchedAddresses = await getAddresses(restoranData.nama);
-        setAddress(fetchedAddresses);
+        // const fetchedAddresses = await getAddresses(restoranData.nama);
+        // setAddress(fetchedAddresses);
+            // Fetch the kamar data
+            const imagesResponse2 = await fetch(`https://tripselbe.fly.dev/addresses/${nama}`);
+            const imagesData2 = await imagesResponse2.json();
+            setAddress(imagesData2);
 
       } catch (error) {
         console.error('Error fetching restoran data:', error);
@@ -292,49 +401,70 @@ export default function Register() {
     fetchRestoranData();
   }, [location]);
   
+  // const deleteAllAddresses = async (oleh_nama: string) => {
+  //   try {
+  //     const response = await fetch(`https://tripselbe.fly.dev/addresses/${oleh_nama}`, {
+  //       method: 'DELETE',
+  //     });
+  
+  //     if (!response.ok) {
+  //       const errorMessage = await response.text();
+  //       throw new Error(`Failed to delete addresses: ${response.status}: ${errorMessage}`);
+  //     }
+  
+  //     const data = await response.json();
+  //     console.log(data.message); // Optionally log the message from the server
+  //   } catch (error) {
+  //     console.error('Error deleting addresses:', error);
+  //     throw error;
+  //   }
+  // };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    
     try {
-      // Step 1: Upload images
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
-
+  
       // Check if all uploads were successful
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
+      // const existingResponse = await fetch(`https://tripselbe.fly.dev/oleh/${formData.nama}`);
+      // if (!existingResponse.ok) {
+      //     const errorMessage = await existingResponse.text();
+      //     throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
+      // }
 
+      // const existingData = await existingResponse.json();
       const updatedFormData = {
         ...formData,
-        gambar_url1: uploadedImages[0] || '', // If uploadedImages[0] is null, use an empty string
-        gambar_url2: uploadedImages[1] || '', // If uploadedImages[1] is null, use an empty string
-        gambar_url3: uploadedImages[2] || '', // If uploadedImages[2] is null, use an empty string
-      };
-
-      // Step 2: Create new oleh entry
-      const response = await fetch('https://tripselbe.fly.dev/oleh', {
+        gambar_url1: uploadedImages[0] ,
+        gambar_url2: uploadedImages[1] ,
+        gambar_url3: uploadedImages[2] ,
+    };
+      const response = await fetch(`https://tripselbe.fly.dev/oleh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedFormData),
       });
-
+  
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
-
+  
+      console.log(updatedFormData);
       const data = await response.json();
-
-      // Step 3: Add new addresses
-      await Promise.all(addresses.map(address => postDataToServer(address)));
-
+      await uploadImagesToCloudinaryKamar(addresses, formData.nama);
+      // await Promise.all(addresses.map(address => postDataToServer(address)));
       alert(data.message);
     } catch (error) {
-      console.error('Error creating new oleh entry:', error);
-      alert(`Failed to create new oleh entry: ${error}`);
+      console.error('Error updating restoran:', error);
+      alert(`Failed to update restoran: ${error}`);
     }
   };
   
@@ -651,7 +781,7 @@ export default function Register() {
                   borderRadius: '20px',
                   '&:hover': { background: '#FF010C', color: '#FFF' }
                 }}
-                onClick={() => handleDeleteAddress(address.nama, formData.nama)}
+                onClick={() => removeAddress(index)}
               >
                 Hapus Cabang
               </Button>
@@ -661,27 +791,35 @@ export default function Register() {
                 Gambar Cabang {index+1}
               </Typography>
               <Stack
-                justifyContent={'center'}
-                alignItems={'center'}
-                borderRadius={'20px'}
-                sx={{
-                  background: `${address.gambar_preview ? `url(${address.gambar_preview})` : address.gambar_url ? `url(${address.gambar_url})` : '#D9D9D9'}`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
-                }}
-                height={'100%'}
-                width={'100%'}
-                onClick={() => handleImageAlamat(index)}
-                >
-                {/* File input for image 1 */}
-                <input
-                  type="file"
-                  id={`fileInputalamat${index}`}
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileInputChangeAlamat(e, index)}
-                  />
-              </Stack>
+    justifyContent={'start'}
+    alignItems={'end'}
+    borderRadius={'20px'}
+    sx={{
+      backgroundColor:'#D9D9D9',
+      background: address.gambar_url ? `url(${address.gambar_url})` : '#D9D9D9',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      cursor:'pointer'
+    }}
+    height={'100%'}
+    width={'100%'}
+    onClick={() =>  document.getElementById(`fileInput${index}address`)?.click()} // Adjusted index here
+  >
+      <input
+        type="file"
+        id={`fileInput${index}address`} // Adjusted index here
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileInputChangeAddress(e, index)} // Adjusted index here
+      />
+      <Stack
+        height={'auto'}
+        width={'auto'}
+        sx={{ backgroundColor: 'white', borderRadius: '100px', margin: '10px' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+      </Stack>
+      </Stack>
             </Stack>
           </Stack>
         </Stack>
