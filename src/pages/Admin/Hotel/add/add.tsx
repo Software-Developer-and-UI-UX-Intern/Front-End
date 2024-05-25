@@ -862,7 +862,7 @@ const deleteFasilitas = async (hotelName: string) => {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  Kecamatan/Kelurahan
+                  Kecamatan
                 </Typography>
                 <MuiSelect
                   displayEmpty
@@ -887,12 +887,14 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={formData.lokasi}
                   onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
                 >
-         
-                  <MenuItem value={'Nusa Dua, ' + formData.domisili}>Nusa Dua</MenuItem>
-                  <MenuItem value={'kuta, ' + formData.domisili}>Kuta</MenuItem>
-                  <MenuItem value={'Denpasar, ' + formData.domisili}>Denpasar</MenuItem>
-                  <MenuItem value={'Badung, ' + formData.domisili}>Badung</MenuItem>
-                  <MenuItem value={'Flores, ' + formData.domisili}>Flores</MenuItem>
+                {/* <MenuItem value={formData.lokasi}>
+                    <em>{formData.lokasi}</em>
+                  </MenuItem>                   */}
+                  <MenuItem value={'Nusa Dua'}>Nusa Dua</MenuItem>
+                  <MenuItem value={'kuta'}>Kuta</MenuItem>
+                  <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
+                  <MenuItem value={'Badung'}>Badung</MenuItem>
+                  <MenuItem value={'Flores'}>Flores</MenuItem>
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,
@@ -1009,6 +1011,25 @@ const deleteFasilitas = async (hotelName: string) => {
                     name: 'Telfon',
                     value: formData.telfon,
                     onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+                 <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Link Alamat
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Link alamat hotel"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nomor Telfon',
+                    name: 'Telfon',
+                    value: formData.alamat,
+                    onChange: (e) => setFormData({ ...formData, alamat: (e.target as HTMLInputElement).value }),
                   }}
                 />
 

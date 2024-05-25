@@ -87,6 +87,8 @@ export default function Register() {
     domisili: '',
     single_alamat: '',
     jarak: '',
+    hargatermurah:'',
+    hargatermahal:'',
     
   });
   const [addresses, setAddress] = useState<Address[]>([]);
@@ -375,24 +377,24 @@ export default function Register() {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
 
-        setFormData({
-          nama: restoranData.nama || '',
-          gambar_url1: restoranData.gambar_url1 || '',
-          gambar_url2: restoranData.gambar_url2 || '',
-          gambar_url3: restoranData.gambar_url3 || '',
-          tiket_masuk: restoranData.tiket_masuk || '',
-          parkir: restoranData.parkir || '',
-          description: restoranData.description || '',
-          domisili: restoranData.domisili || '',
-          single_alamat: restoranData.single_alamat || '',
-          jarak: restoranData.jarak || '',
-        });
+        // setFormData({
+        //   nama: restoranData.nama || '',
+        //   gambar_url1: restoranData.gambar_url1 || '',
+        //   gambar_url2: restoranData.gambar_url2 || '',
+        //   gambar_url3: restoranData.gambar_url3 || '',
+        //   tiket_masuk: restoranData.tiket_masuk || '',
+        //   parkir: restoranData.parkir || '',
+        //   description: restoranData.description || '',
+        //   domisili: restoranData.domisili || '',
+        //   single_alamat: restoranData.single_alamat || '',
+        //   jarak: restoranData.jarak || '',
+        // });
         // const fetchedAddresses = await getAddresses(restoranData.nama);
         // setAddress(fetchedAddresses);
             // Fetch the kamar data
             const imagesResponse2 = await fetch(`https://tripselbe.fly.dev/addresses/${nama}`);
             const imagesData2 = await imagesResponse2.json();
-            setAddress(imagesData2);
+            setAddress(imagesData2); 
 
       } catch (error) {
         console.error('Error fetching restoran data:', error);
@@ -438,11 +440,16 @@ export default function Register() {
       // }
 
       // const existingData = await existingResponse.json();
+      const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
+ 
+
+    
       const updatedFormData = {
         ...formData,
         gambar_url1: uploadedImages[0] ,
         gambar_url2: uploadedImages[1] ,
         gambar_url3: uploadedImages[2] ,
+        parkir:hargaString,
     };
       const response = await fetch(`https://tripselbe.fly.dev/oleh`, {
         method: 'POST',
@@ -596,30 +603,8 @@ export default function Register() {
                   <MenuItem value='Flores'>Flores</MenuItem>
                 </MuiSelect>
                 </Stack>
-                <Stack maxWidth={'50%'}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Jarak
-                </Typography>
-                <Input
-                  disableUnderline
-                  placeholder="Dalam km"
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
-                  inputProps={{
-                    'aria-label': 'Jarak',
-                    name: 'fullName',
-                    value: formData.jarak,
-                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
-                </Stack>
-
-
+                
+                <Stack width={'100%'} maxWidth={'50%'}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -627,9 +612,6 @@ export default function Register() {
                 }}>
                   Harga Tiket
                 </Typography>
-                <Stack alignItems={'center'} direction={'row'} gap={2} justifyContent={'space-between'}>
-                <Stack width={'100%'} maxWidth={'50%'}>
-
                 <Stack direction={'row'} alignItems={'center'}>
                   <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
                   <Typography sx={{
@@ -656,17 +638,34 @@ export default function Register() {
                 />
                 </Stack>
                 </Stack>
-                {/* <Typography sx={{
+                </Stack>
+
+
+                <Stack alignItems={'center'} direction={'row'} gap={2} justifyContent={'space-between'}>
+                <Stack width={'100%'} maxWidth={'50%'}>
+                <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                  -
-                </Typography> */}
+                  Harga parkir
+                </Typography>
+                </Stack>
+               
                 <Stack width={'100%'} maxWidth={'50%'}>
-
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                </Typography>
+                </Stack>
+                </Stack>
+                <Stack alignItems={'center'} direction={'row'} gap={2} justifyContent={'space-between'}>
+                <Stack width={'100%'} maxWidth={'50%'}>
+                
                 <Stack direction={'row'} alignItems={'center'}>
-                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'30px 0 0 30px'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
                   <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -678,14 +677,51 @@ export default function Register() {
                   </Stack>
                 <Input
                 disableUnderline
-                  placeholder="Harga Parkir"
+                  placeholder="Termurah"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
-                    'aria-label': 'Harga Parkir',
+                    'aria-label': 'Hargatermurah',
                     name: 'email',
-                    value: formData.parkir,
-                    onChange: (e) => setFormData({ ...formData, parkir: (e.target as HTMLInputElement).value }),
+                    value: formData.hargatermurah,
+                    onChange: (e) => setFormData({ ...formData, hargatermurah: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
+                  }}
+                />
+                </Stack>
+                </Stack>
+
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  
+                }}>
+                  -
+                </Typography>
+                 <Stack width={'100%'} maxWidth={'50%'} justifyContent={'center'} alignItems={'center'}>
+               
+                <Stack direction={'row'} alignItems={'center'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
+                <Input
+                disableUnderline
+                  placeholder="Termahal"
+                  sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Hargatermahal',
+                    name: 'email',
+                    value: formData.hargatermahal,
+                    onChange: (e) => setFormData({ ...formData, hargatermahal : (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
@@ -694,7 +730,25 @@ export default function Register() {
                 </Stack>
 
 
-
+   <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Jarak
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Dalam km"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Jarak',
+                    name: 'fullName',
+                    value: formData.jarak,
+                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
+                  }}
+                />
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',

@@ -743,7 +743,7 @@ const deleteFasilitas = async (hotelName: string) => {
         </Typography>
           <Stack spacing={2} maxWidth={'100%'}>
             <Stack direction={'row'} gap={2}>
-              <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
+            <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -753,11 +753,11 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama Restoran"
+                  placeholder="Nama Hotel"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Nama Restoran',
+                    'aria-label': 'Nama Hotel',
                     name: 'fullName',
                     value: formData.nama,
                     onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
@@ -766,82 +766,6 @@ const deleteFasilitas = async (hotelName: string) => {
 
                 <Stack direction={'row'} justifyContent={'space-between'} gap={2}>
                 <Stack maxWidth={'50%'} width={'50%'}>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                  Bintang
-                </Typography>
-                <MuiSelect
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Domisili' }}
-                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C' }}
-                  sx={{
-                    ...customInputStyle,
-                    '&:focus': {
-                      borderColor: 'transparent !important',
-                    },
-                    '& fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:active fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                  }}
-                  name="bintang"
-                  value={formData.bintang}
-                  onChange={(e) => setFormData({ ...formData, bintang: e.target.value })}
-                >
-                  <MenuItem value={formData.bintang} sx={{justifyContent:'center'}}>
-                                {/* Render star icons */}
-            {Array.from({ length: parseInt(formData.bintang, 10) }).map((_, starIndex) => (
-              <Icon key={starIndex} icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-            ))}
-                  </MenuItem>
-                  <MenuItem value='5'>
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  </MenuItem>
-                  <MenuItem value='4'>
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  </MenuItem>
-                  <MenuItem value='3'>
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-                  </MenuItem>
-                </MuiSelect>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Nomor Telepon
-                </Typography>
-                <Input
-                  disableUnderline
-                  placeholder="Nomor Telfon"
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
-                  inputProps={{
-                    'aria-label': 'Nama Restoran',
-                    name: 'fullName',
-                    value: formData.telfon,
-                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
-                  }}
-                />
-                </Stack>
-                <Stack maxWidth={'50%'}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -872,13 +796,105 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={formData.domisili}
                   onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
                 >
-                  <MenuItem value={formData.domisili}>
-                    <em>{formData.domisili}</em>
-                  </MenuItem>
+                  
                   <MenuItem value='Bali'>Bali</MenuItem>
-                  <MenuItem value='Kupang'>Kupang</MenuItem>
-                  <MenuItem value='Mataram'>Mataram</MenuItem>
-                  <MenuItem value='Flores'>Flores</MenuItem>
+                  <MenuItem value='NTT'>NTT</MenuItem>
+                  <MenuItem value='NTB'>NTB</MenuItem>
+                </MuiSelect>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  Bintang
+                </Typography>
+                <MuiSelect
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Domisili' }}
+                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C' }}
+                  sx={{
+                    ...customInputStyle,
+                    '&:focus': {
+                      borderColor: 'transparent !important',
+                    },
+                    '& fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:active fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                  }}
+                  name="bintang"
+                  value={formData.bintang}
+                  onChange={(e) => setFormData({ ...formData, bintang: e.target.value })}
+                >
+                  {/* <MenuItem value={formData.bintang} sx={{justifyContent:'center'}}>
+                                {/* Render star icons */}
+           
+                  {/* </MenuItem> */} 
+                  <MenuItem value='5'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                  <MenuItem value='4'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                  <MenuItem value='3'>
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
+                  </MenuItem>
+                </MuiSelect>
+                
+                </Stack>
+                <Stack maxWidth={'50%'}>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  Kecamatan
+                </Typography>
+                <MuiSelect
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Domisili' }}
+                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
+                  sx={{
+                    ...customInputStyle,
+                    '&:focus': {
+                      borderColor: 'transparent !important',
+                    },
+                    '& fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                    '&:active fieldset': {
+                      borderColor: 'transparent !important',
+                    },
+                  }}
+                  name="Kecamatan"
+                  value={formData.lokasi}
+                  onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
+                >
+                <MenuItem value={formData.lokasi}>
+                    <em>{formData.lokasi}</em>
+                  </MenuItem>                  
+                  <MenuItem value={'Nusa Dua'}>Nusa Dua</MenuItem>
+                  <MenuItem value={'kuta'}>Kuta</MenuItem>
+                  <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
+                  <MenuItem value={'Badung'}>Badung</MenuItem>
+                  <MenuItem value={'Flores'}>Flores</MenuItem>
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,
@@ -893,8 +909,8 @@ const deleteFasilitas = async (hotelName: string) => {
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Dalam meter',
-                    name: 'fullName',
+                    'aria-label': 'Jarak',
+                    name: 'jarak',
                     value: formData.jarak,
                     onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
                   }}
@@ -926,12 +942,12 @@ const deleteFasilitas = async (hotelName: string) => {
                   </Stack>
                 <Input
                 disableUnderline
-                  placeholder="Termurah"
+                  placeholder=" Harga Termurah"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
-                    'aria-label': 'Hargatermurah',
-                    name: 'email',
+                    'aria-label': 'Harga termurah',
+                    name: 'harga',
                     value: formData.hargatermurah,
                     onChange: (e) => setFormData({ ...formData, hargatermurah: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
@@ -961,22 +977,61 @@ const deleteFasilitas = async (hotelName: string) => {
                   </Stack>
                 <Input
                 disableUnderline
-                  placeholder="Termahal"
+                  placeholder=" Harga Termahal"
                   sx={customInputStyle}
                   style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
                     'aria-label': 'Hargatermahal',
-                    name: 'email',
+                    name: 'harga',
                     value: formData.hargatermahal,
                     onChange: (e) => setFormData({ ...formData, hargatermahal: (e.target as HTMLInputElement).value }),
                     style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
                 </Stack>
-                </Stack>
+                
                 </Stack>
                 
-
+                </Stack>
+                
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Nomor Telepon
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Nomor Telfon"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nomor Telfon',
+                    name: 'Telfon',
+                    value: formData.telfon,
+                    onChange: (e) => setFormData({ ...formData, telfon: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+   <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Link Alamat
+                </Typography>
+                <Input
+                  disableUnderline
+                  placeholder="Link alamat hotel"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  inputProps={{
+                    'aria-label': 'Nomor Telfon',
+                    name: 'Telfon',
+                    value: formData.alamat,
+                    onChange: (e) => setFormData({ ...formData, alamat: (e.target as HTMLInputElement).value }),
+                  }}
+                />
                 {/* kamar render */}
                 <Stack gap={2}>
                 {kamar.map((room, index) => (
@@ -1016,7 +1071,7 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Dalam meter persegi"
+                  placeholder="Nama kamar"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   onChange={(e) => handleRoomChange(index, 'ukuran', e.target.value)}
@@ -1169,9 +1224,6 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={room.bed}
                   onChange={(e) => handleRoomChange(index, 'bed', e.target.value)}
                 >
-                  <MenuItem value={room.bed}>
-                    <em>{room.bed}</em>
-                  </MenuItem>
                   <MenuItem value='King Bed'>King Bed</MenuItem>
                   <MenuItem value='Queen bed'>Queen bed</MenuItem>
                   <MenuItem value='Twin Bed'>Twin Bed</MenuItem>
