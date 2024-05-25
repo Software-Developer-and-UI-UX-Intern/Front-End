@@ -274,7 +274,7 @@ export default function Register() {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
     // Split the harga into hargatermurah and hargatermahal
-    const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
+    const hargaArray = restoranData.harga ?  restoranData.harga.replace(/[^0-9,-]+/g, '').split('-').map((harga: string) => harga.trim()) :[];
     const hargatermurah = hargaArray[0] || ''; // Get the smallest price
     const hargatermahal = hargaArray[1] || ''; // Get the largest price
 

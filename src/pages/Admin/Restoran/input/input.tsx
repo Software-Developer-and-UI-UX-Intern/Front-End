@@ -184,8 +184,8 @@ export default function Register() {
        const minumanArray = restoranData.minuman ? restoranData.minuman.split(',') : [];
    
        // Split the harga into hargatermurah and hargatermahal
-       const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
-        const hargatermurah = hargaArray[0] || ''; // Get the smallest price
+       const hargaArray = restoranData.harga ?  restoranData.harga.replace(/[^0-9,-]+/g, '').split('-').map((harga: string) => harga.trim()) :[];
+       const hargatermurah = hargaArray[0] || ''; // Get the smallest price
         const hargatermahal = hargaArray[1] || ''; // Get the largest price
     
         setFormData({
