@@ -108,7 +108,7 @@ export default function RestoranPage() {
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Domisili</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Jarak ke TSO</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Estimasi dari TSO</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Jenis Restoran</Typography>
@@ -222,7 +222,7 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.location && (restoran.location.length > 22 ? restoran.location.slice(0, 22) + '...' : restoran.location)}
+          {restoran.location && (restoran.location.length > 22 ? restoran.location.slice(0, 22) + '...' : `${restoran.location} menit`)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>

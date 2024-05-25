@@ -796,9 +796,7 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={formData.domisili}
                   onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
                 >
-                  <MenuItem value={formData.domisili}>
-                    <em>{formData.domisili}</em>
-                  </MenuItem>
+                  
                   <MenuItem value='Bali'>Bali</MenuItem>
                   <MenuItem value='NTT'>NTT</MenuItem>
                   <MenuItem value='NTB'>NTB</MenuItem>
@@ -833,12 +831,10 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={formData.bintang}
                   onChange={(e) => setFormData({ ...formData, bintang: e.target.value })}
                 >
-                  <MenuItem value={formData.bintang} sx={{justifyContent:'center'}}>
+                  {/* <MenuItem value={formData.bintang} sx={{justifyContent:'center'}}>
                                 {/* Render star icons */}
-            {Array.from({ length: parseInt(formData.bintang, 10) }).map((_, starIndex) => (
-              <Icon key={starIndex} icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
-            ))}
-                  </MenuItem>
+           
+                  {/* </MenuItem> */} 
                   <MenuItem value='5'>
                   <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
                   <Icon icon="fluent:star-16-filled" width="25" height="25" style={{ color: '#FF8702' }} />
@@ -907,7 +903,7 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Jarak ke TSO"
+                  placeholder="Dalam km"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
@@ -1062,7 +1058,7 @@ const deleteFasilitas = async (hotelName: string) => {
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'Ukuran',
-                    value: room.ukuran
+                    value: `${room.ukuran} m²`
                     // onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
@@ -1208,11 +1204,14 @@ const deleteFasilitas = async (hotelName: string) => {
                   value={room.bed}
                   onChange={(e) => handleRoomChange(index, 'bed', e.target.value)}
                 >
-                  <MenuItem value={room.bed}>
-                    <em>{room.bed}</em>
-                  </MenuItem>
                   <MenuItem value='King Bed'>King Bed</MenuItem>
                   <MenuItem value='Queen bed'>Queen bed</MenuItem>
+                  <MenuItem value='Twin Bed'>Twin Bed</MenuItem>
+                  <MenuItem value='Single bed'>Queen bed</MenuItem>
+                  <MenuItem value='King Bed / 2 Single Bed'>King Bed / 2 Single Bed</MenuItem>
+                  <MenuItem value='King Bed / Twin Bed'>King Bed / Twin Bed</MenuItem>
+                  <MenuItem value='2 King Bed'>2 King Bed</MenuItem>
+                  <MenuItem value='2 Single Bed'>2 Single Bed</MenuItem>
                 </MuiSelect>
                 </Stack>
                 </Stack>

@@ -889,11 +889,11 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama Restoran"
+                  placeholder="Dalam km"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
-                    'aria-label': 'Nama Restoran',
+                    'aria-label': 'Dalam meter',
                     name: 'fullName',
                     value: formData.jarak,
                     onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
@@ -1016,14 +1016,14 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama kamar"
+                  placeholder="Dalam meter persegi"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   onChange={(e) => handleRoomChange(index, 'ukuran', e.target.value)}
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'Ukuran',
-                    value: room.ukuran
+                    value: `${room.ukuran} m²`
                     // onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
@@ -1174,6 +1174,12 @@ const deleteFasilitas = async (hotelName: string) => {
                   </MenuItem>
                   <MenuItem value='King Bed'>King Bed</MenuItem>
                   <MenuItem value='Queen bed'>Queen bed</MenuItem>
+                  <MenuItem value='Twin Bed'>Twin Bed</MenuItem>
+                  <MenuItem value='Single bed'>Queen bed</MenuItem>
+                  <MenuItem value='King Bed / 2 Single Bed'>King Bed / 2 Single Bed</MenuItem>
+                  <MenuItem value='King Bed / Twin Bed'>King Bed / Twin Bed</MenuItem>
+                  <MenuItem value='2 King Bed'>2 King Bed</MenuItem>
+                  <MenuItem value='2 Single Bed'>2 Single Bed</MenuItem>
                 </MuiSelect>
                 </Stack>
                 </Stack>

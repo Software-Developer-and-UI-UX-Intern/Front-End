@@ -606,7 +606,7 @@ export default function Register() {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Dalam meter"
+                  placeholder="Dalam km"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{

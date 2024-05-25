@@ -213,7 +213,7 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.jarak && (restoran.jarak.length > 22 ? restoran.jarak.slice(0, 22) + '...' : restoran.jarak)}
+          {restoran.jarak && (restoran.jarak.length > 22 ? restoran.jarak.slice(0, 22) + '...' : `${restoran.jarak} km`)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>

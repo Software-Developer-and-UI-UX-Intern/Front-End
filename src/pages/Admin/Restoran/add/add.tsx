@@ -470,11 +470,11 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                Jarak
+                Estimasi
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Jarak"
+                  placeholder="Dalam menit"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
