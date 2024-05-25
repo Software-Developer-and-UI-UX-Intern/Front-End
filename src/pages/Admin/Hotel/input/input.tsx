@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -43,6 +43,17 @@ interface CustomLabelProps {
   icon: React.ReactNode;
   text: string;
 }
+const customCheckboxStyle = {
+  '& .MuiSvgIcon-root': {
+    fontSize: 50, // This sets the size of the checkbox
+    color:'#04214C',
+  },
+};
+
+const customLabelStyle = {
+  fontSize: '22px', // This sets the font size of the label
+  color:'#04214C'
+};
 const CustomLabel: React.FC<CustomLabelProps> = ({ icon, text }) => (
   <Stack alignItems={'center'} direction={'row'}>
     <Stack>
@@ -106,12 +117,40 @@ interface Kamar {
   var1icon: string;
   var2icon: string;
 }
+
+interface Fasilitas {
+  icon: string;
+  nama: string;
+}
+const facilities = [
+  { icon: 'material-symbols:pool-rounded', label: 'Kolam Renang' },
+  { icon: 'material-symbols:restaurant-rounded', label: 'Restoran' },
+  { icon: 'mingcute:parking-fill', label: 'Parkir Gratis' },
+  { icon: 'mdi:gym', label: 'Pusat kebugaran' },
+  { icon: 'material-symbols:room-service-rounded', label: 'Layanan Kamar' },
+  { icon: 'maki:bar', label: 'Bar' },
+  { icon: 'fa6-solid:wifi', label: 'WiFi Gratis' },
+  { icon: 'maki:beach', label: 'Tepi Pantai' },
+  { icon: 'map:spa', label: 'Spa' },
+];
 export default function Register() {
+  const [fasilitas, setFasilitasChecked] = useState<Fasilitas[]>(facilities.map(facility => ({ icon: facility.icon, nama: facility.label })));
+  const handleFasilitasCheckboxChange = (index: number) => {
+    const currentFacility = facilities[index];
+    const isAlreadyChecked = fasilitas.some(f => f.nama === currentFacility.label);
+
+    if (isAlreadyChecked) {
+      setFasilitasChecked(fasilitas.filter(f => f.nama !== currentFacility.label));
+    } else {
+      setFasilitasChecked([...fasilitas, { icon: currentFacility.icon, nama: currentFacility.label }]);
+    }
+  };
   const [kamar, setKamar] = useState<Kamar[]>([]);
   const [gambarhotel, setGambarHotel] = useState<Gambar_hotel[]>([
     { nama: '', url: '' }, // Default first element
     { nama: '', url: '' }  // Default second element
-  ]);  const [datafasilitas, setFasilitas] = useState<Gambar_fasilitas[]>([]);
+  ]);  
+  const [datafasilitas, setFasilitas] = useState<Gambar_fasilitas[]>([]);
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedImagesFasilitas, setSelectedImagesFasilitas] = useState<number[]>([]);
@@ -169,6 +208,11 @@ export default function Register() {
         var2icon: '',
       },
     ]);
+  };
+  const removeRoom = (index:number) => {
+    const newKamar = [...kamar];
+    newKamar.splice(index, 1);
+    setKamar(newKamar);
   };
   const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
@@ -258,10 +302,17 @@ export default function Register() {
           const imagesResponse2 = await fetch(`https://tripselbe.fly.dev/hotel-kamar/${nama}`);
           const imagesData2 = await imagesResponse2.json();
           setKamar(imagesData2);
-        // Fetch the Fasilitas data
+        // Fetch the Fasilitas detail data
         const fasilitasResponse = await fetch(`https://tripselbe.fly.dev/kamar/${nama}`);
         const fasilitasData = await fasilitasResponse.json();
         setFasilitas(Array.isArray(fasilitasData) ? fasilitasData : []);
+
+        // fetch fasilitas checkbox data
+        const fasilitasResponse2 = await fetch(`https://tripselbe.fly.dev/hotel-fasilitas/${nama}`);
+        const fasilitasData2 = await fasilitasResponse2.json();
+        
+        const initialCheckedFacilities = fasilitasData2.map((f: Fasilitas) => ({ icon: f.icon, nama: f.nama }));
+        setFasilitasChecked(initialCheckedFacilities);
       } catch (error) {
         console.error('Error fetching kamar data:', error);
       }
@@ -316,6 +367,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       await uploadImagesToCloudinary(gambarhotel, formData.nama);
       await uploadImagesToCloudinaryKamar(kamar, formData.nama);
       await uploadImagesToCloudinaryFasilitas(datafasilitas, formData.nama);
+      await uploadImagesToCloudinaryFasilitasCheck(fasilitas, formData.nama);
 
       alert('Hotel information updated successfully!');
   } catch (error) {
@@ -323,7 +375,23 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     }
 };
 
+const deleteFasilitas = async (hotelName: string) => {
+  try {
+    const deleteResponse = await fetch(`https://tripselbe.fly.dev/hotel-fasilitas/${hotelName}`, {
+      method: 'DELETE',
+    });
 
+    if (!deleteResponse.ok) {
+      const errorText = await deleteResponse.text();
+      throw new Error(`Failed to delete existing fasilitas: ${deleteResponse.status} - ${errorText}`);
+    }
+
+    console.log(`All images for hotel ${hotelName} deleted successfully.`);
+  } catch (error) {
+    console.error('Error deleting images:', error);
+    throw error;  // Re-throw the error to stop the process if deleting images fails
+  }
+};
   const deleteHotelImages = async (hotelName: string) => {
     try {
       const deleteResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${hotelName}`, {
@@ -375,6 +443,48 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       throw error;  // Re-throw the error to stop the process if deleting images fails
     }
   };
+  const uploadImagesToCloudinaryFasilitasCheck = async (images: Fasilitas[], hotelName: string) => {
+    try {
+      // Step 1: Delete all existing facilities for the hotel
+      try {
+        await deleteFasilitas(hotelName);
+      } catch (error) {
+        console.warn('Failed to delete existing facilities, proceeding to upload new facilities:', error);
+      }
+  
+      // Step 2: Upload new facilities
+      await Promise.all(
+        images.map(async (facility, index) => {
+          try {
+            // Store the facility data in the database
+            const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-fasilitas', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                icon: facility.icon,
+                nama: facility.nama,
+                hotel_nama: hotelName,
+              }),
+            });
+  
+            if (!storeResponse.ok) {
+              throw new Error(`Failed to store facility ${index} to database`);
+            }
+  
+          } catch (error) {
+            console.error(`Error uploading and storing facility ${index}:`, error);
+            // Handle error...
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error uploading facilities:', error);
+      // Handle error...
+    }
+  };
+  
   const uploadImagesToCloudinary = async (images: Gambar_hotel[], hotelName: string) => {
     try {
       // Step 1: Delete all existing images for the hotel
@@ -384,52 +494,20 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         console.warn('Failed to delete existing images, proceeding to upload new images:', error);
       }
   
-      // Step 2: Upload new images
+      // Upload the thumbnail first
+      const thumbnailIndex = images.findIndex(image => image.nama === 'thumbnail');
+      if (thumbnailIndex !== -1) {
+        const thumbnailImage = images.splice(thumbnailIndex, 1)[0];
+        await uploadImage(thumbnailImage, hotelName);
+      }
+  
+      // Upload other images
       await Promise.all(
-        images.map(async (image, index) => {
+        images.map(async (image) => {
           try {
-            // Upload the image to Cloudinary
-            const imageResponse = await fetch(image.url);
-            if (!imageResponse.ok) {
-              throw new Error(`Failed to fetch image ${index}: ${imageResponse.status}`);
-            }
-            const blob = await imageResponse.blob();
-            const formData = new FormData();
-            formData.append('file', blob);
-            formData.append('upload_preset', 'ml_default');
-  
-            const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
-              method: 'POST',
-              body: formData,
-            });
-  
-            if (!cloudinaryResponse.ok) {
-              throw new Error(`Failed to upload image ${index} to Cloudinary`);
-            }
-  
-            const cloudinaryData = await cloudinaryResponse.json();
-            const imageUrl = cloudinaryData.secure_url;
-  
-            // Store the image URL and hotel name in the database
-            const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-images', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                nama: image.nama,
-                url: imageUrl,
-                hotel_name: hotelName,
-              }),
-            });
-  
-            if (!storeResponse.ok) {
-              throw new Error(`Failed to store image ${index} URL to database`);
-            }
-  
-            console.log(`Image ${index} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+            await uploadImage(image, hotelName);
           } catch (error) {
-            console.error(`Error uploading and storing image ${index}:`, error);
+            console.error(`Error uploading and storing image ${image.nama}:`, error);
             // Handle error...
           }
         })
@@ -439,6 +517,51 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       // Handle error...
     }
   };
+  
+  const uploadImage = async (image: Gambar_hotel, hotelName: string) => {
+    // Upload the image to Cloudinary
+    const imageResponse = await fetch(image.url);
+    if (!imageResponse.ok) {
+      throw new Error(`Failed to fetch image ${image.nama}: ${imageResponse.status}`);
+    }
+    const blob = await imageResponse.blob();
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('upload_preset', 'ml_default');
+  
+    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+  
+    if (!cloudinaryResponse.ok) {
+      throw new Error(`Failed to upload image ${image.nama} to Cloudinary`);
+    }
+  
+    const cloudinaryData = await cloudinaryResponse.json();
+    const imageUrl = cloudinaryData.secure_url;
+  
+    // Store the image URL and hotel name in the database
+    const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-images', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nama: image.nama,
+        url: imageUrl,
+        hotel_name: hotelName,
+      }),
+    });
+  
+    if (!storeResponse.ok) {
+      throw new Error(`Failed to store image ${image.nama} URL to database`);
+    }
+  
+    console.log(`Image ${image.nama} uploaded to Cloudinary and stored in database: ${imageUrl}`);
+  };
+  
+  
   const uploadImagesToCloudinaryKamar = async (kamarList: Kamar[], hotelName: string) => {
     try {
         // Delete existing images first
@@ -848,7 +971,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 
 
                 {/* kamar render */}
-                <Stack>
+                <Stack gap={2}>
                 {kamar.map((room, index) => (
                   <Stack key={index}>
                 <Stack>
@@ -1098,9 +1221,33 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
  />
   </RadioGroup>
   </FormControl>
+  
                 </Stack>
                 </Stack>
+                <Stack alignItems="flex-start">
+        <Button
+          type="button"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '44px',
+            width: '300px',
+            padding: '0 20px',
+            fontWeight: 500,
+            fontSize: '22px',
+            color: '#FFF',
+            backgroundColor: '#FF0000',
+            borderRadius: '20px',
+            '&:hover': { background: '#FF0000', color: '#FFF' },
+          }}
+          onClick={() => removeRoom(index)}
+        >
+          Hapus Kamar
+        </Button>
+      </Stack>
                 </Stack>
+                
                 ))}
                 <Button
             type="button"
@@ -1124,12 +1271,65 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           </Button>
           </Stack>
 
+          {/* fasilitas */}
+          <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  Fasilitas
+                </Typography>
+                <Stack direction={'row'}>
+      <Stack width={'100%'} maxWidth={'50%'}>
+        <FormGroup>
+          {facilities.slice(0, 5).map((facility, index) => (
+            <FormControlLabel
+              key={index}
+              control={
+                <Checkbox
+                  checked={fasilitas.some(f => f.nama === facility.label)}
+                  onChange={() => handleFasilitasCheckboxChange(index)}
+                  sx={customCheckboxStyle}
+                />
+              }
+              label={
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Icon icon={facility.icon} width="40" height="40" style={{ color: '#04214C' }} />
+                  <Typography sx={customLabelStyle}>{facility.label}</Typography>
+                </Stack>
+              }
+            />
+          ))}
+        </FormGroup>
+      </Stack>
+      <Stack width={'100%'} maxWidth={'50%'}>
+        <FormGroup>
+          {facilities.slice(5).map((facility, index) => (
+            <FormControlLabel
+              key={index + 5}
+              control={
+                <Checkbox
+                  checked={fasilitas.some(f => f.nama === facility.label)}
+                  onChange={() => handleFasilitasCheckboxChange(index+5)}
+                  sx={customCheckboxStyle}
+                />
+              }
+              label={
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Icon icon={facility.icon} width="40" height="40" style={{ color: '#04214C' }} />
+                  <Typography sx={customLabelStyle}>{facility.label}</Typography>
+                </Stack>
+              }
+            />
+          ))}
+        </FormGroup>
+      </Stack>
+      {/* <pre>{JSON.stringify(fasilitas, null, 2)}</pre> */}
+    </Stack>
+
               </Stack>
 
-
-
-
-
+            {/* right side */}
               <Stack direction={'column'} maxWidth={'50%'} width={'100%'} spacing={1}>
       <Typography
         sx={{
