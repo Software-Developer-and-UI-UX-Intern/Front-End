@@ -351,12 +351,19 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
   try {
+    const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
+ 
+
+    const newFormData = {
+      ...formData,
+      harga: hargaString, 
+    };
       const response = await fetch(`https://tripselbe.fly.dev/hotel/${formData.nama}`, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(newFormData),
       });
 
       if (!response.ok) {

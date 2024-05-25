@@ -226,7 +226,7 @@ export default function Register() {
   
       const makananString = formData.makanan.join(',');
       const minumanString = formData.minuman.join(',');
-      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
+      const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
 
       const existingResponse = await fetch(`https://tripselbe.fly.dev/restoran/${formData.nama}`);
       if (!existingResponse.ok) {

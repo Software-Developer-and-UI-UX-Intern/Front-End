@@ -82,6 +82,7 @@ export default function Register() {
     telfon: '',
     description: '',
     domisili: '',
+    jarak:'',
     alamat_gbr: '',
     link_menu: '',
     makanan: [''],
@@ -199,6 +200,7 @@ export default function Register() {
           telfon: restoranData.telfon || '',
           description: restoranData.description || '',
           domisili: restoranData.domisili || '',
+          jarak:restoranData.jarak||'',
           alamat_gbr: restoranData.alamat_gbr || '',
           link_menu: restoranData.link_menu || '',
           makanan: makananArray,
@@ -223,7 +225,7 @@ export default function Register() {
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
-      const hargaString = formData.hargatermurah + ',' + formData.hargatermahal;
+      const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
       const makananString = formData.makanan.join(',');
       const minumanString = formData.minuman.join(',');
   
@@ -477,9 +479,9 @@ export default function Register() {
                   sx={customInputStyle}
                   inputProps={{
                     'aria-label': 'Jarak',
-                    name: 'fullName',
-                    value: formData.location,
-                    onChange: (e) => setFormData({ ...formData, location: (e.target as HTMLInputElement).value }),
+                    name: 'jarak',
+                    value: formData.jarak,
+                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
