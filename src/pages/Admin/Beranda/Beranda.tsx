@@ -44,6 +44,18 @@ interface Hotel {
   stars: string;
   image: string;
 }
+interface Wisata {
+  name: string;
+  provinsi: string;
+  image: string;
+}
+interface Wisatalist {
+  nama: string;
+  domisili: string;
+  gambar_url1:string;
+  gambar_url2:string;
+  gambar_url3:string;
+}
 interface HotelList {
   nama: string;
   bintang: string;
@@ -55,6 +67,8 @@ interface HotelThumbnail {
   nama:string
 }
 export default function RestoranPage() {
+  const [wisata, setWisata] = useState<Wisata[]>([]);
+  const [wisatalist, setWisatalist] = useState<Wisatalist[]>([]);
   const [hotel, setHotel] = useState<Hotel[]>([]);
   const [hotelgambar, setHotelgambar] = useState<HotelThumbnail[]>([]);
   const [hotellist, setHotellist] = useState<HotelList[]>([]);
@@ -65,7 +79,10 @@ export default function RestoranPage() {
         // Fetch hotel recommendations
         const response1 = await axios.get<Hotel[]>('https://tripselbe.fly.dev/recommendation');
         setHotel(response1.data);
-
+        const response4 = await axios.get<Wisata[]>('https://tripselbe.fly.dev/recommendationwisata');
+        setWisata(response4.data);
+        const response5 = await axios.get<Wisatalist[]>('https://tripselbe.fly.dev/wisata');
+        setWisatalist(response5.data);
         // Fetch hotel list
         const response2 = await axios.get<HotelList[]>('https://tripselbe.fly.dev/hotels');
         setHotellist(response2.data);
@@ -97,7 +114,34 @@ export default function RestoranPage() {
       console.error('Error fetching hotel images:', error);
     }
   };
-
+  const handleWisataChange = async (selectedWisataName: string, index: number) => {
+    try {
+      // Find the selected wisata from the wisatalist state
+      const selectedWisata = wisatalist.find(wisata => wisata.nama === selectedWisataName);
+  
+      if (!selectedWisata) {
+        console.error('Selected Wisata not found');
+        return;
+      }
+  
+      // Determine the image URL based on the priority of gambar_url1, gambar_url2, and gambar_url3
+      const imageUrl = selectedWisata.gambar_url1 || selectedWisata.gambar_url2 || selectedWisata.gambar_url3 || '';
+  
+      // Update wisata name, provinsi, and image based on the selected wisata
+      const updatedWisata = [...wisata];
+      updatedWisata[index] = {
+        name: selectedWisataName,
+        provinsi: selectedWisata.domisili,
+        image: imageUrl,
+      };
+      
+      setWisata(updatedWisata);
+    } catch (error) {
+      console.error('Error updating wisata:', error);
+    }
+  };
+  
+  
 // Modify the handleAdd function to add a new element to the hotel array
 const handleAdd = () => {
   // Create a new hotel object with default values
@@ -136,9 +180,32 @@ const handleAdd = () => {
       console.error('Error submitting data:', error);
     }
   };
+  const submitDataWisata = async (hotel: Wisata[]) => {
+    try {
+      // Asynchronously delete all data from the recommendationhotel table
+      const deleteOperation = axios.delete('https://tripselbe.fly.dev/recommendationwisata');
+  
+      // Submit each hotel recommendation one by one
+      for (let i = 0; i < hotel.length; i++) {
+        const { name, provinsi, image } = hotel[i];
+        console.log(hotel[i])
+        await axios.post('https://tripselbe.fly.dev/recommendationwisata', { name: name, provinsi, image });
+      }
+      
+      // Wait for the delete operation to complete
+      await deleteOperation;
+  
+      console.log('Data submitted successfully');
+    } catch (error) {
+      console.error('Error submitting data:', error);
+    }
+  };
   return (
-    <Stack width="100%" height="900px" sx={{overflowY:'none'}}>
-      {/* restoran and create button */}
+    <Stack  width="100%" height="900px" sx={{overflowY:'auto'}}>
+
+  {/* rekomendasi hotel */}
+    <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
+      
       <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
         <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
           Rekomendasi Hotel
@@ -200,8 +267,7 @@ const handleAdd = () => {
       borderRight={'none'} 
       borderTop={'none'} 
       borderBottom={'2px solid #04214C'}
-      borderLeft={'2px solid #04214C'}
-      key={hotel.name}
+      key={index}
       sx={{
         '&:hover': {
           backgroundColor: '#f0f0f0',
@@ -306,8 +372,133 @@ const handleAdd = () => {
           </Stack>
     </Stack>
   </Stack>
-</Stack>
+      </Stack>
 
+    </Stack>
+
+
+  {/* rekomendasi Wisata */}
+  <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
+      
+      <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
+        <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
+          Rekomendasi Wisata
+        </Typography>
+
+       
+      </Stack>
+      
+      <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 3) + 105px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
+    
+    {/* header container with horizontal scroll */}
+    <Stack direction={'row'} sx={{ overflowX: 'none' }}>
+      <Stack minWidth={'70px'} alignItems={'center'} justifyContent={'center'} padding={'16px'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>No</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Provinsi</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Link Gambar</Typography>
+      </Stack>
+
+    </Stack>
+    
+    {/* rows container with vertical scroll */}
+    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    {wisata.map((hotel, index) => (
+  <Stack
+    direction={'row'}
+    borderRight={'none'}
+    borderTop={'none'}
+    borderBottom={'2px solid #04214C'}
+    key={index}  // Using index as key
+    sx={{
+      '&:hover': {
+        backgroundColor: '#f0f0f0',
+      },
+    }}
+  >
+    <Stack borderRight={'2px solid #04214C'}></Stack>
+    <Stack minWidth={'68.4px'} alignItems={'center'} justifyContent={'center'} padding={'16px'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>{index + 1}</Typography>
+    </Stack>
+
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+        <MuiSelect
+          displayEmpty
+          inputProps={{ 'aria-label': 'Domisili' }}
+          style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
+          sx={{
+            ...customInputStyle,
+            '&:focus': {
+              borderColor: 'transparent !important',
+            },
+            '& fieldset': {
+              borderColor: 'transparent !important',
+            },
+            '&:hover fieldset': {
+              borderColor: 'transparent !important',
+            },
+            '&:active fieldset': {
+              borderColor: 'transparent !important',
+            },
+          }}
+          name="domisili"
+          value={hotel.name}
+          onChange={(e) => handleWisataChange(e.target.value, index)}
+        >
+          <MenuItem value={hotel.name}>{hotel.name}</MenuItem>
+          {wisatalist.map((wisata) => (
+            <MenuItem key={wisata.nama} value={wisata.nama}>{wisata.nama}</MenuItem>
+          ))}
+        </MuiSelect>
+      </Typography>
+    </Stack>
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+        {hotel.provinsi && (hotel.provinsi.length > 22 ? hotel.provinsi.slice(0, 22) + '...' : hotel.provinsi)}
+      </Typography>
+    </Stack>
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+        {hotel.image && (hotel.image.length > 22 ? hotel.image.slice(0, 22) + '...' : hotel.image)}
+      </Typography>
+    </Stack>
+  </Stack>
+))}
+
+  <Stack padding={'20px 0px'}>
+  <Button
+  type="button"
+  sx={{
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '44px',
+    width: '300px',
+    padding: '0 20px',
+    fontWeight: 500,
+    fontSize: '22px',
+    color: '#FFF',
+    backgroundColor: '#04214C',
+    borderRadius: '20px',
+    '&:hover': { background: '#04214C', color: '#FFF' },
+  }}
+  onClick={() => submitDataWisata(wisata)} // Call the submitData function with the updated hotel data
+>
+  Edit
+</Button>
+          </Stack>
+    </Stack>
+  </Stack>
+      </Stack>
+
+    </Stack>
 
     </Stack>
   );
