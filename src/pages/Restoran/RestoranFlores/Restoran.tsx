@@ -59,7 +59,7 @@ const Oleh = () => {
         });
 
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
-          imageSrc: item.gambar_url1,
+          imageSrc: item.gambar_url1 || item.gambar_url2 || item.gambar_url3 || '',
           textContent: item.nama,
           location: item.location,
           domisili: item.domisili

@@ -38,7 +38,7 @@ const Oleh = () => {
         const data: OlehDataItem[] = await response.json();
         const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'flores');
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
-          imageSrc: item.gambar_url1,
+          imageSrc: item.gambar_url1 || item.gambar_url2 || item.gambar_url3 || '',
           textContent: item.nama,
           jarak: item.jarak,
           domisili:item.domisili

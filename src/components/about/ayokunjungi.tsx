@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 interface OrangeDataItem {
   gambar_url1: string;
+  gambar_url2: string;
+  gambar_url3: string;
   nama: string;
   domisili: string;
 }
@@ -172,7 +174,7 @@ export default function Orangewithimage({ domisili }: OrangewithimageProps) {
    
         {orangeData.map((item, index) => (
           <Stack key={index} onClick={() => handleItemClick(item.nama)}> 
-            <Orangewithimage1 imageSrc={item.gambar_url1} textContent={item.nama} fontsize='30px' />
+            <Orangewithimage1 imageSrc={item.gambar_url1||item.gambar_url2||item.gambar_url3} textContent={item.nama} fontsize='30px' />
           </Stack>
         ))}
       </Stack>

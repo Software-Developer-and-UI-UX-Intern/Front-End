@@ -40,7 +40,7 @@ const Oleh = () => {
         // Filter the data to include only items where domisili is equal to 'bali'
         const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'bali');
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
-          imageSrc: item.gambar_url1,
+          imageSrc: item.gambar_url1 || item.gambar_url2 || item.gambar_url3 || '',
           textContent: item.nama,
           jarak: item.jarak,
           domisili:item.domisili

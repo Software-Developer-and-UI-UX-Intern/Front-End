@@ -138,42 +138,98 @@ export default function Oleh() {
       </Stack>
     );
   }
+  const imageUrls = [data.gambar_url1, data.gambar_url2, data.gambar_url3].filter(Boolean);
 
   return (
     <Stack gap={3}>
       <Stack direction={'row'} gap={3} width={'100%'}>
-        <Stack height={'510px'} width={'50%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url1 ? 'lightgray' : 'inherit' }}>
-          {!imageLoading && data.gambar_url1 && (
-            <img
-              src={data.gambar_url1}
-              onLoad={() => setImageLoading(false)}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              alt="Image1"
-            />
-          )}
-        </Stack>
-        <Stack direction={'column'} gap={4} width={'50%'}>
-          <Stack height={'240px'} width={'100%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url2 ? 'lightgray' : 'inherit' }}>
-            {!imageLoading && data.gambar_url2 && (
-              <img
-                src={data.gambar_url2}
-                onLoad={() => setImageLoading(false)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                alt="Image2"
-              />
-            )}
-          </Stack>
-          <Stack height={'240px'} width={'100%'} className='loading' sx={{ backgroundColor: imageLoading || !data.gambar_url3 ? 'lightgray' : 'inherit' }}>
-            {!imageLoading && data.gambar_url3 && (
-              <img
-                src={data.gambar_url3}
-                onLoad={() => setImageLoading(false)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                alt="Image3"
-              />
-            )}
-          </Stack>
-        </Stack>
+      <Stack gap={2} sx={{ height: '100%', width: '100%', margin: '0 auto' }}>
+  {imageUrls.length === 1 && (
+   <Stack direction={'row'} height={'720px'} justifyContent={'center'} alignItems={'center'} gap={1}>
+   <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '100%', width: '50%' }}>
+       {!imageLoading && (
+         <img
+           src={imageUrls[0]}
+           onLoad={() => setImageLoading(false)}
+           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+           alt="Image1"
+         />
+       )}
+     </Stack>
+
+   </Stack>
+  )}
+  {imageUrls.length === 2 && (
+    <>
+ <Stack direction={'row'} height={'720px'} justifyContent={'space-between'} gap={1}>
+    <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '100%', width: '50%' }}>
+        {!imageLoading && (
+          <img
+            src={imageUrls[0]}
+            onLoad={() => setImageLoading(false)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            alt="Image1"
+          />
+        )}
+      </Stack>
+      <Stack gap={1} width={'50%'}>
+      <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '100%', width: '100%' }}>
+        {!imageLoading && (
+          <img
+            src={imageUrls[1]}
+            onLoad={() => setImageLoading(false)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            alt="Image2"
+          />
+        )}
+      </Stack>
+      </Stack>
+    </Stack>
+    </>
+  )}
+  {imageUrls.length === 3 && (
+    <>
+    <Stack direction={'row'} height={'720px'} justifyContent={'space-between'} gap={1}>
+    <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '100%', width: '50%' }}>
+        {!imageLoading && (
+          <img
+            src={imageUrls[0]}
+            onLoad={() => setImageLoading(false)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            alt="Image1"
+          />
+        )}
+      </Stack>
+      <Stack gap={1} width={'50%'}>
+      <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '49%', width: '100%' }}>
+        {!imageLoading && (
+          <img
+            src={imageUrls[1]}
+            onLoad={() => setImageLoading(false)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            alt="Image2"
+          />
+        )}
+      </Stack>
+      <Stack className='loading' sx={{ backgroundColor: imageLoading ? 'lightgray' : 'inherit', height: '50%', width: '100%' }}>
+        {!imageLoading && (
+          <img
+            src={imageUrls[2]}
+            onLoad={() => setImageLoading(false)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            alt="Image3"
+          />
+        )}
+      </Stack>
+      </Stack>
+    </Stack>
+      
+      
+    </>
+  )}
+</Stack>
+
+
       </Stack>
 
       <Stack gap={3} marginLeft={'80px'} marginRight={'80px'}>

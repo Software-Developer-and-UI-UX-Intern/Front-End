@@ -115,9 +115,20 @@ function CarouselContent({ hotelImages }: CarouselContentProps) {
             <Slider>
                 {hotelImages.map((image, index) => (
                     <Slide index={index} key={index}>
-                        <Stack maxHeight={'511px'} key={index} direction={'row'} justifyContent={'center'} alignItems={'center'}>
-                            <img src={image.url} alt={`Hotel ${index}`} style={{ maxHeight: '511px', width: '1440px' }} />
-                        </Stack>
+                        <Stack
+  maxHeight={'511px'}
+  key={index}
+  direction={'row'}
+  justifyContent={'center'}
+  alignItems={'center'}
+  sx={{
+    backgroundImage: `url(${image.url})`, // Set image as background
+    backgroundSize: 'cover', // Cover the entire Stack area
+    backgroundPosition: 'center', // Center the background image
+    width: '100%', // Ensure the Stack fills its container width
+    height: '511px', // Set the fixed height
+  }}
+/>
                     </Slide>
                 ))}
             </Slider>
