@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button, Stack, Typography, Select as MuiSelect, MenuItem } from '@mui/material';
+import { Button, Stack, Typography, Select as MuiSelect, MenuItem, Input } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 const customInputStyle = {
@@ -38,6 +38,10 @@ const customInputStyle = {
     },
   },
 };
+interface Youtube {
+  url: string;
+  
+}
 // Define the Restoran type
 interface Hotel {
   name: string;
@@ -67,6 +71,7 @@ interface HotelThumbnail {
   nama:string
 }
 export default function RestoranPage() {
+  const [youtube, setYoutube] = useState<Youtube[]>([]);
   const [wisata, setWisata] = useState<Wisata[]>([]);
   const [wisatalist, setWisatalist] = useState<Wisatalist[]>([]);
   const [hotel, setHotel] = useState<Hotel[]>([]);
@@ -83,6 +88,8 @@ export default function RestoranPage() {
         setWisata(response4.data);
         const response5 = await axios.get<Wisatalist[]>('https://tripselbe.fly.dev/wisata');
         setWisatalist(response5.data);
+        const response6 = await axios.get<Youtube[]>('https://tripselbe.fly.dev/youtube');
+        setYoutube(response6.data);
         // Fetch hotel list
         const response2 = await axios.get<HotelList[]>('https://tripselbe.fly.dev/hotels');
         setHotellist(response2.data);
@@ -115,6 +122,7 @@ export default function RestoranPage() {
     }
   };
   const handleWisataChange = async (selectedWisataName: string, index: number) => {
+    console.log(selectedWisataName)
     try {
       // Find the selected wisata from the wisatalist state
       const selectedWisata = wisatalist.find(wisata => wisata.nama === selectedWisataName);
@@ -140,7 +148,21 @@ export default function RestoranPage() {
       console.error('Error updating wisata:', error);
     }
   };
-  
+  const handleYoutubeChange = async (selectedYoutubeName: string, index: number) => {
+    console.log(selectedYoutubeName)
+    try {
+
+      // Update wisata name, provinsi, and image based on the selected wisata
+      const updatedYoutube = [...youtube];
+      updatedYoutube[index] = {
+        url: selectedYoutubeName,
+      };
+      
+      setYoutube(updatedYoutube);
+    } catch (error) {
+      console.error('Error updating wisata:', error);
+    }
+  };
   
 // Modify the handleAdd function to add a new element to the hotel array
 const handleAdd = () => {
@@ -189,7 +211,27 @@ const handleAdd = () => {
       for (let i = 0; i < hotel.length; i++) {
         const { name, provinsi, image } = hotel[i];
         console.log(hotel[i])
-        await axios.post('https://tripselbe.fly.dev/recommendationwisata', { name: name, provinsi, image });
+        await axios.post('https://tripselbe.fly.dev/recommendationwisata', { name, provinsi, image });
+      }
+      
+      // Wait for the delete operation to complete
+      await deleteOperation;
+  
+      console.log('Data submitted successfully');
+    } catch (error) {
+      console.error('Error submitting data:', error);
+    }
+  };
+  const submitDataYoutube = async (yt: Youtube[]) => {
+    try {
+      // Asynchronously delete all data from the recommendationhotel table
+      const deleteOperation = axios.delete('https://tripselbe.fly.dev/youtube');
+  
+      // Submit each hotel recommendation one by one
+      for (let i = 0; i < yt.length; i++) {
+        const { url } = yt[i];
+        console.log(yt[i])
+        await axios.post('https://tripselbe.fly.dev/youtube', { url});
       }
       
       // Wait for the delete operation to complete
@@ -325,7 +367,7 @@ const handleAdd = () => {
                     },
                   }}
                   name="domisili"
-                  value={hotel.name}
+                  value={hotel.name} 
                   onChange={(e) => handleHotelChange(e.target.value, index)}
                   >
                   <MenuItem value={hotel.name}>{hotel.name}</MenuItem>
@@ -349,7 +391,11 @@ const handleAdd = () => {
       </Stack>
     </Stack>
   ))}
-  <Stack padding={'20px 0px'}>
+  
+    </Stack>
+  </Stack>
+      </Stack>
+      <Stack padding={'20px 20px'}>
   <Button
   type="button"
   sx={{
@@ -370,10 +416,6 @@ const handleAdd = () => {
   Edit
 </Button>
           </Stack>
-    </Stack>
-  </Stack>
-      </Stack>
-
     </Stack>
 
 
@@ -473,7 +515,12 @@ const handleAdd = () => {
   </Stack>
 ))}
 
-  <Stack padding={'20px 0px'}>
+
+    </Stack>
+  </Stack>
+  
+      </Stack>
+      <Stack padding={'20px 20px'}>
   <Button
   type="button"
   sx={{
@@ -495,11 +542,100 @@ const handleAdd = () => {
 </Button>
           </Stack>
     </Stack>
+
+
+
+  {/* rekomendasi youtube */}
+  <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
+      
+      <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
+        <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
+          Rekomendasi Youtube
+        </Typography>
+
+       
+      </Stack>
+      
+      <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 1) + 104px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
+    
+    {/* header container with horizontal scroll */}
+    <Stack direction={'row'} sx={{ overflowX: 'none' }}>
+      <Stack minWidth={'70px'} alignItems={'center'} justifyContent={'center'} padding={'16px'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>No</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+      </Stack>
+
+
+    </Stack>
+    
+    {/* rows container with vertical scroll */}
+    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    {youtube.map((hotel, index) => (
+  <Stack
+    direction={'row'}
+    borderRight={'none'}
+    borderTop={'none'}
+    borderBottom={'2px solid #04214C'}
+    key={index}  // Using index as key
+    sx={{
+      '&:hover': {
+        backgroundColor: '#f0f0f0',
+      },
+    }}
+  >
+    <Stack borderRight={'2px solid #04214C'}></Stack>
+    <Stack minWidth={'68.4px'} alignItems={'center'} justifyContent={'center'} padding={'16px'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>{index + 1}</Typography>
+    </Stack>
+
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+  
+                <Input
+                  disableUnderline
+                  placeholder="Link alamat hotel"
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  sx={customInputStyle}
+                  onChange={(e) => handleYoutubeChange(e.target.value, index)}
+                  inputProps={{
+                    'aria-label': 'Nomor Telfon',
+                    name: 'Telfon',
+                    value: hotel.url,
+                  }}
+                />
+    </Stack>
+
+  </Stack>
+))}
+
+  <Stack padding={'20px 0px'}>
+  <Button
+  type="button"
+  sx={{
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '44px',
+    width: '300px',
+    padding: '0 20px',
+    fontWeight: 500,
+    fontSize: '22px',
+    color: '#FFF',
+    backgroundColor: '#04214C',
+    borderRadius: '20px',
+    '&:hover': { background: '#04214C', color: '#FFF' },
+  }}
+  onClick={() => submitDataYoutube(youtube)} // Call the submitData function with the updated hotel data
+>
+  Edit
+</Button>
+          </Stack>
+    </Stack>
   </Stack>
       </Stack>
 
     </Stack>
-
     </Stack>
   );
 }
