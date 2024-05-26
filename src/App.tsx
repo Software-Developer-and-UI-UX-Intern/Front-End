@@ -4,6 +4,7 @@ import Navbar  from './components/ui/navbar/navbar';
 import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Navbaradmin  from './components/ui/navbar/navbaradmin';
 // import Adminlayout  from './pages/Admin/Login/adminlayout';
+import { AboutUs } from './pages/Aboutus';
 import { AdminHotel } from './pages/Admin/Hotel';
 import { AdminBeranda } from './pages/Admin/Beranda';
 import { InputHotel } from './pages/Admin/Hotel/input';
@@ -91,6 +92,18 @@ const router = createBrowserRouter([
           <Beranda />
           <Footer />
         </>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/aboutus',
+    element: (
+      <ProtectedRoute>
+      <>
+        <Navbar />
+        <AboutUs />
+        <Footer/>
+      </>
       </ProtectedRoute>
     )
   },
