@@ -5,6 +5,7 @@ import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Navbaradmin  from './components/ui/navbar/navbaradmin';
 // import Adminlayout  from './pages/Admin/Login/adminlayout';
 import { AdminHotel } from './pages/Admin/Hotel';
+import { AdminBeranda } from './pages/Admin/Beranda';
 import { InputHotel } from './pages/Admin/Hotel/input';
 import { AddHotel } from './pages/Admin/Hotel/add';
 import { AdminRestoran } from './pages/Admin/Restoran';
@@ -350,6 +351,10 @@ const router = createBrowserRouter([
         {
           path: 'hotel', 
           element: <AdminHotel />,
+        },
+        {
+          path: 'beranda', 
+          element: <AdminBeranda />,
         },
         {
           path: 'input-hotel', 

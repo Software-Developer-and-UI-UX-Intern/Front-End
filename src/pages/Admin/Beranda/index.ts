@@ -1,1 +1,1 @@
-export { default as AdminUser } from './User';
+export { default as AdminBeranda } from './Beranda';
