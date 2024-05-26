@@ -53,6 +53,10 @@ interface Wisata {
   provinsi: string;
   image: string;
 }
+interface Areapopuler {
+  nama: string;
+  domisili: string;
+}
 interface Wisatalist {
   nama: string;
   domisili: string;
@@ -71,6 +75,7 @@ interface HotelThumbnail {
   nama:string
 }
 export default function RestoranPage() {
+  const [populer, setPopuler] = useState<Areapopuler[]>([]);
   const [youtube, setYoutube] = useState<Youtube[]>([]);
   const [wisata, setWisata] = useState<Wisata[]>([]);
   const [wisatalist, setWisatalist] = useState<Wisatalist[]>([]);
@@ -90,6 +95,8 @@ export default function RestoranPage() {
         setWisatalist(response5.data);
         const response6 = await axios.get<Youtube[]>('https://tripselbe.fly.dev/youtube');
         setYoutube(response6.data);
+        const response7 = await axios.get<Areapopuler[]>('https://tripselbe.fly.dev/wisatarecomend');
+        setPopuler(response7.data);
         // Fetch hotel list
         const response2 = await axios.get<HotelList[]>('https://tripselbe.fly.dev/hotels');
         setHotellist(response2.data);
@@ -148,6 +155,30 @@ export default function RestoranPage() {
       console.error('Error updating wisata:', error);
     }
   };
+  const handlePopulerChange = async (selectedWisataName: string, index: number) => {
+    console.log(selectedWisataName)
+    try {
+      // Find the selected wisata from the wisatalist state
+      const selectedWisata = wisatalist.find(wisata => wisata.nama === selectedWisataName);
+  
+      if (!selectedWisata) {
+        console.error('Selected Wisata not found');
+        return;
+      }
+  
+ 
+      // Update wisata name, provinsi, and image based on the selected wisata
+      const updatedWisata = [...populer];
+      updatedWisata[index] = {
+        nama: selectedWisataName,
+        domisili: selectedWisata.domisili,
+      };
+      
+      setPopuler(updatedWisata);
+    } catch (error) {
+      console.error('Error updating wisata:', error);
+    }
+  };
   const handleYoutubeChange = async (selectedYoutubeName: string, index: number) => {
     console.log(selectedYoutubeName)
     try {
@@ -175,13 +206,47 @@ const handleAdd = () => {
   // Add the new hotel to the hotel array
   setHotel([...hotel, newHotel]);
 };
-
-  const handleDelete = (index: number) => {
-    const updatedHotels = [...hotel];
-    updatedHotels.splice(index, 1); // Remove the hotel at the specified index
-    setHotel(updatedHotels); // Update the hotel state array
+const handleDelete = (index: number) => {
+  const updatedHotels = [...hotel];
+  updatedHotels.splice(index, 1); // Remove the hotel at the specified index
+  setHotel(updatedHotels); // Update the hotel state array
+};
+const handleDeletePopuler = (index: number) => {
+  const updatedHotels = [...populer];
+  updatedHotels.splice(index, 1); // Remove the hotel at the specified index
+  setPopuler(updatedHotels); // Update the hotel state array
+};
+const handleAddPopuler = () => {
+  // Create a new hotel object with default values
+  // console.log(wisatalist)
+  const newHotel: Areapopuler = {
+    nama: '',
+    domisili: '',
   };
+  // Add the new hotel to the hotel array
+  setPopuler([...populer, newHotel]);
+};
+ 
+const submitDataPopuler = async (hotel: Areapopuler[]) => {
+  try {
+    // Asynchronously delete all data from the recommendationhotel table
+    const deleteOperation = axios.delete('https://tripselbe.fly.dev/wisatarecomend');
 
+    // Submit each hotel recommendation one by one
+    for (let i = 0; i < hotel.length; i++) {
+      const { nama, domisili } = hotel[i];
+      console.log(hotel[i])
+      await axios.post('https://tripselbe.fly.dev/wisatarecomend', { nama, domisili });
+    }
+    
+    // Wait for the delete operation to complete
+    await deleteOperation;
+
+    console.log('Data submitted successfully');
+  } catch (error) {
+    console.error('Error submitting data:', error);
+  }
+};
   const submitData = async (hotel: Hotel[]) => {
     try {
       // Asynchronously delete all data from the recommendationhotel table
@@ -309,7 +374,7 @@ const handleAdd = () => {
       borderRight={'none'} 
       borderTop={'none'} 
       borderBottom={'2px solid #04214C'}
-      key={index}
+      key={`${hotel.name}_${index}`}
       sx={{
         '&:hover': {
           backgroundColor: '#f0f0f0',
@@ -370,10 +435,10 @@ const handleAdd = () => {
                   value={hotel.name} 
                   onChange={(e) => handleHotelChange(e.target.value, index)}
                   >
-                  <MenuItem value={hotel.name}>{hotel.name}</MenuItem>
+                  {/* <MenuItem value={hotel.name}>{hotel.name}</MenuItem> */}
                   {hotellist.map((hotel) => (
 
-                  <MenuItem value={hotel.nama}>{hotel.nama}</MenuItem>
+                  <MenuItem     key={`${hotel.nama}_${index}`} value={hotel.nama}>{hotel.nama}</MenuItem>
 
                   ))}
                 </MuiSelect>
@@ -450,6 +515,9 @@ const handleAdd = () => {
 
     </Stack>
     
+
+
+
     {/* rows container with vertical scroll */}
     <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
     {wisata.map((hotel, index) => (
@@ -458,7 +526,8 @@ const handleAdd = () => {
     borderRight={'none'}
     borderTop={'none'}
     borderBottom={'2px solid #04214C'}
-    key={index}  // Using index as key
+    key={`${hotel.name}_${index}`}
+    // Using index as key
     sx={{
       '&:hover': {
         backgroundColor: '#f0f0f0',
@@ -497,7 +566,7 @@ const handleAdd = () => {
         >
           <MenuItem value={hotel.name}>{hotel.name}</MenuItem>
           {wisatalist.map((wisata) => (
-            <MenuItem key={wisata.nama} value={wisata.nama}>{wisata.nama}</MenuItem>
+            <MenuItem     key={`${wisata.nama}_${index}`} value={wisata.nama}>{wisata.nama}</MenuItem>
           ))}
         </MuiSelect>
       </Typography>
@@ -543,7 +612,173 @@ const handleAdd = () => {
           </Stack>
     </Stack>
 
+  {/* Area populer */}
+  <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
+      
+      <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
+        <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
+          Area Populer
+        </Typography>
+        <Button 
+        onClick={handleAddPopuler}
+          disableElevation 
+          disableFocusRipple 
+          disableRipple 
+          disableTouchRipple
+          sx={{
+            width: 'auto',
+            padding: '10px 20px',
+            backgroundColor: '#FF010C',
+            borderRadius: '40px',
+          }}
+        >
+          <Icon icon='fluent:add-16-filled' width='30' height='30' style={{ color: 'red', backgroundColor: 'white', borderRadius: '50px', padding: '5px' }} />
+          <Typography paddingLeft={'15px'} sx={{
+            color: 'white',
+            fontSize: '24px',
+            fontWeight: 500,
+          }}>
+            Tambah Data
 
+          </Typography>
+        </Button>
+       
+      </Stack>
+      
+      <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 3) + 105px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
+    
+    {/* header container with horizontal scroll */}
+    <Stack direction={'row'} sx={{ overflowX: 'none' }}>
+      <Stack minWidth={'70px'} alignItems={'center'} justifyContent={'center'} padding={'16px'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>No</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Action</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Domisili</Typography>
+      </Stack>
+
+
+    </Stack>
+    
+
+
+    
+    {/* rows container with vertical scroll */}
+    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    {populer.map((hotel, index) => (
+  <Stack
+    direction={'row'}
+    borderRight={'none'}
+    borderTop={'none'}
+    borderBottom={'2px solid #04214C'}
+    key={`${hotel.nama}_${index}`}
+    sx={{
+      '&:hover': {
+        backgroundColor: '#f0f0f0',
+      },
+    }}
+  >
+    <Stack borderRight={'2px solid #04214C'}></Stack>
+    <Stack minWidth={'68.4px'} alignItems={'center'} justifyContent={'center'} padding={'16px'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>{index + 1}</Typography>
+    </Stack>
+    <Stack direction={'row'} height={'100px'} alignItems={'center'} justifyContent={'center'} width={'372px'} gap={1} borderRight={'2px solid #04214C'}>
+        <Button 
+  disableElevation 
+  disableFocusRipple 
+  disableRipple 
+  disableTouchRipple
+  onClick={() => handleDeletePopuler(index)} // Pass the index to the handleDelete function
+  sx={{
+    color: 'white',
+    fontSize: '26px',
+    fontWeight: 500,
+    backgroundColor: '#FF010C',
+    padding: '10px 25px',
+    borderRadius: '40px',
+    minWidth: 'auto',
+    height: 'auto',
+    transition: 'color 0.4s ease-in-out',
+  }}
+>
+  <Icon icon="ic:round-delete" width="30" height="30" style={{ color: 'inherit', paddingRight: '10px' }} />
+  Delete
+</Button>
+        </Stack>
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+        <MuiSelect
+          displayEmpty
+          inputProps={{ 'aria-label': 'Domisili' }}
+          style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
+          sx={{
+            ...customInputStyle,
+            '&:focus': {
+              borderColor: 'transparent !important',
+            },
+            '& fieldset': {
+              borderColor: 'transparent !important',
+            },
+            '&:hover fieldset': {
+              borderColor: 'transparent !important',
+            },
+            '&:active fieldset': {
+              borderColor: 'transparent !important',
+            },
+          }}
+          name="domisili"
+          value={hotel.nama}
+          onChange={(e) => handlePopulerChange(e.target.value, index)}
+        >
+          <MenuItem value={hotel.nama}>{hotel.nama}</MenuItem>
+          {wisatalist.map((wisata) => (
+            <MenuItem     key={`${wisata.nama}_${index}`} value={wisata.nama}>{wisata.nama}</MenuItem>
+          ))}
+        </MuiSelect>
+      </Typography>
+    </Stack>
+    <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+      <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+        {hotel.domisili && (hotel.domisili.length > 22 ? hotel.domisili.slice(0, 22) + '...' : hotel.domisili)}
+      </Typography>
+    </Stack>
+
+  </Stack>
+))}
+
+
+    </Stack>
+  </Stack>
+  
+      </Stack>
+      <Stack padding={'20px 20px'}>
+  <Button
+  type="button"
+  sx={{
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '44px',
+    width: '300px',
+    padding: '0 20px',
+    fontWeight: 500,
+    fontSize: '22px',
+    color: '#FFF',
+    backgroundColor: '#04214C',
+    borderRadius: '20px',
+    '&:hover': { background: '#04214C', color: '#FFF' },
+  }}
+  onClick={() => submitDataPopuler(populer)} // Call the submitData function with the updated hotel data
+>
+  Edit
+</Button>
+          </Stack>
+    </Stack>
 
   {/* rekomendasi youtube */}
   <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
@@ -579,7 +814,7 @@ const handleAdd = () => {
     borderRight={'none'}
     borderTop={'none'}
     borderBottom={'2px solid #04214C'}
-    key={index}  // Using index as key
+    key={`${hotel.url}_${index}`}
     sx={{
       '&:hover': {
         backgroundColor: '#f0f0f0',
