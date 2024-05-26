@@ -1,9 +1,11 @@
-import {  Button, InputBase, Menu, Stack, Typography, MenuItem, Divider, } from '@mui/material';
+import {  Button, InputBase, Menu, Stack, Typography, MenuItem, Divider, Link, IconButton } from '@mui/material';
 import logo from '../../../assets/adminlogonavbar.png'
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, ChangeEvent, useEffect } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const menuItemStyle = {
   fontSize: '22px',
@@ -14,18 +16,78 @@ const menuItemStyle = {
     color: 'red', // Change text color to red on hover
   },
 };
+interface Data {
+  oleh: OlehData[];
+  wisata: WisataData[];
+  hotels: HotelData[];
+  restoran: RestoranData[];
+}
+interface OlehData {
+  nama: string;
+  // Add more properties as needed
+}
 
+interface WisataData {
+  nama: string;
+  // Add more properties as needed
+}
+
+interface HotelData {
+  nama: string;
+  // Add more properties as needed
+}
+
+interface RestoranData {
+  nama: string;
+  // Add more properties as needed
+}
 export default function Navbar() {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null); // State for wisata menu
   const [profileMenuActive, setProfileMenuActive] = useState(false); // State to track wisata menu activation
   const [menuActive, setMenuActive] = useState(false);
+  const [data, setData] = useState<Data>({
+    oleh: [],
+    wisata: [],
+    hotels: [],
+    restoran: [],
+  });
 
-
+  const handleClear = () => {
+    setSearchValue('');
+    // setShowCategories(true);
+  };
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
+    const fetchData = async () => {
+      try {
+        const olehResponse = await fetch('https://tripselbe.fly.dev/oleh');
+        const olehData: OlehData[] = await olehResponse.json();
+  
+        const wisataResponse = await fetch('https://tripselbe.fly.dev/wisata');
+        const wisataData: WisataData[] = await wisataResponse.json();
+  
+        const hotelsResponse = await fetch('https://tripselbe.fly.dev/hotels');
+        const hotelsData: HotelData[] = await hotelsResponse.json();
+  
+        const restoranResponse = await fetch('https://tripselbe.fly.dev/restoran');
+        const restoranData: RestoranData[] = await restoranResponse.json();
+  
+        setData({
+          oleh: olehData,
+          wisata: wisataData,
+          hotels: hotelsData,
+          restoran: restoranData,
+        });
+        console.log(hotelsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
   }, []);
 
   const handleMenuOpen = () => {
@@ -249,6 +311,11 @@ export default function Navbar() {
             value={searchValue}
             onChange={handleChange}
             startAdornment={<SearchIcon sx={{color:'#FF010C'}} />}
+            endAdornment={
+              <IconButton onClick={handleClear} sx={{color:'#FF010C'}} size="small">
+                <CloseIcon />
+              </IconButton>
+            }
             sx={{
               borderRadius: '40px',
               border: '2px solid var(--Primary-Color---Red-3, #FF010C)',
@@ -320,9 +387,100 @@ export default function Navbar() {
                 </Menu>
               </Stack>
       </Stack>
+    
       {/* main page */}
       <Stack height='100%' width='100%' sx={{overflowY:'hidden'}}>
+        {/* searchbar result */}
+      <Stack sx={{ backgroundColor: 'white', borderRadius: '0 0 40px 40px', overflowY: 'auto' }} color={'#04214C'} width={'80%'} maxHeight={'calc(100vh - 105px)'} position={'absolute'} top={'105px'}>
+      {searchValue && (
+        <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+          Pencarian
+        </Typography>
+      )}
+      {searchValue && data.hotels && data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Hotel
+          </Typography>
+          {data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).map((hotel, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() =>         {navigate(`/admin/input-hotel`, { state: { nama:hotel.nama } });
+            handleClear();
+            }}>
+                {hotel.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.restoran && data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Restaurant
+          </Typography>
+          {data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).map((restoran, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => {        navigate(`/admin/input-restoran`, { state: { nama:restoran.nama } });
+            handleClear();
+            }}>
+                {restoran.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.oleh && data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Oleh-Oleh
+          </Typography>
+          {data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).map((oleh, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} onClick={() => {
+
+                      navigate(`/admin/input-oleh-oleh`, { state: { nama:oleh.nama } });
+                      handleClear();
+                      }}>
+                {oleh.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {searchValue && data.wisata && data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).length > 0 && (
+        <>
+          <Typography padding={'30px'} fontSize={'28px'} fontWeight={700}>
+            Wisata
+          </Typography>
+          {data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).map((wisata, index) => (
+            <Typography key={index} padding={'0px 30px 30px'} fontSize={'22px'} fontWeight={500}>
+              <Link sx={{textDecoration:'none', color:'#04214C'}} 
+      onClick={() => {
+        navigate(`/admin/input-wisata`, { state: { nama: wisata.nama } });
+        handleClear();
+      }}>
+                {wisata.nama}
+              </Link>
+            </Typography>
+          ))}
+        </>
+      )}
+      {!searchValue || 
+        (
+          (data.hotels && data.hotels.filter(hotel => hotel.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.restoran && data.restoran.filter(restoran => restoran.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.oleh && data.oleh.filter(oleh => oleh.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0) &&
+          (data.wisata && data.wisata.filter(wisata => wisata.nama.toLowerCase().includes(searchValue.toLowerCase())).length === 0)
+        )
+      && (
+        <Typography padding={'30px'} fontSize={'22px'} fontWeight={500}>
+          Tidak ada yang cocok
+        </Typography>
+      )}
+    </Stack>
+    {searchValue==='' && (
       <Outlet/>
+    )}
       </Stack>
     </Stack>
   </Stack>
