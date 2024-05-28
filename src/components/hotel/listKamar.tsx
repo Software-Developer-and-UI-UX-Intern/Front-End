@@ -128,7 +128,8 @@ export default function ListHotel() {
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
                 <Icon icon="ic:round-person" width="20" height="20" style={{ color: '#FF010C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
-                  {hotel.tamu}
+                  {/* {hotel.tamu} */}
+                  2 Tamu
                 </Typography>
               </Stack>
             </Stack>
@@ -139,7 +140,8 @@ export default function ListHotel() {
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
                 <Icon icon="material-symbols:balcony-rounded" width="20" height="20" style={{ color: '#FF010C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
-                  {hotel.var1}
+                  {/* {hotel.var1} */}
+                  Balkon
                 </Typography>
               </Stack>
             )}
@@ -147,7 +149,8 @@ export default function ListHotel() {
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
                 <Icon icon="material-symbols:balcony-rounded" width="20" height="20" style={{ color: '#6E6C6C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
-                  {hotel.var1}
+                  {/* {hotel.var1} */}
+                  Tidak Ada Balkon
                 </Typography>
               </Stack>
             )}
@@ -155,7 +158,7 @@ export default function ListHotel() {
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
                 <Icon icon="mingcute:fork-spoon-fill" width="20" height="20" style={{ color: '#FF010C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
-                  {hotel.var2}
+                  {/* {hotel.var2} */}Termasuk Sarapan
                 </Typography>
               </Stack>
             )}
@@ -163,7 +166,7 @@ export default function ListHotel() {
               <Stack direction={'row'} borderRadius={'15px'} gap={1} padding={' 1px 15px'}>
                 <Icon icon="mingcute:fork-spoon-fill" width="20" height="20" style={{ color: '#6E6C6C' }} />
                 <Typography fontWeight={400} fontSize={'16px'} color={'#04214C'}>
-                  {hotel.var2}
+                  {/* {hotel.var2} */}Tidak Termasuk Sarapan
                 </Typography>
               </Stack>
             )}
@@ -174,7 +177,7 @@ export default function ListHotel() {
             <Stack width={'1px'} height={'100%'} sx={{background:'rgba(0, 0, 0, 0.12)'}}/>
             <Stack direction={'column'} justifyContent={'center'} paddingRight={'20px'} alignItems={'right'}>
               <Typography fontSize={'32px'} color={'#FF010C'} fontWeight={500} textAlign={'right'}>Mulai Dari</Typography>
-              <Typography fontSize={'48px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>
+              <Typography fontSize={'40px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>
                 {hotel.harga.split(',').map(Number).sort((a, b) => a - b).map((value, i, array) => (i === 0 ? 'Rp' : '') + value.toLocaleString().replace(/,/g, '.') + (i === 0 ? '  ' : '') + (i === array.length - 1 ? '' : 'Rp') )}
               </Typography>
               <Typography fontSize={'18px'} color={'#04214C'} fontWeight={600} textAlign={'right'}>Harga spesial untuk T-Flyers</Typography>

@@ -54,7 +54,7 @@ export default function Hotel() {
     return <div>Loading...</div>;
   }
 
-  const { nama, harga, lokasi, telfon, jarak, alamat } = hotelData;
+  const { nama, harga, lokasi, telfon, jarak, alamat,domisili } = hotelData;
 
   return (
     <Stack gap={3}>
@@ -74,8 +74,8 @@ export default function Hotel() {
             ))}
           </Stack>
         </Stack>
-        <Stack gap={35} direction={'row'} justifyContent={'space-between'}>
-          <Stack flexWrap={'wrap'}
+        <Stack direction={'row'} justifyContent={'space-between'}>
+          <Stack direction={'row'}
             sx={{
               width: 'auto',
               height: '70px',
@@ -93,11 +93,19 @@ export default function Hotel() {
               fontFamily: 'Poppins',
               fontWeight: 600,
             }}>
-{harga.split(',').map(Number).sort((a, b) => a - b).map((value, i, array) => (i === 0 ? 'Rp' : '') + value.toLocaleString().replace(/,/g, '.') + (i === 0 ? ' - ' : '') + (i === array.length - 1 ? '' : 'Rp') )}
-            </Typography>
+ {harga
+        .replace('Rp ', '') // Remove 'Rp' prefix
+        .split('-') // Split into two parts
+        .map(part =>
+          parseInt(part.replace(/\D/g, ''), 10) // Remove non-numeric characters and convert to integers
+            .toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) // Format as currency
+            .replace(/\s/g, '') // Remove spaces
+            .slice(0, -3) // Remove the last three characters ('00')
+        )
+        .join(' - ')}            </Typography>
           </Stack>
 
-          <Stack flexWrap={'wrap'}
+          <Stack direction={'row'}
             sx={{
               width: 'auto',
               height: '70px',
@@ -114,7 +122,7 @@ export default function Hotel() {
               fontFamily: 'Poppins',
               fontWeight: 500,
             }}>
-              {lokasi}
+              {lokasi}, {domisili}
             </Typography>
           </Stack>
         </Stack>
@@ -139,7 +147,7 @@ export default function Hotel() {
         <Stack gap={3} direction={'row'}>
           <Icon icon="solar:route-bold" width="50" height="50" style={{ color: 'red' }} />
           <Typography fontWeight={'500'} fontSize={'30px'} color={'#04214C'}>
-            {jarak} ke TSO {lokasi}
+            {jarak} Km ke TSO {lokasi}
           </Typography>
         </Stack>
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>

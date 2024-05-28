@@ -70,12 +70,18 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
         if (!hotel.harga) {
           return false; // Skip hotels without a harga or fasilitas value
         }
-
-        const hargaValues = hotel.harga.split(',').map(Number); // Split harga string and convert each part to a number
-        const value1 = Math.min(...hargaValues); // Find the minimum value
-        const value2 = Math.max(...hargaValues);
-        const min = Number(minimal.replace(/\./g, ''));
-        const max = Number(maximal.replace(/\./g, ''));
+        const [minHarga, maxHarga] = hotel.harga
+        .replace('Rp ', '') // Remove 'Rp'
+        .split('-') // Split into two parts
+        .map(part => parseInt(part.replace(/\D/g, ''), 10)); // Remove non-numeric characters and convert to integers
+      
+      const value1 = isNaN(minHarga) ? 0 : minHarga; // Use 0 if NaN
+      const value2 = isNaN(maxHarga) ? 0 : maxHarga; // Use 0 if NaN
+      
+      // Rest of the code remains the same
+      const min = Number(minimal.replace(/\./g, '')); // Remove '.' from minimal and convert to number
+      const max = Number(maximal.replace(/\./g, '')); // Remove '.' from maximal and convert to number
+      console.log([value1, value2]); // Log the harga values
         return (!minimal || value1 >= min && value2 >= min) && (!maximal || value2 <= max && value1 <= max); // Check harga range
       })
       .filter(hotel => checkedFasilitas.length === 0 || 
@@ -134,8 +140,18 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
               <Stack width={'1px'} height={'100%'} sx={{background:'rgba(0, 0, 0, 0.12)'}}/>
               <Stack direction={'column'} justifyContent={'center'} paddingRight={'20px'} alignItems={'right'}>
                 <Typography fontSize={'22px'} color={'#FF010C'} fontWeight={500} textAlign={'right'}>Mulai Dari</Typography>
-                <Typography fontSize={'32px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>
-                  Rp{hotel.harga ? hotel.harga.split(',').map(Number).sort((a, b) => a - b)[0].toLocaleString().replace(/,/g, '.') : ''}
+                <Typography fontSize={'24px'} color={'#04214C'} fontWeight={700} textAlign={'right'}>
+                  {/* Rp{hotel.harga ? hotel.harga.split(',').map(Number).sort((a, b) => a - b)[0].toLocaleString().replace(/,/g, '.') : ''} */}
+                  {/* {hotel.harga} */}
+                  {parseInt(
+        hotel.harga
+          .replace('Rp ', '') // Remove 'Rp' prefix
+          .split('-')[0] // Take the first part (minimal value)
+          .replace(/\D/g, ''), // Remove non-numeric characters
+        10 // Parse as base 10
+      )
+        .toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) // Format as currency
+        .replace(/\s/g, '')}
                 </Typography>
                 <Typography fontSize={'12px'} color={'#04214C'} fontWeight={600} textAlign={'right'}>Harga spesial untuk T-Flyers</Typography>
               </Stack>
