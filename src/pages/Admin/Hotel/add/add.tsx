@@ -169,6 +169,13 @@ export default function Register() {
     bintang: '',
     fasilitas: [''],
   });
+  
+  // const [selectedValue, setSelectedValue] = useState(room.var1); // Step 1: Define State
+
+  // const handleChange = (event) => { // Step 2: Update the onChange handler
+  //   setSelectedValue(event.target.value);
+  //   handleRoomChange(index, 'var1', event.target.value); // Also call handleRoomChange with updated value
+  // };
   // Function to handle room changes
   const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
     const newKamar = [...kamar];
@@ -216,10 +223,18 @@ export default function Register() {
   };
   const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
+    const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+    if (file && file.size > maxFileSize) {
+        alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+        // Clear the file input to cancel the upload
+        e.target.value = '';
+        return;
+    }
+
     if (file) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-
         reader.onload = () => {
             setKamar(prevKamar => {
                 const newKamar = [...prevKamar];
@@ -233,35 +248,55 @@ export default function Register() {
     }
 };
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0];
-    if (file) {
+
+const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const file = e.target.files?.[0];
+  const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+  if (file && file.size > maxFileSize) {
+      alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+      // Clear the file input to cancel the upload
+      e.target.value = '';
+      return;
+  }
+
+  if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-  
+
       // Create a closure to capture the current index
       reader.onload = () => {
-        const newGambarHotel = [...gambarhotel];
-        const nama = file.name; // Customize this based on your requirements
-        newGambarHotel[index] = { nama, url: reader.result as string }; // Replace the old image at the correct index
-        setGambarHotel(newGambarHotel);
-        console.log(index)
+          const newGambarHotel = [...gambarhotel];
+          const nama = file.name; // Customize this based on your requirements
+          newGambarHotel[index] = { nama, url: reader.result as string }; // Replace the old image at the correct index
+          setGambarHotel(newGambarHotel);
+          console.log(index)
       };
-    }
-  };
-  const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0];
-    if (file) {
+  }
+};
+
+const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const file = e.target.files?.[0];
+  const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+  if (file && file.size > maxFileSize) {
+      alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+      // Clear the file input to cancel the upload
+      e.target.value = '';
+      return;
+  }
+
+  if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const newFasilitas = [...datafasilitas];
-        const nama = file.name; // You can customize this based on your requirements
-        newFasilitas[index] = { nama, gambar_url: reader.result as string }; // Replace the old image
-        setFasilitas(newFasilitas);
+          const newFasilitas = [...datafasilitas];
+          const nama = file.name; // Customize this based on your requirements
+          newFasilitas[index] = { nama, gambar_url: reader.result as string }; // Replace the old image
+          setFasilitas(newFasilitas);
       };
-    }
-  };
+  }
+};
 
   // useEffect(() => {
   //   const fetchRestoranData = async () => {
@@ -505,14 +540,14 @@ const deleteFasilitas = async (hotelName: string) => {
       const thumbnailIndex = images.findIndex(image => image.nama === 'thumbnail');
       if (thumbnailIndex !== -1) {
         const thumbnailImage = images.splice(thumbnailIndex, 1)[0];
-        await uploadImage(thumbnailImage, hotelName);
+        await uploadImage(thumbnailImage);
       }
   
       // Upload other images
       await Promise.all(
         images.map(async (image) => {
           try {
-            await uploadImage(image, hotelName);
+            await uploadImage(image);
           } catch (error) {
             console.error(`Error uploading and storing image ${image.nama}:`, error);
             // Handle error...
@@ -525,20 +560,20 @@ const deleteFasilitas = async (hotelName: string) => {
     }
   };
   
-  const uploadImage = async (image: Gambar_hotel, hotelName: string) => {
+  const uploadImage = async (image: Gambar_hotel) => {
     // Upload the image to Cloudinary
     const imageResponse = await fetch(image.url);
     if (!imageResponse.ok) {
       throw new Error(`Failed to fetch image ${image.nama}: ${imageResponse.status}`);
     }
     const blob = await imageResponse.blob();
-    const formData = new FormData();
-    formData.append('file', blob);
-    formData.append('upload_preset', 'ml_default');
+    const gambarbaru = new FormData();
+    gambarbaru.append('file', blob);
+    gambarbaru.append('upload_preset', 'ml_default');
   
     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
       method: 'POST',
-      body: formData,
+      body: gambarbaru,
     });
   
     if (!cloudinaryResponse.ok) {
@@ -557,7 +592,7 @@ const deleteFasilitas = async (hotelName: string) => {
       body: JSON.stringify({
         nama: image.nama,
         url: imageUrl,
-        hotel_name: hotelName,
+        // hotel_name: hotelName,
       }),
     });
   
@@ -583,17 +618,18 @@ const deleteFasilitas = async (hotelName: string) => {
             kamarList.map(async (kamar, index) => {
                 try {
                     const response = await fetch(kamar.gambar);
+                    console.log(kamar.gambar)
                     if (!response.ok) {
                         throw new Error(`Failed to fetch image ${index}: ${response.status}`);
                     }
                     const blob = await response.blob();
-                    const formData = new FormData();
-                    formData.append('file', blob);
-                    formData.append('upload_preset', 'ml_default');
-
+                    const gambarbaru = new FormData();
+                    gambarbaru.append('file', blob);
+                    gambarbaru.append('upload_preset', 'ml_default');
+    
                     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
                         method: 'POST',
-                        body: formData,
+                        body: gambarbaru,
                     });
 
                     if (!cloudinaryResponse.ok) {
@@ -602,7 +638,6 @@ const deleteFasilitas = async (hotelName: string) => {
 
                     const cloudinaryData = await cloudinaryResponse.json();
                     const imageUrl = cloudinaryData.secure_url;
-
                     // Store image URL in the database
                     const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-kamar', {
                         method: 'POST',
@@ -612,7 +647,17 @@ const deleteFasilitas = async (hotelName: string) => {
                         body: JSON.stringify({
                             ...kamar,
                             gambar: imageUrl,
-                            hotel_nama: hotelName, // Ensure to send hotel name
+                            nama: kamar.nama,
+                            ukuran: kamar.ukuran,
+                            ac_up: kamar.ac_up,
+                            bed: kamar.bed,
+                            tamu: kamar.tamu,
+                            harga: kamar.harga,
+                            hotel_nama: kamar.hotel_nama,
+                            var1: kamar.var1,
+                            var2: kamar.var2,
+                            var1icon: kamar.var1icon,
+                            var2icon: kamar.var2icon,
                         }),
                     });
 
@@ -650,13 +695,13 @@ const deleteFasilitas = async (hotelName: string) => {
               throw new Error(`Failed to fetch image ${index}: ${imageResponse.status}`);
             }
             const blob = await imageResponse.blob();
-            const formData = new FormData();
-            formData.append('file', blob);
-            formData.append('upload_preset', 'ml_default');
+            const gambarbaru = new FormData();
+            gambarbaru.append('file', blob);
+            gambarbaru.append('upload_preset', 'ml_default');
   
             const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
               method: 'POST',
-              body: formData,
+              body: gambarbaru,
             });
   
             if (!cloudinaryResponse.ok) {
@@ -675,7 +720,6 @@ const deleteFasilitas = async (hotelName: string) => {
               body: JSON.stringify({
                 nama: image.nama,
                 gambar_url: imageUrl,
-                hotel_nama: fasilitasName,
               }),
             });
   
@@ -890,6 +934,8 @@ const deleteFasilitas = async (hotelName: string) => {
                 {/* <MenuItem value={formData.lokasi}>
                     <em>{formData.lokasi}</em>
                   </MenuItem>                   */}
+                                    <MenuItem value={'Gianyar'}>Gianyar</MenuItem>
+                                    <MenuItem value={'Buleleng'}>Buleleng</MenuItem>
                   <MenuItem value={'Nusa Dua'}>Nusa Dua</MenuItem>
                   <MenuItem value={'kuta'}>Kuta</MenuItem>
                   <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
@@ -1072,14 +1118,14 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama kamar"
+                  placeholder="Ukuran kamar"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   onChange={(e) => handleRoomChange(index, 'ukuran', e.target.value)}
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'Ukuran',
-                    value: `${room.ukuran} m²`
+                    value: room.ukuran
                     // onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
@@ -1226,70 +1272,70 @@ const deleteFasilitas = async (hotelName: string) => {
                   onChange={(e) => handleRoomChange(index, 'bed', e.target.value)}
                 >
                   <MenuItem value='King Bed'>King Bed</MenuItem>
+                  <MenuItem value='King Twin'>King Twin</MenuItem>
+
                   <MenuItem value='Queen bed'>Queen bed</MenuItem>
+                  <MenuItem value='2 Queen bed'>2 Queen bed</MenuItem>
                   <MenuItem value='Twin Bed'>Twin Bed</MenuItem>
                   <MenuItem value='Single bed'>Queen bed</MenuItem>
                   <MenuItem value='King Bed / 2 Single Bed'>King Bed / 2 Single Bed</MenuItem>
                   <MenuItem value='King Bed / Twin Bed'>King Bed / Twin Bed</MenuItem>
+                  <MenuItem value='2 Twin Bed / 1 King bed'>2 Twin Bed / 1 King bed</MenuItem>
                   <MenuItem value='2 King Bed'>2 King Bed</MenuItem>
                   <MenuItem value='2 Single Bed'>2 Single Bed</MenuItem>
                 </MuiSelect>
                 </Stack>
                 </Stack>
                 </Stack>
-                <Stack justifyContent={'space-between'} direction={'row'} gap={2} > 
-                <Stack width={'100%'} maxWidth={'50%'}>
-                <FormControl>
-  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
-  <RadioGroup
-      aria-labelledby="demo-radio-buttons-group-label"
-      defaultValue={room.var1}
-      name={`var1_${index}`} // Add index to make the name unique for each room
-      onChange={(e) => handleRoomChange(index, 'var1', e.target.value)} // Update the onChange handler
-    >
+                <Stack justifyContent={'space-between'} direction={'row'} gap={2}>
+  <Stack width={'100%'} maxWidth={'50%'}>
+    <FormControl key={index}>
+      <RadioGroup
+        aria-labelledby={`demo-radio-buttons-group-label-${index}`}
+        value={room.var1}
+        name={`var1_${index}`}
+        onChange={(e) => handleRoomChange(index, 'var1', e.target.value)}
+      >
+        <FormControlLabel
+          value="false"
+          control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+          label={<CustomLabel icon={<Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#6E6C6C' }} />} text="Tidak ada Balkon" />}
+          sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
+        />
+        <FormControlLabel
+          value="true"
+          control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+          label={<CustomLabel icon={<Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#FF010C' }} />} text="Ada Balkon" />}
+          sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
+        />
+      </RadioGroup>
+    </FormControl>
+  </Stack>
+  <Stack width={'100%'} maxWidth={'50%'}>
+    <FormControl>
+      <RadioGroup
+        aria-labelledby="demo-radio-buttons-group-label"
+        value={room.var2} // Use value instead of defaultValue
+        name={`var2_${index}`}
+        onChange={(e) => handleRoomChange(index, 'var2', e.target.value)}
+      >
+        <FormControlLabel
+          value="false"
+          control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+          label={<CustomLabel icon={<Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#6E6C6C' }} />} text="Tidak termasuk Sarapan" />}
+          sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
+        />
+        <FormControlLabel
+          value="true"
+          control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
+          label={<CustomLabel icon={<Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#FF010C' }} />} text="Termasuk Sarapan" />}
+          sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
+        />
+      </RadioGroup>
+    </FormControl>
+  </Stack>
+</Stack>
 
-    <FormControlLabel value="false" 
-   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
-   label={<CustomLabel icon={ <Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#6E6C6C' }} />
-  } text="Tidak ada Balkon" />}
-   sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
- />
- <FormControlLabel value="true" 
-   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
-   label={<CustomLabel icon={ <Icon icon="material-symbols:balcony-rounded" width="40" height="40" style={{ color: '#FF010C' }} />
-  } text="Ada Balkon" />}
-   sx={{ '& .MuiFormControlLabel-label': { fontSize: 22, fontWeight: 400 } }}
- />
-  </RadioGroup>
-  </FormControl>
-                </Stack>
-                <Stack width={'100%'} maxWidth={'50%'}>
-                <FormControl>
-  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
-  <RadioGroup
-      aria-labelledby="demo-radio-buttons-group-label"
-      defaultValue={room.var2}
-      name={`var2_${index}`} // Add index to make the name unique for each room
-      onChange={(e) => handleRoomChange(index, 'var2', e.target.value)} // Update the onChange handler
-    >
-
-    <FormControlLabel value="false" 
-   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
-   label={<CustomLabel icon={ <Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#6E6C6C' }} />
-  } text="Tidak termasuk Sarapan" />}
-   sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
- />
- <FormControlLabel value="true" 
-   control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 50, color:'#04214C' } }} />}
-   label={<CustomLabel icon={ <Icon icon="mingcute:fork-spoon-fill" width="40" height="40" style={{ color: '#FF010C' }} />
-  } text="Termasuk Sarapan" />}
-   sx={{ '& .MuiFormControlLabel-label': { fontSize: 18, fontWeight: 400 } }}
- />
-  </RadioGroup>
-  </FormControl>
-  
-                </Stack>
-                </Stack>
                 <Stack alignItems="flex-start">
         <Button
           type="button"

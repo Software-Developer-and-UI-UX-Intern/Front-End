@@ -90,30 +90,39 @@ export default function Register() {
   const [gambar3, setGambar3] = useState('');
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const files = e.target.files;
+    const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+    if (files && files.length && files[0].size > maxFileSize) {
+        alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+        // Clear the file input to cancel the upload
+        e.target.value = '';
+        return;
+    }
+
     if (files?.length) {
-      setGambarFiles(prevFiles => {
-        const newFiles = [...prevFiles];
-        newFiles[index - 1] = files[0]; // Index is 1-based, so subtract 1
-        return newFiles;
-      });
+        setGambarFiles(prevFiles => {
+            const newFiles = [...prevFiles];
+            newFiles[index - 1] = files[0]; // Index is 1-based, so subtract 1
+            return newFiles;
+        });
     }
     if (files) {
-  switch (index) {
-    case 1:
-      setGambar1(URL.createObjectURL(files[0]));
-      break;
-    case 2:
-      setGambar2(URL.createObjectURL(files[0]));
-      break;
-    case 3:
-      setGambar3(URL.createObjectURL(files[0]));
-      break;
-    default:
-      break;
-  }
-}
-    
-  };
+        switch (index) {
+            case 1:
+                setGambar1(URL.createObjectURL(files[0]));
+                break;
+            case 2:
+                setGambar2(URL.createObjectURL(files[0]));
+                break;
+            case 3:
+                setGambar3(URL.createObjectURL(files[0]));
+                break;
+            default:
+                break;
+        }
+    }
+};
+
 
   useEffect(() => {
     const fetchRestoranData = async () => {

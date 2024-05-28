@@ -214,12 +214,20 @@ export default function Register() {
     newKamar.splice(index, 1);
     setKamar(newKamar);
   };
-  const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
+    const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+    if (file && file.size > maxFileSize) {
+        alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+        // Clear the file input to cancel the upload
+        e.target.value = '';
+        return;
+    }
+
     if (file) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-
         reader.onload = () => {
             setKamar(prevKamar => {
                 const newKamar = [...prevKamar];
@@ -233,39 +241,60 @@ export default function Register() {
     }
 };
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0];
-    if (file) {
+
+const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const file = e.target.files?.[0];
+  const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+  if (file && file.size > maxFileSize) {
+      alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+      // Clear the file input to cancel the upload
+      e.target.value = '';
+      return;
+  }
+
+  if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-  
+
       // Create a closure to capture the current index
       reader.onload = () => {
-        const newGambarHotel = [...gambarhotel];
-        const nama = file.name; // Customize this based on your requirements
-        newGambarHotel[index] = { nama, url: reader.result as string }; // Replace the old image at the correct index
-        setGambarHotel(newGambarHotel);
-        console.log(index)
+          const newGambarHotel = [...gambarhotel];
+          const nama = file.name; // Customize this based on your requirements
+          newGambarHotel[index] = { nama, url: reader.result as string }; // Replace the old image at the correct index
+          setGambarHotel(newGambarHotel);
+          console.log(index)
       };
-    }
-  };
-  const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const file = e.target.files?.[0];
-    if (file) {
+  }
+};
+
+const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const file = e.target.files?.[0];
+  const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
+
+  if (file && file.size > maxFileSize) {
+      alert('File size exceeds the maximum allowed limit of 7 MB. Please choose a smaller file.');
+      // Clear the file input to cancel the upload
+      e.target.value = '';
+      return;
+  }
+
+  if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const newFasilitas = [...datafasilitas];
-        const nama = file.name; // You can customize this based on your requirements
-        newFasilitas[index] = { nama, gambar_url: reader.result as string }; // Replace the old image
-        setFasilitas(newFasilitas);
+          const newFasilitas = [...datafasilitas];
+          const nama = file.name; // Customize this based on your requirements
+          newFasilitas[index] = { nama, gambar_url: reader.result as string }; // Replace the old image
+          setFasilitas(newFasilitas);
       };
-    }
-  };
+  }
+};
+
 
   useEffect(() => {
     const fetchRestoranData = async () => {
-      const { nama } = location.state;
+      const { nama } = location.state || {};
   
       try {
         const response = await fetch(`https://tripselbe.fly.dev/hotels/${nama}`);
@@ -532,13 +561,13 @@ const deleteFasilitas = async (hotelName: string) => {
       throw new Error(`Failed to fetch image ${image.nama}: ${imageResponse.status}`);
     }
     const blob = await imageResponse.blob();
-    const formData = new FormData();
-    formData.append('file', blob);
-    formData.append('upload_preset', 'ml_default');
+    const gambarbaru = new FormData();
+    gambarbaru.append('file', blob);
+    gambarbaru.append('upload_preset', 'ml_default');
   
     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
       method: 'POST',
-      body: formData,
+      body: gambarbaru,
     });
   
     if (!cloudinaryResponse.ok) {
@@ -572,6 +601,8 @@ const deleteFasilitas = async (hotelName: string) => {
   const uploadImagesToCloudinaryKamar = async (kamarList: Kamar[], hotelName: string) => {
     try {
         // Delete existing images first
+        console.log(kamarList)
+
         try {
             await deleteKamarImages(hotelName);
         } catch (error) {
@@ -587,13 +618,13 @@ const deleteFasilitas = async (hotelName: string) => {
                         throw new Error(`Failed to fetch image ${index}: ${response.status}`);
                     }
                     const blob = await response.blob();
-                    const formData = new FormData();
-                    formData.append('file', blob);
-                    formData.append('upload_preset', 'ml_default');
+                    const gambarbaru = new FormData();
+                    gambarbaru.append('file', blob);
+                    gambarbaru.append('upload_preset', 'ml_default');
 
                     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
                         method: 'POST',
-                        body: formData,
+                        body: gambarbaru,
                     });
 
                     if (!cloudinaryResponse.ok) {
@@ -650,13 +681,13 @@ const deleteFasilitas = async (hotelName: string) => {
               throw new Error(`Failed to fetch image ${index}: ${imageResponse.status}`);
             }
             const blob = await imageResponse.blob();
-            const formData = new FormData();
-            formData.append('file', blob);
-            formData.append('upload_preset', 'ml_default');
+            const gambarbaru = new FormData();
+            gambarbaru.append('file', blob);
+            gambarbaru.append('upload_preset', 'ml_default');
   
             const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
               method: 'POST',
-              body: formData,
+              body: gambarbaru,
             });
   
             if (!cloudinaryResponse.ok) {
@@ -695,8 +726,6 @@ const deleteFasilitas = async (hotelName: string) => {
       // Handle error...
     }
   };
-  
-  
   
   const handleCheckboxChange = (index: number) => {
     if (selectedImages.includes(index)) {
@@ -890,6 +919,8 @@ const deleteFasilitas = async (hotelName: string) => {
                 <MenuItem value={formData.lokasi}>
                     <em>{formData.lokasi}</em>
                   </MenuItem>                  
+                  <MenuItem value={'Gianyar'}>Gianyar</MenuItem>
+                                    <MenuItem value={'Buleleng'}>Buleleng</MenuItem>
                   <MenuItem value={'Nusa Dua'}>Nusa Dua</MenuItem>
                   <MenuItem value={'kuta'}>Kuta</MenuItem>
                   <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
@@ -1071,14 +1102,14 @@ const deleteFasilitas = async (hotelName: string) => {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nama kamar"
+                  placeholder="Ukuran kamar"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   onChange={(e) => handleRoomChange(index, 'ukuran', e.target.value)}
                   inputProps={{
                     'aria-label': 'Nama Restoran',
                     name: 'Ukuran',
-                    value: `${room.ukuran} m²`
+                    value: room.ukuran
                     // onChange: (e) => setFormData({ ...formData, nama: (e.target as HTMLInputElement).value }),
                   }}
                 />
@@ -1225,11 +1256,15 @@ const deleteFasilitas = async (hotelName: string) => {
                   onChange={(e) => handleRoomChange(index, 'bed', e.target.value)}
                 >
                   <MenuItem value='King Bed'>King Bed</MenuItem>
+                  <MenuItem value='King Twin'>King Twin</MenuItem>
+
+                  <MenuItem value='2 Queen bed'>2 Queen bed</MenuItem>
                   <MenuItem value='Queen bed'>Queen bed</MenuItem>
                   <MenuItem value='Twin Bed'>Twin Bed</MenuItem>
                   <MenuItem value='Single bed'>Queen bed</MenuItem>
                   <MenuItem value='King Bed / 2 Single Bed'>King Bed / 2 Single Bed</MenuItem>
                   <MenuItem value='King Bed / Twin Bed'>King Bed / Twin Bed</MenuItem>
+                  <MenuItem value='2 Twin Bed / 1 King bed'>2 Twin Bed / 1 King bed</MenuItem>
                   <MenuItem value='2 King Bed'>2 King Bed</MenuItem>
                   <MenuItem value='2 Single Bed'>2 Single Bed</MenuItem>
                 </MuiSelect>
