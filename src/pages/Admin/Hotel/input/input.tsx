@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
@@ -290,7 +290,36 @@ const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, 
       };
   }
 };
+let timeoutIdKamar: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChangeKamar = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdKamar) {
+    clearTimeout(timeoutIdKamar);
+  }
+  timeoutIdKamar = setTimeout(() => {
+    handleFileInputChangeKamar(e, index);
+  }, 500); // Adjust the delay as needed
+};
 
+// Debounced version of handleFileInputChangeFasilitas
+let timeoutIdFasilitas: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChangeFasilitas = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdFasilitas) {
+    clearTimeout(timeoutIdFasilitas);
+  }
+  timeoutIdFasilitas = setTimeout(() => {
+    handleFileInputChangeFasilitas(e, index);
+  }, 500); // Adjust the delay as needed
+};
+// Debounced version of handleFileInputChange
+let timeoutIdFileInput: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdFileInput) {
+    clearTimeout(timeoutIdFileInput);
+  }
+  timeoutIdFileInput = setTimeout(() => {
+    handleFileInputChange(e, index);
+  }, 500); // Adjust the delay as needed
+};
 
   useEffect(() => {
     const fetchRestoranData = async () => {
@@ -926,6 +955,8 @@ const deleteFasilitas = async (hotelName: string) => {
                   <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
                   <MenuItem value={'Badung'}>Badung</MenuItem>
                   <MenuItem value={'Flores'}>Flores</MenuItem>
+                  <MenuItem value={'Kupang'}>Kupang</MenuItem>
+                  <MenuItem value={'Mataram'}>Mataram</MenuItem>
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,
@@ -1171,7 +1202,7 @@ const deleteFasilitas = async (hotelName: string) => {
         type="file"
         id={`fileInput${index}kamar`} // Adjusted index here
         style={{ display: 'none' }}
-        onChange={(e) => handleFileInputChangeKamar(e, index)} // Adjusted index here
+        onChange={(e) => debouncedHandleFileInputChangeKamar(e, index)} // Adjusted index here
       />
       <Stack
         height={'auto'}
@@ -1460,7 +1491,7 @@ const deleteFasilitas = async (hotelName: string) => {
             type="file"
             id="fileInput0"
             style={{ display: 'none' }}
-            onChange={(e) => handleFileInputChange(e, 0)}
+            onChange={(e) => debouncedHandleFileInputChange(e, 0)}
           />
         </Stack>
       </Stack>
@@ -1505,7 +1536,7 @@ const deleteFasilitas = async (hotelName: string) => {
         type="file"
         id={`fileInput${index}`} // Adjusted index here
         style={{ display: 'none' }}
-        onChange={(e) => handleFileInputChange(e, index)} // Adjusted index here
+        onChange={(e) => debouncedHandleFileInputChange(e, index)} // Adjusted index here
       />
     )}
     {isSelectionMode && (
@@ -1651,8 +1682,8 @@ const deleteFasilitas = async (hotelName: string) => {
           icon={<Icon icon="ph:trash-light" width="27" height="27" style={{ color: '#04214C' }} />}
           checkedIcon={<Icon icon="ph:trash-fill" width="27" height="27" style={{ color: '#04214C' }} />}
           checked={selectedImagesFasilitas.includes(index)}
-          onChange={() => handleCheckboxChangeFasilitas(index)}
-        />
+          onChange={(e) => debouncedHandleFileInputChangeFasilitas(e, index)} // Adjusted index here
+          />
       </Stack>
     )}
   </Stack>

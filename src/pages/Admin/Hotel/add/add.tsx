@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup } from '@mui/material';
 import { Button } from '@mui/material';
 // import { useLocation } from 'react-router-dom'; // Import the useLocation hook
@@ -133,6 +133,33 @@ const facilities = [
   { icon: 'maki:beach', label: 'Tepi Pantai' },
   { icon: 'map:spa', label: 'Spa' },
 ];
+// function useDebouncedCallback<T extends (...args: [number]) => void>(callback: T, delay: number) {
+//   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+//   const debouncedCallback = useCallback(
+//     (...args: Parameters<T>) => {
+//       if (timeoutId) {
+//         clearTimeout(timeoutId);
+//       }
+//       const id = setTimeout(() => {
+//         callback(...args);
+//       }, delay);
+//       setTimeoutId(id);
+//     },
+//     [callback, delay, timeoutId]
+//   );
+
+//   useEffect(() => {
+//     return () => {
+//       if (timeoutId) {
+//         clearTimeout(timeoutId);
+//       }
+//     };
+//   }, [timeoutId]);
+
+//   return debouncedCallback;
+// }
+
 export default function Register() {
   const [fasilitas, setFasilitasChecked] = useState<Fasilitas[]>(facilities.map(facility => ({ icon: facility.icon, nama: facility.label })));
   const handleFasilitasCheckboxChange = (index: number) => {
@@ -170,33 +197,6 @@ export default function Register() {
     fasilitas: [''],
   });
   
-  // const [selectedValue, setSelectedValue] = useState(room.var1); // Step 1: Define State
-
-  // const handleChange = (event) => { // Step 2: Update the onChange handler
-  //   setSelectedValue(event.target.value);
-  //   handleRoomChange(index, 'var1', event.target.value); // Also call handleRoomChange with updated value
-  // };
-  // Function to handle room changes
-  const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
-    const newKamar = [...kamar];
-  
-    // Convert boolean values to strings
-    const sanitizedValue = typeof value === 'boolean' ? value.toString() : value;
-  
-    newKamar[index][field] = sanitizedValue;
-  
-    // If var1 is being changed and its value becomes 'true', set var1icon to true
-    if (field === 'var1' && sanitizedValue === 'true') {
-      newKamar[index]['var1icon'] = 'true';
-    }
-  
-    // If var2 is being changed and its value becomes 'true', set var2icon to true
-    if (field === 'var2' && sanitizedValue === 'true') {
-      newKamar[index]['var2icon'] = 'true';
-    }
-  
-    setKamar(newKamar);
-  };
   const addRoom = () => {
     setKamar([
       ...kamar,
@@ -221,6 +221,27 @@ export default function Register() {
     newKamar.splice(index, 1);
     setKamar(newKamar);
   };
+  const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
+    const newKamar = [...kamar];
+  
+    // Convert boolean values to strings
+    const sanitizedValue = typeof value === 'boolean' ? value.toString() : value;
+  
+    newKamar[index][field] = sanitizedValue;
+  
+    // If var1 is being changed and its value becomes 'true', set var1icon to true
+    if (field === 'var1' && sanitizedValue === 'true') {
+      newKamar[index]['var1icon'] = 'true';
+    }
+  
+    // If var2 is being changed and its value becomes 'true', set var2icon to true
+    if (field === 'var2' && sanitizedValue === 'true') {
+      newKamar[index]['var2icon'] = 'true';
+    }
+  
+    setKamar(newKamar);
+  };
+
   const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
     const maxFileSize = 7 * 1024 * 1024; // 7 MB in bytes
@@ -298,90 +319,6 @@ const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, 
   }
 };
 
-  // useEffect(() => {
-  //   const fetchRestoranData = async () => {
-  //     const { nama } = location.state;
-  
-  //     try {
-  //       const response = await fetch(`https://tripselbe.fly.dev/hotels/${nama}`);
-  //       const restoranData = await response.json();
-  //       if (!response.ok) {
-  //         throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
-  //       }
-    // // Split the harga into hargatermurah and hargatermahal
-    // const hargaArray = restoranData.harga ? restoranData.harga.split(',') : [];
-    // const hargatermurah = hargaArray[0] || ''; // Get the smallest price
-    // const hargatermahal = hargaArray[1] || ''; // Get the largest price
-
-        // setFormData({
-        //   nama: restoranData.nama || '',
-        //   harga: restoranData.harga || '',
-        //   lokasi:  restoranData.lokasi || '',
-        //   domisili: restoranData.domisili || '',
-        //   telfon: restoranData.telfon || '',
-        //   hargatermurah:  hargatermurah,
-        //   hargatermahal: hargatermahal,
-        //   jarak: restoranData.jarak || '',
-        //   alamat: restoranData.alamat || '',
-        //   bintang: restoranData.bintang || '',
-        //   fasilitas: restoranData.location || [''],
-
-        // });
-        // // Fetch the gambar_hotel data
-        // const imagesResponse = await fetch(`https://tripselbe.fly.dev/hotel-images/${nama}`);
-        // const imagesData = await imagesResponse.json();
-        // if (Array.isArray(imagesData) && imagesData.length > 0) {
-        //   setGambarHotel(imagesData);
-        // }
-        //   // Fetch the kamar data
-        //   const imagesResponse2 = await fetch(`https://tripselbe.fly.dev/hotel-kamar/${nama}`);
-        //   const imagesData2 = await imagesResponse2.json();
-        //   setKamar(imagesData2);
-        // // Fetch the Fasilitas detail data
-        // const fasilitasResponse = await fetch(`https://tripselbe.fly.dev/kamar/${nama}`);
-        // const fasilitasData = await fasilitasResponse.json();
-        // setFasilitas(Array.isArray(fasilitasData) ? fasilitasData : []);
-
-        // // fetch fasilitas checkbox data
-        // const fasilitasResponse2 = await fetch(`https://tripselbe.fly.dev/hotel-fasilitas/${nama}`);
-        // const fasilitasData2 = await fasilitasResponse2.json();
-        
-        // const initialCheckedFacilities = fasilitasData2.map((f: Fasilitas) => ({ icon: f.icon, nama: f.nama }));
-        // setFasilitasChecked(initialCheckedFacilities);
-  //     } catch (error) {
-  //       console.error('Error fetching kamar data:', error);
-  //     }
-  //   };
-  //   fetchRestoranData();
-  // }, [location]);
-  // const gambarhotelout = () => {
-  //   console.log(gambarhotel)
-  // };
-//   const addKamarData = async () => {
-//     try {
-//         // Iterate through each room (kamar) and add it to the database
-//         await Promise.all(
-//             kamar.map(async (kamar) => {
-//                 const response = await fetch('https://tripselbe.fly.dev/hotel-kamar', {
-//                     method: 'POST',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                     body: JSON.stringify(kamar), // Send each room separately in the body
-//                 });
-
-//                 if (!response.ok) {
-//                     const errorMessage = await response.text();
-//                     throw new Error(`Failed to add kamar data: ${response.status}: ${errorMessage}`);
-//                 }
-//             })
-//         );
-//     } catch (error) {
-//         console.error('Error adding kamar data:', error);
-//         throw error;
-//     }
-// };
-
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
@@ -416,6 +353,63 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       console.error('Error updating hotel information:', error);
     }
 };
+
+
+  // // Debounce the handleFileInputChangeKamar function with a delay of 500ms
+  // const debouncedHandleFileInputChangeKamar = useDebouncedCallback(handleFileInputChangeKamar, 500);
+
+  // // Debounce the handleFileInputChange function with a delay of 500ms
+  // const debouncedHandleFileInputChange = useDebouncedCallback(handleFileInputChange, 500);
+
+  // // Debounce the handleFileInputChangeFasilitas function with a delay of 500ms
+  // const debouncedHandleFileInputChangeFasilitas = useDebouncedCallback(handleFileInputChangeFasilitas, 500);
+
+  // // Debounce the handleSubmit function with a delay of 500ms
+  // const debouncedHandleSubmit = useDebouncedCallback(handleSubmit, 500);
+// Debounced version of handleFileInputChangeKamar
+let timeoutIdKamar: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChangeKamar = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdKamar) {
+    clearTimeout(timeoutIdKamar);
+  }
+  timeoutIdKamar = setTimeout(() => {
+    handleFileInputChangeKamar(e, index);
+  }, 500); // Adjust the delay as needed
+};
+
+// Debounced version of handleFileInputChangeFasilitas
+let timeoutIdFasilitas: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChangeFasilitas = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdFasilitas) {
+    clearTimeout(timeoutIdFasilitas);
+  }
+  timeoutIdFasilitas = setTimeout(() => {
+    handleFileInputChangeFasilitas(e, index);
+  }, 500); // Adjust the delay as needed
+};
+// Debounced version of handleFileInputChange
+let timeoutIdFileInput: NodeJS.Timeout | null = null;
+const debouncedHandleFileInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  if (timeoutIdFileInput) {
+    clearTimeout(timeoutIdFileInput);
+  }
+  timeoutIdFileInput = setTimeout(() => {
+    handleFileInputChange(e, index);
+  }, 500); // Adjust the delay as needed
+};
+
+// Debounced version of handleSubmit
+// let timeoutIdSubmit: NodeJS.Timeout | null = null;
+// const debouncedHandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+//   if (timeoutIdSubmit) {
+//     clearTimeout(timeoutIdSubmit);
+//   }
+//   timeoutIdSubmit = setTimeout(() => {
+//     handleSubmit(e);
+//   }, 500); // Adjust the delay as needed
+// };
+
+
 
 const deleteFasilitas = async (hotelName: string) => {
   try {
@@ -540,14 +534,14 @@ const deleteFasilitas = async (hotelName: string) => {
       const thumbnailIndex = images.findIndex(image => image.nama === 'thumbnail');
       if (thumbnailIndex !== -1) {
         const thumbnailImage = images.splice(thumbnailIndex, 1)[0];
-        await uploadImage(thumbnailImage);
+        await uploadImage(thumbnailImage,hotelName);
       }
   
       // Upload other images
       await Promise.all(
         images.map(async (image) => {
           try {
-            await uploadImage(image);
+            await uploadImage(image,hotelName);
           } catch (error) {
             console.error(`Error uploading and storing image ${image.nama}:`, error);
             // Handle error...
@@ -560,7 +554,7 @@ const deleteFasilitas = async (hotelName: string) => {
     }
   };
   
-  const uploadImage = async (image: Gambar_hotel) => {
+  const uploadImage = async (image: Gambar_hotel, hotelName: string) => {
     // Upload the image to Cloudinary
     const imageResponse = await fetch(image.url);
     if (!imageResponse.ok) {
@@ -592,7 +586,7 @@ const deleteFasilitas = async (hotelName: string) => {
       body: JSON.stringify({
         nama: image.nama,
         url: imageUrl,
-        // hotel_name: hotelName,
+        hotel_name: hotelName,
       }),
     });
   
@@ -607,6 +601,8 @@ const deleteFasilitas = async (hotelName: string) => {
   const uploadImagesToCloudinaryKamar = async (kamarList: Kamar[], hotelName: string) => {
     try {
         // Delete existing images first
+        console.log(kamarList)
+
         try {
             await deleteKamarImages(hotelName);
         } catch (error) {
@@ -618,7 +614,6 @@ const deleteFasilitas = async (hotelName: string) => {
             kamarList.map(async (kamar, index) => {
                 try {
                     const response = await fetch(kamar.gambar);
-                    console.log(kamar.gambar)
                     if (!response.ok) {
                         throw new Error(`Failed to fetch image ${index}: ${response.status}`);
                     }
@@ -626,7 +621,7 @@ const deleteFasilitas = async (hotelName: string) => {
                     const gambarbaru = new FormData();
                     gambarbaru.append('file', blob);
                     gambarbaru.append('upload_preset', 'ml_default');
-    
+
                     const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
                         method: 'POST',
                         body: gambarbaru,
@@ -638,6 +633,7 @@ const deleteFasilitas = async (hotelName: string) => {
 
                     const cloudinaryData = await cloudinaryResponse.json();
                     const imageUrl = cloudinaryData.secure_url;
+
                     // Store image URL in the database
                     const storeResponse = await fetch('https://tripselbe.fly.dev/hotel-kamar', {
                         method: 'POST',
@@ -647,17 +643,7 @@ const deleteFasilitas = async (hotelName: string) => {
                         body: JSON.stringify({
                             ...kamar,
                             gambar: imageUrl,
-                            nama: kamar.nama,
-                            ukuran: kamar.ukuran,
-                            ac_up: kamar.ac_up,
-                            bed: kamar.bed,
-                            tamu: kamar.tamu,
-                            harga: kamar.harga,
-                            hotel_nama: kamar.hotel_nama,
-                            var1: kamar.var1,
-                            var2: kamar.var2,
-                            var1icon: kamar.var1icon,
-                            var2icon: kamar.var2icon,
+                            hotel_nama: hotelName, // Ensure to send hotel name
                         }),
                     });
 
@@ -675,6 +661,7 @@ const deleteFasilitas = async (hotelName: string) => {
         console.error('Error uploading images:', error);
     }
 };
+
 
   const uploadImagesToCloudinaryFasilitas = async (images: Gambar_fasilitas[], fasilitasName: string) => {
     try {
@@ -720,6 +707,7 @@ const deleteFasilitas = async (hotelName: string) => {
               body: JSON.stringify({
                 nama: image.nama,
                 gambar_url: imageUrl,
+                hotel_nama: fasilitasName,
               }),
             });
   
@@ -941,6 +929,8 @@ const deleteFasilitas = async (hotelName: string) => {
                   <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
                   <MenuItem value={'Badung'}>Badung</MenuItem>
                   <MenuItem value={'Flores'}>Flores</MenuItem>
+                  <MenuItem value={'Kupang'}>Kupang</MenuItem>
+                  <MenuItem value={'Mataram'}>Mataram</MenuItem>
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,
@@ -1187,7 +1177,7 @@ const deleteFasilitas = async (hotelName: string) => {
         type="file"
         id={`fileInput${index}kamar`} // Adjusted index here
         style={{ display: 'none' }}
-        onChange={(e) => handleFileInputChangeKamar(e, index)} // Adjusted index here
+        onChange={(e) => debouncedHandleFileInputChangeKamar(e, index)} // Adjusted index here
       />
       <Stack
         height={'auto'}
@@ -1472,7 +1462,7 @@ const deleteFasilitas = async (hotelName: string) => {
             type="file"
             id="fileInput0"
             style={{ display: 'none' }}
-            onChange={(e) => handleFileInputChange(e, 0)}
+            onChange={(e) => debouncedHandleFileInputChange(e, 0)}
           />
         </Stack>
       </Stack>
@@ -1517,7 +1507,7 @@ const deleteFasilitas = async (hotelName: string) => {
         type="file"
         id={`fileInput${index}`} // Adjusted index here
         style={{ display: 'none' }}
-        onChange={(e) => handleFileInputChange(e, index)} // Adjusted index here
+        onChange={(e) => debouncedHandleFileInputChange(e, index)} // Adjusted index here
       />
     )}
     {isSelectionMode && (
@@ -1648,7 +1638,7 @@ const deleteFasilitas = async (hotelName: string) => {
         type="file"
         id={`fileInput${index}fasilitas`} // Adjusted index here
         style={{ display: 'none' }}
-        onChange={(e) => handleFileInputChangeFasilitas(e, index)} // Adjusted index here
+        onChange={(e) => debouncedHandleFileInputChangeFasilitas(e, index)} // Adjusted index here
       />
     )}
     {isSelectionModeFasilitas && (
