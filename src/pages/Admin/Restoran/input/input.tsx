@@ -475,8 +475,8 @@ export default function Register() {
                   <MenuItem value={formData.halal}>
                     <em>{formData.halal}</em>
                   </MenuItem>
-                  <MenuItem value='Halal'>Halal</MenuItem>
-                  <MenuItem value='Non Halal'>Non Halal</MenuItem>
+                  <MenuItem value='true'>Halal</MenuItem>
+                  <MenuItem value='false'>Non Halal</MenuItem>
                 </MuiSelect>
                 </Stack>
                 <Stack maxWidth={'50%'}>
