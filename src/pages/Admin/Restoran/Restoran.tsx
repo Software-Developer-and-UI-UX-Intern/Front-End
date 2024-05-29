@@ -222,7 +222,7 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {restoran.location && (restoran.location.length > 22 ? restoran.location.slice(0, 22) + '...' : `${restoran.location} menit`)}
+          {restoran.location && (restoran.location.length > 22 ? restoran.location.slice(0, 22) + '...' : `${restoran.location} km`)}
         </Typography>
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>

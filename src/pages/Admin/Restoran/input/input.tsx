@@ -489,7 +489,7 @@ export default function Register() {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Dalam menit"
+                  placeholder="Dalam km"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{

@@ -138,7 +138,7 @@ export default function DragableAlamat() {
             borderRadius: '50px 0px'
           }}>
             <Typography fontSize={'32px'} fontWeight={500} color={'white'} sx={{ marginTop: 33, marginLeft: 3 }}>
-              {address.jarak}
+              {address.jarak} km dari TSO Renon, Bali
             </Typography>
           </Stack>
           <Typography fontSize={'28px'} fontWeight={600} color={'#04214C'}>

@@ -30,7 +30,7 @@ overflow:'auto'
           background:'linear-gradient(90deg, #04214C 25.42%, rgba(4, 33, 76, 0.00) 100%)',
           justifyContent:'center',
         }}>
-          <Typography color={'white'} fontSize={'32px'} fontWeight={500} paddingLeft={'53px'} >{location} menit dari TSO {domisili}</Typography>
+          <Typography color={'white'} fontSize={'32px'} fontWeight={500} paddingLeft={'53px'} >{location} km dari TSO {domisili}</Typography>
           </Stack>
         </Stack>
       </Stack>

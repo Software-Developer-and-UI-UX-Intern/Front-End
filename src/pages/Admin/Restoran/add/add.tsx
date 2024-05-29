@@ -483,14 +483,14 @@ export default function Register() {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Dalam menit"
+                  placeholder="Dalam km"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
                     'aria-label': 'Jarak',
                     name: 'jarak',
-                    value: formData.jarak,
-                    onChange: (e) => setFormData({ ...formData, jarak: (e.target as HTMLInputElement).value }),
+                    value: formData.location,
+                    onChange: (e) => setFormData({ ...formData, location: (e.target as HTMLInputElement).value }),
                   }}
                 />
                 </Stack>
