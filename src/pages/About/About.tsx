@@ -227,7 +227,7 @@ export default function Oleh() {
             }}
           >
             <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
-              {`Tiket Masuk : ${data.tiket_masuk || 'Loading...'}`}
+            {`Tiket Masuk : ${data.tiket_masuk ? 'Rp' + data.tiket_masuk.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : 'Loading...'}`}
             </Typography>
           </Stack>
           <Stack
@@ -246,7 +246,7 @@ export default function Oleh() {
             }}
           >
             <Typography noWrap fontSize={'24px'} sx={{ fontFamily: 'Poppins', fontWeight: 600 }}>
-              {`Parkir : ${data.parkir || 'Loading...'}`}
+            {`Parkir : ${data.parkir ? 'Rp' + data.parkir.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : 'Loading...'}`}
             </Typography>
           </Stack>
         </Stack>

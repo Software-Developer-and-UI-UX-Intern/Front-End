@@ -36,7 +36,7 @@ const Oleh = () => {
         setIsLoading(true);
         const response = await fetch('https://tripselbe.fly.dev/oleh');
         const data: OlehDataItem[] = await response.json();
-        const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'flores');
+        const filteredData: OlehDataItem[] = data.filter(item => item.domisili.toLowerCase() === 'kupang');
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
           imageSrc: item.gambar_url1 || item.gambar_url2 || item.gambar_url3 || '',
           textContent: item.nama,

@@ -89,6 +89,7 @@ export default function Register() {
     jarak: '',
     hargatermurah:'',
     hargatermahal:'',
+    harga:'',
     
   });
   const [addresses, setAddress] = useState<Address[]>([]);
@@ -376,9 +377,18 @@ export default function Register() {
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
-        const hargaArray = restoranData.harga ?  restoranData.harga.replace(/[^0-9,-]+/g, '').split('-').map((harga: string) => harga.trim()) :[];
-        const hargatermurah = hargaArray[0] || ''; // Get the smallest price
-        const hargatermahal = hargaArray[1] || ''; // Get the largest price
+     // Clean and split the price range
+  const hargaArray = restoranData.parkir
+  ? restoranData.parkir
+      .replace(/Rp\s*/gi, '') // Remove "Rp" prefix and spaces
+      .split('-') // Split by hyphen
+      .map((harga: string) => harga.trim().replace(/[^0-9]+/g, '')) // Trim and keep only digits
+  : [];
+console.log(hargaArray)
+// Extract the smallest and largest prices
+const hargatermurah = hargaArray[0] || ''; // Smallest price
+const hargatermahal = hargaArray[1] || ''; // Largest price
+
         setFormData({
           nama: restoranData.nama || '',
           gambar_url1: restoranData.gambar_url1 || '',
@@ -392,6 +402,7 @@ export default function Register() {
           jarak: restoranData.jarak || '',
           hargatermahal:hargatermahal ||'',
           hargatermurah:hargatermurah||'',
+          harga: restoranData.harga ||'',
         });
         // const fetchedAddresses = await getAddresses(restoranData.nama);
         // setAddress(fetchedAddresses);

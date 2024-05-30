@@ -20,16 +20,28 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (Data) {
-      setGridData(Data);
-    } else if (backendLink) {
-      fetch(backendLink)
-        .then(response => response.json())
-        .then((data: OrangewithimageProps[]) => setGridData(data))
-        .catch(error => console.error('Error fetching data:', error));
-    }
+    const fetchData = async () => {
+      if (Data) {
+        setAndSortGridData(Data);
+      } else if (backendLink) {
+        try {
+          const response = await fetch(backendLink);
+          const data: OrangewithimageProps[] = await response.json();
+          setAndSortGridData(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
   }, [backendLink, Data]);
 
+  const setAndSortGridData = (data: OrangewithimageProps[]) => {
+    // Sort the data based on the location property parsed as a number
+    const sortedData = data.sort((a, b) => parseFloat(a.location) - parseFloat(b.location));
+    setGridData(sortedData);
+  };
   const handleItemClick = (textContent: string) => {
     navigate(`/cari-restoran?kesiniyuk=${encodeURIComponent(textContent)}`);
   };

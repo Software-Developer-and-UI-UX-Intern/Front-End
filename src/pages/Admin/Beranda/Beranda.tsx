@@ -830,13 +830,13 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
   
                 <Input
                   disableUnderline
-                  placeholder="Link alamat hotel"
+                  placeholder="Link youtube"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   onChange={(e) => handleYoutubeChange(e.target.value, index)}
                   inputProps={{
                     'aria-label': 'Nomor Telfon',
-                    name: 'Telfon',
+                    name: 'url',
                     value: hotel.url,
                   }}
                 />

@@ -20,16 +20,28 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   const navigate = useNavigate(); // Initialize useHistory
 
   useEffect(() => {
-    if (Data) {
-      setGridData(Data);
-    } else if (backendLink) {
-      fetch(backendLink)
-        .then(response => response.json())
-        .then((data: OrangewithimageProps[]) => setGridData(data))
-        .catch(error => console.error('Error fetching data:', error));
-    }
+    const fetchData = async () => {
+      if (Data) {
+        setAndSortGridData(Data);
+      } else if (backendLink) {
+        try {
+          const response = await fetch(backendLink);
+          const data: OrangewithimageProps[] = await response.json();
+          setAndSortGridData(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
   }, [backendLink, Data]);
 
+  const setAndSortGridData = (data: OrangewithimageProps[]) => {
+    // Sort the data based on the jarak property parsed as a number
+    const sortedData = data.sort((a, b) => parseFloat(a.jarak) - parseFloat(b.jarak));
+    setGridData(sortedData);
+  };
   // Function to handle click event
   const handleItemClick = (textContent: string) => {
     // Use useHistory to navigate to the specified path
