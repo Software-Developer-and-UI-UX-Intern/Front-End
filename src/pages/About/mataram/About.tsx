@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/about/mataram/header.jpg';
-import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+// import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import nusapenida from '../../../assets/about/mataram/footer.jpg'
 import '../../../assets/font/telkomselbatik.css'
@@ -101,7 +101,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
           <Balimenunggu domisili='mataram'/>
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
+        {/* <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
         <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
@@ -113,7 +113,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
             Area Populer
           </Typography>
           <RowAndColumnSpacing domisili='mataram' />
-        </Stack>
+        </Stack> */}
         </Stack>
       </Stack>
 

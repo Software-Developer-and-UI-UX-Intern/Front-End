@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/about/kupang/header.png';
-import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+// import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import nusapenida from '../../../assets/about/kupang/footer.png'
 import '../../../assets/font/telkomselbatik.css'
@@ -99,7 +99,7 @@ Apakah T-Flyers sudah siap mengunjungi Kupang? Ayo jelajahi tempat-tempat khusus
           <Balimenunggu domisili='kupang'/>
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
+        {/* <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
         <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
@@ -111,7 +111,7 @@ Apakah T-Flyers sudah siap mengunjungi Kupang? Ayo jelajahi tempat-tempat khusus
             Area Populer
           </Typography>
           <RowAndColumnSpacing domisili='kupang' />
-        </Stack>
+        </Stack> */}
         </Stack>
       </Stack>
 

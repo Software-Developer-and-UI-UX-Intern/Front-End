@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
-import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+// import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import pinkbawah from '../../../assets/about/flores/pinkzoomair.png'
 import pinkatas from '../../../assets/about/flores/pinkorang.png'
@@ -100,7 +100,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
           </Typography>
           <Balimenunggu domisili='flores'/>
         </Stack>
-
+{/* 
         <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'}>
         <Typography sx={{
             fontWeight: 700,
@@ -113,7 +113,7 @@ Jangan lupa mencicipi makanan lezat Flores seperti ikan bakar dan jajanan tradis
             Area Populer
           </Typography>
           <RowAndColumnSpacing domisili='flores' />
-        </Stack>
+        </Stack> */}
         </Stack>
       </Stack>
 

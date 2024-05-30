@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import bali from '../../../assets/aboutbali.jpg';
-import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+// import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
 import '../../../assets/font/telkomselbatik.css'
@@ -102,7 +102,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
           <Balimenunggu domisili='bali'/>
         </Stack>
 
-        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
+        {/* <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
         <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
@@ -114,7 +114,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
             Area Populer
           </Typography>
           <RowAndColumnSpacing domisili='bali' />
-        </Stack>
+        </Stack> */}
         </Stack>
       </Stack>
 
