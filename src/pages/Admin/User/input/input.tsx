@@ -151,7 +151,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama User
+                Nama User
                 </Typography>
                 <Input
                   disableUnderline
@@ -272,7 +272,7 @@ export default function Register() {
                 </Typography>
                 <Input
                   disableUnderline
-                  placeholder="Nomor Telfon"
+                  placeholder="NIK"
                   style={{ fontSize: '22px', color: '#04214C' }}
                   sx={customInputStyle}
                   inputProps={{
@@ -358,11 +358,11 @@ export default function Register() {
                     },
                   }}
                   name="domisili"
-                  value={formData.domisili}
-                  onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 >
-                  <MenuItem value={formData.domisili}>
-                    <em>{formData.domisili}</em>
+                  <MenuItem value={formData.status}>
+                    <em>{formData.status}</em>
                   </MenuItem>
                   <MenuItem value='Guest'>Guest</MenuItem>
                   <MenuItem value='User'>User</MenuItem>
