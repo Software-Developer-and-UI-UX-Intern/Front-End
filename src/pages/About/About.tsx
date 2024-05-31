@@ -12,6 +12,7 @@ interface OlehData {
   domisili: string;
   alamat_gbr:string;
   alamat_url:string;
+  youtube_url:string;
 }
 
 export default function Oleh() {
@@ -256,6 +257,7 @@ export default function Oleh() {
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'}>
           Alamat
         </Typography>
+        
         <Stack width={'100%'} height={'600px'} className='loading' sx={{
            backgroundSize: 'cover',
            backgroundRepeat: 'no-repeat',
@@ -264,6 +266,29 @@ export default function Oleh() {
           <iframe src={data.alamat_url}
            width="100%" height="100%" className='loading' frameBorder={'0px'} style={{borderRadius:'0px 40px'}}></iframe>
         </Stack>
+        {data.youtube_url &&(
+          <Stack direction={'column'}>
+        <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'}>
+          Youtube
+        </Typography>
+        <Stack width={'100%'} height={'600px'} className='loading' sx={{
+           backgroundSize: 'cover',
+           backgroundRepeat: 'no-repeat',
+           borderRadius: '0px 40px',
+        }}>
+          <iframe
+                            width="100%"
+                            height="100%"
+                            src={data.youtube_url}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            style={{ borderRadius: '0px 40px' }}
+                        ></iframe>
+        </Stack>
+        </Stack>
+        )}
       </Stack>
     </Stack>
   );

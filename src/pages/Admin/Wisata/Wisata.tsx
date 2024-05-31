@@ -17,6 +17,7 @@ interface Restoran {
   gambar_url3: string;
   link_menu: string;
   alamat_url: string;
+  youtube_url:string;
 }
 
 export default function RestoranPage() {
@@ -88,7 +89,7 @@ export default function RestoranPage() {
       </Stack>
       
       <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
-  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 10) + 100px)'} height={'auto'}  borderRadius={'30px 30px 0 0'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 11) + 100px)'} height={'auto'}  borderRadius={'30px 30px 0 0'}>
     
     {/* header container with horizontal scroll */}
     <Stack direction={'row'} sx={{ overflowX: 'none' }}>
@@ -124,6 +125,9 @@ export default function RestoranPage() {
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Gambar 3</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Youtube</Typography>
       </Stack>
     </Stack>
     
@@ -240,6 +244,11 @@ export default function RestoranPage() {
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
           {restoran.gambar_url3 && (restoran.gambar_url3.length > 22 ? restoran.gambar_url3.slice(0, 22) + '...' : restoran.gambar_url3)}
+        </Typography>
+      </Stack>
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {restoran.youtube_url && (restoran.youtube_url.length > 22 ? restoran.youtube_url.slice(0, 22) + '...' : restoran.youtube_url)}
         </Typography>
       </Stack>
     </Stack>
