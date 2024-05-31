@@ -75,6 +75,10 @@ export default function Register() {
     nama: '',
     domisili: '',
     tiket_masuk: '',
+    tikettermurah: '',
+    tikettermahal: '',
+    parkirtermurah: '',
+    parkirtermahal: '',
     parkir: '',
     description: '',
     alamat_gbr: '',
@@ -83,6 +87,7 @@ export default function Register() {
     gambar_url3: '',
     link_menu: '',
     alamat_url: '',
+    youtube_url:'',
   });
   
   const [gambarFiles, setGambarFiles] = useState<File[]>([]);
@@ -134,7 +139,20 @@ export default function Register() {
         if (!response.ok) {
           throw new Error(`Server responded with status ${response.status}: ${restoranData.error}`);
         }
-
+       // Split the harga into hargatermurah and hargatermahal
+       const hargaArray = restoranData.tiket_masuk 
+       ? restoranData.tiket_masuk.replace(/Rp\s*/gi, '').split('-').map((harga: string) => harga.trim().replace(/[^0-9]+/g, '')) 
+       : [];
+     
+       const tikettermurah = hargaArray[0] || ''; // Get the smallest price
+        const tikettermahal = hargaArray[1] || ''; // Get the largest price
+        const hargaArray2 = restoranData.parkir
+        ? restoranData.tiket_masuk.replace(/Rp\s*/gi, '').split('-').map((harga: string) => harga.trim().replace(/[^0-9]+/g, '')) 
+        : [];
+      
+        const parkirtermurah = hargaArray2[0] || ''; // Get the smallest price
+         const parkirtermahal = hargaArray2[1] || ''; // Get the largest price
+     
         setFormData({
           nama: restoranData.nama || '',
           domisili: restoranData.domisili || '',
@@ -147,6 +165,11 @@ export default function Register() {
           gambar_url3: restoranData.gambar_url3 || '',
           link_menu: restoranData.link_menu || '',
           alamat_url: restoranData.alamat_url || '',
+          youtube_url: restoranData.youtube_url || '',
+          tikettermurah:  tikettermurah,
+          tikettermahal: tikettermahal,
+          parkirtermurah:  parkirtermurah,
+          parkirtermahal: parkirtermahal,
         });
       } catch (error) {
         console.error('Error fetching restoran data:', error);
@@ -298,7 +321,7 @@ export default function Register() {
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <Stack sx={{ width: 'auto' }} spacing={10} >
-          <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
+        <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
           Tambah Data Wisata
         </Typography>
           <Stack spacing={2} maxWidth={'100%'}>
@@ -309,7 +332,7 @@ export default function Register() {
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
-                nama Wisata
+                nama Restoran
                 </Typography>
                 <Input
                   disableUnderline
@@ -325,14 +348,13 @@ export default function Register() {
                 />
 
                 <Stack direction={'row'} justifyContent={'space-between'} gap={2}>
-                <Stack maxWidth={'50%'} width={'50%'}>
+                <Stack width={'100%'} height={'100%'}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
                   color: '#04214C'
                 }}>
                   Domisili
-                  
                 </Typography>
                 <MuiSelect
                   displayEmpty
@@ -365,27 +387,12 @@ export default function Register() {
                   <MenuItem value='Mataram'>Mataram</MenuItem>
                   <MenuItem value='Flores'>Flores</MenuItem>
                 </MuiSelect>
-                <Typography sx={{
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  color: '#04214C'
-                }}>
-                Parkir
-                </Typography>
-                <Input
-                  disableUnderline
-                  placeholder="Parkir"
-                  style={{ fontSize: '22px', color: '#04214C' }}
-                  sx={customInputStyle}
-                  inputProps={{
-                    'aria-label': 'parkir',
-                    name: 'Parkir',
-                    value: formData.parkir,
-                    onChange: (e) => setFormData({ ...formData, parkir: (e.target as HTMLInputElement).value }),
-                  }}
-                />
+                
                 </Stack>
-                <Stack maxWidth={'50%'}>
+
+                </Stack>
+               
+
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -393,21 +400,158 @@ export default function Register() {
                 }}>
                 Tiket Masuk
                 </Typography>
+                <Stack direction={'row'} gap={2} >
+                <Stack direction={'row'} alignItems={'center'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
                 <Input
-                  disableUnderline
-                  placeholder="Tiket Masuk"
-                  style={{ fontSize: '22px', color: '#04214C' }}
+                disableUnderline
+                  placeholder="Termurah"
                   sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
                   inputProps={{
-                    'aria-label': 'Jarak',
-                    name: 'fullName',
-                    value: formData.tiket_masuk,
-                    onChange: (e) => setFormData({ ...formData, tiket_masuk: (e.target as HTMLInputElement).value }),
+                    'aria-label': 'Hargatermurah',
+                    name: 'email',
+                    value: formData.tikettermurah,
+                    onChange: (e) => setFormData({ ...formData, tikettermurah: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
+                  }}
+                />
+                </Stack>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  -
+                </Typography>
+                <Stack direction={'row'} alignItems={'center'}>
+                <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'30px 0 0 30px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
+                <Input
+                disableUnderline
+                  placeholder="Termahal"
+                  sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Hargatermahal',
+                    name: 'email',
+                    value: formData.tikettermahal,
+                    onChange: (e) => setFormData({ ...formData, tikettermahal: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
                   }}
                 />
                 </Stack>
                 </Stack>
 
+
+
+
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Parkir
+                </Typography>
+                <Stack direction={'row'} gap={2} >
+                <Stack direction={'row'} alignItems={'center'}>
+                  <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'20px 0 0 20px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
+                <Input
+                disableUnderline
+                  placeholder="Termurah"
+                  sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Hargatermurah',
+                    name: 'email',
+                    value: formData.parkirtermurah,
+                    onChange: (e) => setFormData({ ...formData, parkirtermurah: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
+                  }}
+                />
+                </Stack>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                  -
+                </Typography>
+                <Stack direction={'row'} alignItems={'center'}>
+                <Stack justifyContent={'center'} alignItems={'center'} height={'53px'} width={'auto'} border={'2px solid #04214C'} borderRight={'none'} borderRadius={'30px 0 0 30px'}>
+                  <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C',
+                  padding:'15px'
+                }}>
+                  Rp
+                </Typography>
+                  </Stack>
+                <Input
+                disableUnderline
+                  placeholder="Termahal"
+                  sx={customInputStyle}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Hargatermahal',
+                    name: 'email',
+                    value: formData.parkirtermahal,
+                    onChange: (e) => setFormData({ ...formData, parkirtermahal: (e.target as HTMLInputElement).value }),
+                    style: { color:'#04214C', borderTopLeftRadius:'0px', borderBottomLeftRadius:'0px' } 
+                  }}
+                />
+                </Stack>
+                </Stack>
+
+                <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
+                <Typography sx={{
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  color: '#04214C'
+                }}>
+                Link Youtube
+                </Typography>
+                <TextField
+                multiline
+                  variant='outlined'
+                  placeholder="Link Youtube"
+                  sx={customInputStyle2}
+                  style={{ fontSize: '22px', color: '#04214C' }}
+                  inputProps={{
+                    'aria-label': 'Link Youtube',
+                    name: 'Link Youtube',
+                    value: formData.youtube_url,
+                    onChange: (e) => setFormData({ ...formData, youtube_url: (e.target as HTMLInputElement).value }),
+                  }}
+                />
+                </Stack>
               </Stack>
               <Stack direction={'column'} maxWidth={'100%'} width={'100%'} spacing={1}>
                 <Typography sx={{
@@ -535,6 +679,7 @@ export default function Register() {
                 </Stack>
               </Stack>
             </Stack>
+           
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
             <Button
