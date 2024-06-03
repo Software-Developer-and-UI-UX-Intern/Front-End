@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useRef, useState, useEffect } from 'react';
 import Orangewithimage1 from '../beranda/orangewithimage';
 import left from '../../assets/about/arrow_left_blue.png';
@@ -138,6 +138,19 @@ export default function Orangewithimage({ domisili }: OrangewithimageProps) {
   }
 
   return (
+    <Stack>
+      {orangeData.length > 0 && (
+       <Typography sx={{
+            fontWeight: 700,
+            color: '#ff010c',
+            fontSize: '60px',
+            paddingTop: '50px',
+            paddingBottom: '30px',
+            textAlign: 'center'
+          }}>
+            Ayo Kunjungi
+          </Typography>
+          )}
     <Stack
       style={{ overflowX: 'clip' }}
       alignItems={'center'}
@@ -147,9 +160,12 @@ export default function Orangewithimage({ domisili }: OrangewithimageProps) {
     >
       <Stack width={'250px'} height={'400px'} sx={{background:'linear-gradient(90deg, white 0%, transparent 100%)'}} position={'absolute'} left={'0px'}>
       </Stack>
+      {orangeData.length > 0 && (
+
       <Stack onMouseDown={startScrollLeft} width={'0px'} position={'absolute'} left={'75px'} zIndex={1}>
         <img src={left} width={'90px'} alt="left" />
       </Stack>
+          )}
 
       <Stack
         ref={containerRef}
@@ -178,11 +194,17 @@ export default function Orangewithimage({ domisili }: OrangewithimageProps) {
           </Stack>
         ))}
       </Stack>
+      {orangeData.length > 0 && (
+
       <Stack onMouseDown={startScrollRight} width={'0px'} position={'absolute'}  right={'201px'} zIndex={1}>
         <img src={right} alt="right" width={'90px'}/>
       </Stack>
+      )}
+
       <Stack width={'250px'} height={'400px'} sx={{background:'linear-gradient(90deg, transparent 0%, white 100%)'}} position={'absolute'} right={'0px'}>
       </Stack>
     </Stack>
+    </Stack>
+
   );
 }

@@ -1,11 +1,12 @@
 // Import React and other required modules
-
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 import '../../../assets/font/telkomselbatik.css';
 import GridOrange from '../../../components/restoran/gridorange';
 import balithumb from '../../../assets/restoran/bali/bg.jpg';
 import loading from '../../../assets/restoran/comingsoongray.png';
+import { useLocation } from 'react-router-dom';
 
 // Define interfaces for data types
 
@@ -28,7 +29,10 @@ interface OrangewithimageProps {
   location: string;
   domisili: string;
 }
-
+interface Area {
+  domisili: string;
+  coverresto: string;
+}
 // Define the functional component
 
 const Oleh = () => {
@@ -36,6 +40,28 @@ const Oleh = () => {
   const [olehData, setOlehData] = useState<OrangewithimageProps[]>([]);
   const [halal, setHalal] = useState<string>('true'); // Default value is 'true'
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [destination, setDestination] = useState<string | null>(null);
+  const [areaData, setAreaData] = useState<Area| null>(null);
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const gasParam = params.get('Gas');
+    setDestination(gasParam);
+  }, [location.search]);
+  useEffect(() => {
+
+    if (destination) {
+      // Fetch the area data from the backend
+      axios.get(`https://tripselbe.fly.dev/area/${destination}`)
+        .then((response) => {
+          setAreaData(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching area data:', error);
+        });
+    }
+  }, [destination]);
 
   // Fetch data from the API when component mounts or 'halal' state changes
   useEffect(() => {
@@ -52,9 +78,9 @@ const Oleh = () => {
 
         const filteredData: OlehDataItem[] = data.filter(item => {
           if (halal === 'true') {
-            return item.halal === 'true' && item.domisili.toLowerCase() === 'bali';
+            return item.halal === 'true' && item.domisili.toLowerCase() === `${destination}`;
           } else {
-            return item.halal !== 'true' && item.domisili.toLowerCase() === 'bali';
+            return item.halal !== 'true' && item.domisili.toLowerCase() === `${destination}`;
           }
         });
     
@@ -75,7 +101,7 @@ const Oleh = () => {
     };
     
     fetchData();
-  }, [halal]); // Trigger the effect whenever halal value changes
+  }, [halal, destination]); // Trigger the effect whenever halal value changes
 
   // Event handlers to toggle 'halal' state
   const handleHalalClick = () => {
@@ -96,9 +122,9 @@ const Oleh = () => {
         marginLeft: '0px',
       }} gap={0}>
         <Stack sx={{
-          backgroundImage: `url(${balithumb})`,
+          backgroundImage: `url(${areaData?.coverresto || balithumb})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center calc(50% + 500px)', 
+          backgroundPosition: 'center center', 
           backgroundRepeat: 'no-repeat',
           display: 'flex',
           height: '504px',
@@ -109,7 +135,7 @@ const Oleh = () => {
            
           <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
             <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Restoran</Typography>
-            <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Bali</Typography>
+            <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>{destination}</Typography>
           </Stack>
         </Stack>
 

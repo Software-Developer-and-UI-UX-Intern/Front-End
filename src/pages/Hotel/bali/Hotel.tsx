@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Stack, Typography, Input, Checkbox, styled } from '@mui/material';
 import bali from '../../../assets/hotel/bali/up.png';
@@ -47,10 +49,35 @@ export default function Hotel() {
       },
     },
   };
+  interface Area {
+    domisili: string;
+    coverhotel: string;
+  }
   const [value, setValue] = useState<string>('');
   const [selectedStars, setSelectedStars] = useState<number[]>([]);
   const [checkedFasilitas, setCheckedFasilitas] = useState<string[]>([]);
-
+  const [destination, setDestination] = useState<string | null>(null);
+  const [areaData, setAreaData] = useState<Area| null>(null);
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const gasParam = params.get('Gas');
+    setDestination(gasParam);
+  }, [location.search]);
+  useEffect(() => {
+ 
+    if (destination) {
+      // Fetch the area data from the backend
+      axios.get(`https://tripselbe.fly.dev/area/${destination}`)
+        .then((response) => {
+          setAreaData(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching area data:', error);
+        });
+    }
+  }, [destination]);
    // Function to handle changes in the checked fasilitas
    const handleFasilitasChange = (fasilitas: string) => {
     // Check if the fasilitas is already in the checkedFasilitas array
@@ -117,7 +144,7 @@ export default function Hotel() {
     }} gap={0}>
       
       <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 50%, #FFF 100%), url(${bali})`,
+        backgroundImage: `linear-gradient(180deg, transparent 50%, #FFF 100%), url(${areaData?.coverhotel || bali})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -129,7 +156,7 @@ export default function Hotel() {
       }}>
         <Stack  marginLeft={'100px'} marginRight={'100px'} marginTop={'250px'} height={'600px'} justifyContent={'space-between'}>
         <Stack>
-        <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di Bali!</Typography>
+        <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di {destination}!</Typography>
         <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
         </Stack>
         <Stack justifyContent={'center'} alignItems={'center'} >
@@ -290,7 +317,7 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} selectedDomisili={'bali'} />
+            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} selectedDomisili={`${destination}`} />
             </Stack>
           </Stack>
         </Stack>

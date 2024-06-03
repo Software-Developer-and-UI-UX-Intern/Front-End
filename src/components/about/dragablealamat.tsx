@@ -35,7 +35,7 @@ export default function DragableAlamat(props: DragableAlamatProps) {
         }
         const data: Location[] = await response.json();
   
-        // Filter addresses based on the recommendations
+        // Fetch the recommendations
         const recommendationResponse = await fetch(`https://tripselbe.fly.dev/wisatarecomend`);
         if (!recommendationResponse.ok) {
           console.error('Error fetching recommendations:', recommendationResponse.statusText);
@@ -43,11 +43,14 @@ export default function DragableAlamat(props: DragableAlamatProps) {
           return;
         }
         const recommendations: Recommendation[] = await recommendationResponse.json();
-        const recommendedNames = recommendations
-          .filter(recommendation => recommendation.domisili === props.domisili)
-          .map(recommendation => recommendation.nama);
   
-        const filteredAddresses = data.filter(address => recommendedNames.includes(address.nama));
+        // Filter addresses based on the recommendations and domisili, case-insensitive
+        const filteredAddresses = data.filter(address => 
+          recommendations.some(recommendation => 
+            recommendation.nama.toLowerCase() === address.nama.toLowerCase() && recommendation.domisili?.toLowerCase() === props.domisili.toLowerCase()
+          )
+        );
+        
         setAddresses(filteredAddresses);
         setLoading(false);
       } catch (error) {
@@ -67,6 +70,16 @@ export default function DragableAlamat(props: DragableAlamatProps) {
     // Display loading state while data is being fetched
     return (
       <Stack direction="row" height={'auto'}>
+          <Typography sx={{
+            fontWeight: 700,
+            color: '#ff010c',
+            fontSize: '60px',
+            paddingTop: '50px',
+            paddingBottom: '30px',
+            textAlign: 'center'
+          }}>
+            Area Populer
+          </Typography>
         <Stack
           ref={containerRef}
           direction="row"
@@ -92,7 +105,21 @@ export default function DragableAlamat(props: DragableAlamatProps) {
   }
 
   return (
+    <Stack>
+{addresses.length > 0 && (
+        <Typography sx={{
+            fontWeight: 700,
+            color: '#ff010c',
+            fontSize: '60px',
+            paddingTop: '50px',
+            paddingBottom: '30px',
+            textAlign: 'center'
+          }}>
+            Area Populer
+          </Typography>
+          )}
     <Stack direction="row" width={'auto'}>
+      
       <Stack
         ref={containerRef}
         direction="row"
@@ -128,6 +155,7 @@ export default function DragableAlamat(props: DragableAlamatProps) {
           </Stack>
         ))}
       </Stack>
+    </Stack>
     </Stack>
   );
 }

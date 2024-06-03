@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface Hotel {
   gambar_url1: string;
@@ -23,10 +24,13 @@ interface ListHotelProps {
   checkedFasilitas: string[];
   selectedDomisili: string;
 }
-
+interface Area {
+  jenis: string;
+}
 export default function ListHotel({ selectedStars, minimal, maximal, checkedFasilitas, selectedDomisili }: ListHotelProps) {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const navigate = useNavigate();
+  const [areaData, setAreaData] = useState<Area| null>(null);
 
   useEffect(() => {
     // Fetch hotels data
@@ -45,7 +49,17 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
             // Convert to lowercase and remove numbers from the string
             return fasilitas.nama.toLowerCase().replace(/\d+/g, '').trim();
           });
-  
+          if (hotel.domisili) {
+            // Fetch the area data from the backend
+            axios.get(`https://tripselbe.fly.dev/area/${hotel.domisili}`)
+              .then((response) => {
+                setAreaData(response.data);
+                console.log(response.data)
+              })
+              .catch((error) => {
+                console.error('Error fetching area data:', error);
+              });
+          }
           return {
             ...hotel,
             thumbnailUrl: thumbnailImage ? thumbnailImage.url : undefined,
@@ -129,7 +143,7 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
                 {hotel.jarak && (
                   <Stack height={'35px'} justifyContent={'left'} alignItems={'center'} direction={'row'} gap={1} paddingLeft={'10px'}>
                     <Icon icon="solar:route-bold" width="23" height="23" style={{ color: '#04214C' }} />
-                    <Typography fontWeight={500} fontSize={'20px'} color={'#04214C'}>{hotel.jarak} km ke TSO Renon, Bali</Typography>
+                    <Typography fontWeight={500} fontSize={'20px'} color={'#04214C'}>{hotel.jarak} km ke {areaData?.jenis|| 'TSO'} {hotel.domisili}</Typography>
                   </Stack>
                 )}
               </Stack>

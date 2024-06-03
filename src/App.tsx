@@ -33,24 +33,24 @@ import { Profile } from './pages/profile';
 // import { ProfileLupaPassword } from './pages/profile/Lupapassword';
 import { ProfileLupaVerifikasi } from './pages/profile/Lupapassword/Lupaverifikasi';
 import { About } from './pages/About';
-import { Flores } from './pages/About/flores';
+// import { Flores } from './pages/About/flores';
 import { Bali } from './pages/About/bali';
-import { Kupang } from './pages/About/kupang';
-import { Mataram } from './pages/About/mataram';
+// import { Kupang } from './pages/About/kupang';
+// import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh';
 import {OlehBali} from './pages/Oleh/OlehBali';
 import {Hotel} from './pages/Hotel';
 import {HotelBali} from './pages/Hotel/bali';
-import {HotelNTT} from './pages/Hotel/ntt';
-import {HotelNTB} from './pages/Hotel/ntb';
-import {OlehMataram} from './pages/Oleh/OlehMataram';
-import {OlehKupang} from './pages/Oleh/OlehKupang';
-import {OlehFlores} from './pages/Oleh/OlehFlores';
+// import {HotelNTT} from './pages/Hotel/ntt';
+// import {HotelNTB} from './pages/Hotel/ntb';
+// import {OlehMataram} from './pages/Oleh/OlehMataram';
+// import {OlehKupang} from './pages/Oleh/OlehKupang';
+// import {OlehFlores} from './pages/Oleh/OlehFlores';
 import {Restoran} from './pages/Restoran';
 import {RestoranBali} from './pages/Restoran/RestoranBali';
-import {RestoranMataram} from './pages/Restoran/RestoranMataram';
-import {RestoranKupang} from './pages/Restoran/RestoranKupang';
-import {RestoranFlores} from './pages/Restoran/RestoranFlores';
+// import {RestoranMataram} from './pages/Restoran/RestoranMataram';
+// import {RestoranKupang} from './pages/Restoran/RestoranKupang';
+// import {RestoranFlores} from './pages/Restoran/RestoranFlores';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -120,7 +120,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/wisata-bali',
+    path: '/wisata',
     element: (
       <ProtectedRoute>
       <>
@@ -131,42 +131,42 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     )
   },
-  {
-    path: '/wisata-kupang',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <Kupang />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/wisata-mataram',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <Mataram />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/wisata-flores',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <Flores />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
+  // {
+  //   path: '/wisata-kupang',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <Kupang />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/wisata-mataram',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <Mataram />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/wisata-flores',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <Flores />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
   {
     path: '/cari-oleh-oleh',
     element: (
@@ -180,7 +180,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/oleh-oleh-bali',
+    path: '/oleh-oleh',
     element: (
       <ProtectedRoute>
       <>
@@ -191,42 +191,42 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     )
   },
-  {
-    path: '/oleh-oleh-mataram',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <OlehMataram />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/oleh-oleh-kupang',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <OlehKupang />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/oleh-oleh-flores',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar />
-        <OlehFlores/>
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
+  // {
+  //   path: '/oleh-oleh-mataram',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <OlehMataram />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/oleh-oleh-kupang',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <OlehKupang />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/oleh-oleh-flores',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar />
+  //       <OlehFlores/>
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
   {
     path: '/cari-restoran',
     element: (
@@ -240,7 +240,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/restoran-bali',
+    path: '/restoran',
     element: (
       <ProtectedRoute>
       <>
@@ -251,42 +251,42 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     )
   },
-  {
-    path: '/restoran-mataram',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar/>
-        <RestoranMataram />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/restoran-kupang',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar/>
-        <RestoranKupang />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: '/restoran-flores',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbar/>
-        <RestoranFlores/>
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
+  // {
+  //   path: '/restoran-mataram',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar/>
+  //       <RestoranMataram />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/restoran-kupang',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar/>
+  //       <RestoranKupang />
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  // {
+  //   path: '/restoran-flores',
+  //   element: (
+  //     <ProtectedRoute>
+  //     <>
+  //       <Navbar/>
+  //       <RestoranFlores/>
+  //       <Footer/>
+  //     </>
+  //     </ProtectedRoute>
+  //   )
+  // },
   {
     path: '/cari-hotel',
     element: (
@@ -301,7 +301,7 @@ const router = createBrowserRouter([
   
     },
     {
-      path: '/hotel-bali',
+      path: '/hotel',
       element: (
         <ProtectedRoute>
         <>
@@ -312,30 +312,30 @@ const router = createBrowserRouter([
         </ProtectedRoute>
       )
     },
-    {
-      path: '/hotel-NTT',
-      element: (
-        <ProtectedRoute>
-        <>
-          <Navbar/>
-          <HotelNTT />
-          <Footer/>
-        </>
-        </ProtectedRoute>
-      )
-    },
-    {
-      path: '/hotel-NTB',
-      element: (
-        <ProtectedRoute>
-        <>
-          <Navbar/>
-          <HotelNTB />
-          <Footer/>
-        </>
-        </ProtectedRoute>
-      )
-    },
+    // {
+    //   path: '/hotel-NTT',
+    //   element: (
+    //     <ProtectedRoute>
+    //     <>
+    //       <Navbar/>
+    //       <HotelNTT />
+    //       <Footer/>
+    //     </>
+    //     </ProtectedRoute>
+    //   )
+    // },
+    // {
+    //   path: '/hotel-NTB',
+    //   element: (
+    //     <ProtectedRoute>
+    //     <>
+    //       <Navbar/>
+    //       <HotelNTB />
+    //       <Footer/>
+    //     </>
+    //     </ProtectedRoute>
+    //   )
+    // },
     {
       path: '/profile',
       element: (

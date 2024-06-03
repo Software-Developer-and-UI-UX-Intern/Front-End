@@ -28,6 +28,7 @@ interface Data {
   wisata: WisataData[];
   hotels: HotelData[];
   restoran: RestoranData[];
+  area: Area[];
 }
 interface OlehData {
   nama: string;
@@ -46,6 +47,10 @@ interface HotelData {
 
 interface RestoranData {
   nama: string;
+  // Add more properties as needed
+}
+interface Area {
+  domisili: string;
   // Add more properties as needed
 }
 export default function Navbar() {
@@ -72,6 +77,7 @@ export default function Navbar() {
     wisata: [],
     hotels: [],
     restoran: [],
+    area: [],
   });
 
   useEffect(() => {
@@ -89,13 +95,16 @@ export default function Navbar() {
         const restoranResponse = await fetch('https://tripselbe.fly.dev/restoran');
         const restoranData: RestoranData[] = await restoranResponse.json();
   
+        const areaResponse = await fetch('https://tripselbe.fly.dev/area');
+        const areaData: Area[] = await areaResponse.json();
+  
         setData({
           oleh: olehData,
           wisata: wisataData,
           hotels: hotelsData,
           restoran: restoranData,
+          area: areaData,
         });
-        console.log(hotelsData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -194,23 +203,22 @@ export default function Navbar() {
     navigate(`/login`)
   }
   const handleMenuItemClick = (destination: string) => {
-    navigate(`/hotel-${destination}`); // Navigate to the specified route
+    navigate(`/hotel?Gas=${destination}`);
     handleMenuClose(); // Close the menu after clicking on a menu item
   };
-
  
   const handleRestoranMenuItemClick = (destination: string) => {
-    navigate(`/restoran-${destination}`); // Navigate to the specified route for restoran
+    navigate(`/restoran?Gas=${destination}`);
     handleMenuClose(); // Close the menu after clicking on a menu item
   };
 
   const handleOlehOlehMenuItemClick = (destination: string) => {
-    navigate(`/oleh-oleh-${destination}`); // Navigate to the specified route for oleh-oleh
+    navigate(`/oleh-oleh?Gas=${destination}`);
     handleMenuClose(); // Close the menu after clicking on a menu item
   };
 
   const handleWisataMenuItemClick = (destination: string) => {
-    navigate(`/wisata-${destination}`); // Navigate to the specified route for wisata
+    navigate(`/wisata?Gas=${destination}`);
     handleMenuClose(); // Close the menu after clicking on a menu item
   };
 
@@ -329,11 +337,14 @@ export default function Navbar() {
                   },
                 }}
               >
-                    <MenuItem onClick={() => handleMenuItemClick('Bali')} sx={menuItemStyle}>Bali</MenuItem>
-                    <Divider/>
-                    <MenuItem onClick={() => handleMenuItemClick('NTT')} sx={menuItemStyle}>NTT</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleMenuItemClick('NTB')} sx={menuItemStyle}>NTB</MenuItem>
+                    {data.area.map((area, index) => (
+              <Stack key={area.domisili}>
+                <MenuItem onClick={() => handleMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                  {area.domisili}
+                </MenuItem>
+                {index < data.area.length - 1 && <Divider />}
+              </Stack>
+            ))}
             </Menu>
 
             <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
@@ -376,13 +387,14 @@ export default function Navbar() {
                   },
                 }}
               >
-                    <MenuItem onClick={() => handleRestoranMenuItemClick('Bali')} sx={menuItemStyle}>Bali</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleRestoranMenuItemClick('Mataram')} sx={menuItemStyle}>Mataram</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleRestoranMenuItemClick('Kupang')} sx={menuItemStyle}>Kupang</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleRestoranMenuItemClick('Flores')} sx={menuItemStyle}>Flores</MenuItem>
+                   {data.area.map((area, index) => (
+              <Stack key={area.domisili}>
+                <MenuItem onClick={() => handleRestoranMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                  {area.domisili}
+                </MenuItem>
+                {index < data.area.length - 1 && <Divider />}
+              </Stack>
+            ))}
                 </Menu>
                <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
                   onClick={handleOlehOlehMenuOpen}
@@ -424,13 +436,14 @@ export default function Navbar() {
                   },
                 }}
               >
-                    <MenuItem onClick={() => handleOlehOlehMenuItemClick('Bali')} sx={menuItemStyle}>Bali</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleOlehOlehMenuItemClick('Mataram')} sx={menuItemStyle}>Mataram</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleOlehOlehMenuItemClick('Kupang')} sx={menuItemStyle}>Kupang</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleOlehOlehMenuItemClick('Flores')} sx={menuItemStyle}>Flores</MenuItem>
+                    {data.area.map((area, index) => (
+              <Stack key={area.domisili}>
+                <MenuItem onClick={() => handleOlehOlehMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                  {area.domisili}
+                </MenuItem>
+                {index < data.area.length - 1 && <Divider />}
+              </Stack>
+            ))}
                 </Menu>
                 <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
                   onClick={handleWisataMenuOpen}
@@ -472,13 +485,14 @@ export default function Navbar() {
                   },
                 }}
               >
-                    <MenuItem onClick={() => handleWisataMenuItemClick('Bali')} sx={menuItemStyle}>Bali</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleWisataMenuItemClick('Mataram')} sx={menuItemStyle}>Mataram</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleWisataMenuItemClick('Kupang')} sx={menuItemStyle}>Kupang</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleWisataMenuItemClick('Flores')} sx={menuItemStyle}>Flores</MenuItem>
+                    {data.area.map((area, index) => (
+              <Stack key={area.domisili}>
+                <MenuItem onClick={() => handleWisataMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                  {area.domisili}
+                </MenuItem>
+                {index < data.area.length - 1 && <Divider />}
+              </Stack>
+            ))}
                 </Menu>
                 
                 <Stack justifyContent={'center'} alignItems={'center'}>

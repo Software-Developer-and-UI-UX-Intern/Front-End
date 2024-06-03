@@ -1,18 +1,46 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
+import axios from 'axios';
 import bali from '../../../assets/aboutbali.jpg';
-// import RowAndColumnSpacing from '../../../components/about/dragablealamat';
+import RowAndColumnSpacing from '../../../components/about/dragablealamat';
 import Balimenunggu  from '../../../components/about/ayokunjungi';
 import nusapenida from '../../../assets/about/nusapenida.jpg'
 import '../../../assets/font/telkomselbatik.css'
+
+interface Area {
+  domisili: string;
+  coverabout: string;
+  footerabout: string;
+  deskripsiabout: string;
+}
 export default function Beranda() {
+  const location = useLocation();
+  const [destination, setDestination] = useState<string | null>(null);
+  const [areaData, setAreaData] = useState<Area| null>(null);
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const gasParam = params.get('Gas');
+    setDestination(gasParam);
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.marginTop = '-120px';
     // window.scrollTo(0, 0); // Scroll to the top of the page when the component is mounted or navigation occurs
-  }, []);
+  }, [location.search]);
+  useEffect(() => {
+    if (destination) {
+      // Fetch the area data from the backend
+      axios.get(`https://tripselbe.fly.dev/area/${destination}`)
+        .then((response) => {
+          setAreaData(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching area data:', error);
+        });
+    }
+  }, [destination]);
 
   return (
     <Stack sx={{
@@ -21,9 +49,9 @@ export default function Beranda() {
       alignItems: 'center',
       marginLeft: '0px',
     }} gap={0}>
-      
+  
       <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url(${bali})`,
+        backgroundImage: `linear-gradient(180deg, transparent 56.5%, #04214C 100%), url(${areaData?.coverabout || bali})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -34,7 +62,7 @@ export default function Beranda() {
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}> Bali</Typography>
+          <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}> {areaData?.domisili}</Typography>
         </Stack>
       </Stack>
       <Stack sx={{
@@ -54,22 +82,9 @@ export default function Beranda() {
           fontSize: '25px',
           textAlign: 'left',
         }}>
-        Bali adalah tempat yang sungguh luar biasa dan penuh petualangan menarik! Bayangkan pulau tropis yang dipenuhi dengan pantai-pantai yang indah, ombak yang sempurna untuk berselancar, dan matahari yang selalu bersinar cerah.
+        {areaData?.deskripsiabout}
         </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-        Nggak hanya soal alam dan budaya, Bali juga menjadi tempat yang seru untuk mengeksplorasi kuliner. Kita bisa mencoba makanan lezat seperti nasi goreng, bebek betutu, dan jajanan tradisional lainnya yang pasti akan membuat perut kita senang.        </Typography>
-        <Typography sx={{
-          fontWeight: 400,
-          color: 'white',
-          fontSize: '25px',
-          textAlign: 'left',
-        }}>
-Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi lebih banyak tentang keindahan dan petualangan di Bali?        </Typography>
+        
 </Stack>
       </Stack>
 
@@ -89,32 +104,14 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         }}>
 
           <Stack >
-          <Typography sx={{
-            fontWeight: 700,
-            color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
-            paddingBottom: '30px',
-            textAlign: 'center'
-          }}>
-            Ayo Kunjungi
-          </Typography>
-          <Balimenunggu domisili='bali'/>
+         
+          <Balimenunggu domisili={destination || 'bali'} />
         </Stack>
 
-        {/* <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
-        <Typography sx={{
-            fontWeight: 700,
-            color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
-            paddingBottom: '30px',
-            textAlign: 'center'
-          }}>
-            Area Populer
-          </Typography>
-          <RowAndColumnSpacing domisili='bali' />
-        </Stack> */}
+        <Stack width={'auto'} height={'auto'} marginLeft={'100px'} marginRight={'100px'} marginTop={'30px'} sx={{backgroundColor:'transparent'}}>
+      
+          <RowAndColumnSpacing domisili={destination || 'bali'} />
+        </Stack>
         </Stack>
       </Stack>
 
@@ -126,7 +123,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         borderRadius: '100px 100px 0 0',
       }}>
         <Stack sx={{
-        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${nusapenida})`,
+        backgroundImage: `linear-gradient(180deg, transparent 0%, white 100%), url(${areaData?.footerabout || nusapenida})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -137,7 +134,7 @@ Jadi, apakah kalian sudah siap untuk mengunjungi pulau Dewata dan menjelajahi le
         margin: '0',
       }}>
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-          <Typography fontSize={'90px'} fontFamily={'TelkomselBatikBold'} color={'#04214C'}>Sampai berjumpa di Bali!</Typography>
+          <Typography fontSize={'90px'} fontFamily={'TelkomselBatikBold'} color={'#04214C'}>Sampai berjumpa di {destination}!</Typography>
         </Stack>
         
          
