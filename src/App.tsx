@@ -11,6 +11,8 @@ import { InputHotel } from './pages/Admin/Hotel/input';
 import { AddHotel } from './pages/Admin/Hotel/add';
 import { AdminRestoran } from './pages/Admin/Restoran';
 import { InputRestoran } from './pages/Admin/Restoran/input';
+import { InputDomisili } from './pages/Admin/Beranda/input';
+import { AddDomisili } from './pages/Admin/Beranda/add';
 import { AddRestoran } from './pages/Admin/Restoran/add';
 import { AdminUser } from './pages/Admin/User';
 import { InputUser } from './pages/Admin/User/input';
@@ -380,6 +382,14 @@ const router = createBrowserRouter([
         {
           path: 'restoran', 
           element: <AdminRestoran />,
+        },
+        {
+          path: 'input-domisili', 
+          element: <InputDomisili />,
+        },
+        {
+          path: 'add-domisili', 
+          element: <AddDomisili />,
         },
         {
           path: 'input-restoran', 
