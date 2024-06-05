@@ -3,6 +3,8 @@ import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, Radi
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import { Icon } from '@iconify/react/dist/iconify.js';
+import axios from 'axios';
+
 const customInputStyle = {
   width: '100%',
   height: '53px',
@@ -122,6 +124,10 @@ interface Fasilitas {
   icon: string;
   nama: string;
 }
+interface Area {
+  domisili: string;
+  // Add more properties as needed
+}
 const facilities = [
   { icon: 'material-symbols:pool-rounded', label: 'Kolam Renang' },
   { icon: 'material-symbols:restaurant-rounded', label: 'Restoran' },
@@ -134,6 +140,20 @@ const facilities = [
   { icon: 'map:spa', label: 'Spa' },
 ];
 export default function Register() {
+  const [areaData, setAreaData] = useState<Area[]>([]);
+
+  useEffect(() => {
+      // Fetch the area data from the backend
+      axios.get(`https://tripselbe.fly.dev/area`)
+        .then((response) => {
+          setAreaData(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching area data:', error);
+        });
+    
+  }, []);
   const [fasilitas, setFasilitasChecked] = useState<Fasilitas[]>(facilities.map(facility => ({ icon: facility.icon, nama: facility.label })));
   const handleFasilitasCheckboxChange = (index: number) => {
     const currentFacility = facilities[index];
@@ -170,6 +190,7 @@ export default function Register() {
     fasilitas: [''],
   });
   // Function to handle room changes
+  
   const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
     const newKamar = [...kamar];
   
@@ -855,9 +876,11 @@ const deleteFasilitas = async (hotelName: string) => {
                   onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
                 >
                   
-                  <MenuItem value='Bali'>Bali</MenuItem>
-                  <MenuItem value='NTT'>NTT</MenuItem>
-                  <MenuItem value='NTB'>NTB</MenuItem>
+                  {areaData?.map((domi, index) => (
+    <MenuItem key={`${domi.domisili}_${index}`} value={domi.domisili}>
+      {domi.domisili}
+    </MenuItem>
+  ))}
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,

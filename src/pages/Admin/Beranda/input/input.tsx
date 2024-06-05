@@ -88,6 +88,7 @@ export default function Register() {
     coverhotel: '',
     coveroleh: '',
     jenis: '',
+    lokasi:[''],
   });
   // const [addresses, setAddress] = useState<Address[]>([]);
 
@@ -385,6 +386,8 @@ export default function Register() {
   : [];
 console.log(hargaArray)
 // Extract the smallest and largest prices
+const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
+
         setFormData({
           domisili: restoranData.domisili || '',
           coverabout: restoranData.coverabout || '',
@@ -394,6 +397,8 @@ console.log(hargaArray)
           coverhotel: restoranData.coverhotel || '',
           coveroleh: restoranData.coveroleh || '',
           jenis: restoranData.jenis || '',
+          lokasi: makananArray,
+
         });
         // const fetchedAddresses = await getAddresses(restoranData.nama);
         // setAddress(fetchedAddresses);
@@ -444,6 +449,7 @@ console.log(hargaArray)
           const errorMessage = await existingResponse.text();
           throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
       }
+      const lokasiString = formData.lokasi.join(',');
 
       const existingData = await existingResponse.json();
       const updatedFormData = {
@@ -455,6 +461,7 @@ console.log(hargaArray)
         coveroleh: uploadedImages[2] || existingData.coveroleh,
         coverhotel: uploadedImages[3] || existingData.coverhotel,
         coverresto: uploadedImages[4] || existingData.coverresto,
+        lokasi: lokasiString || ''
 
     };
     console.log(JSON.stringify(updatedFormData))
@@ -546,9 +553,30 @@ console.log(hargaArray)
       fileInput5.click();
     }
   };
-  
-  
-  
+  const handleInputChange = (index: number, value: string) => {
+    const newMakanan = formData.lokasi.map((item, i) =>
+      i === index ? value : item
+    );
+
+    setFormData({
+      ...formData,
+      lokasi: newMakanan,
+    });
+  };
+  const handleDeleteMakanan = (index: number) => {
+    const updatedMakanan = [...formData.lokasi];
+    updatedMakanan.splice(index, 1);
+    setFormData({
+      ...formData,
+      lokasi: updatedMakanan,
+    });
+  };
+  const handleAddInput = () => {
+    setFormData({
+      ...formData,
+      lokasi: [...formData.lokasi, ''],
+    });
+  };
   
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
@@ -795,7 +823,61 @@ console.log(hargaArray)
                   }}
                 />
                 <Stack>
-
+                <Stack gap={2}>
+                <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
+                    Lokasi
+                  </Typography>
+                  {formData.lokasi.map((makanan, index) => (
+  <Stack direction="row" alignItems="center" key={index} gap={1}>
+  <Input
+    disableUnderline
+    placeholder={`Lokasi ${index + 1}`}
+    style={{ fontSize: '22px', color: '#04214C' }}
+    sx={customInputStyle}
+    value={makanan}
+    onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
+  />
+  <Button
+                  type="button"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '60px',
+                    width: '240px',
+                    fontWeight: 500,
+                    fontSize: '22px',
+                    color: '#FFF',
+                    backgroundColor: '#04214C',
+                    borderRadius: '20px',
+                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  }}
+    onClick={() => handleDeleteMakanan(index)}
+  >
+    Delete
+  </Button>
+</Stack>
+                  ))}
+                  <Button
+                    type="button"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '60px',
+                      width: '240px',
+                      fontWeight: 500,
+                      fontSize: '22px',
+                      color: '#FFF',
+                      backgroundColor: '#04214C',
+                      borderRadius: '20px',
+                      '&:hover': { background: '#04214C', color: '#FFF'}
+                    }}
+                    onClick={handleAddInput}
+                  >
+                    Tambah Makanan
+                  </Button>
+                </Stack>
                 </Stack>
                 
                 

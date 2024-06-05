@@ -85,6 +85,7 @@ interface Area {
   coverhotel: string;
   coveroleh: string;
   jenis: string;
+  lokasi: string;
 }
 export default function RestoranPage() {
   const navigate = useNavigate();
@@ -387,7 +388,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
       </Stack>
       
       <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
-  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 9) + 105px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
+  <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 10) + 105px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
     
     {/* header container with horizontal scroll */}
     <Stack direction={'row'} sx={{ overflowX: 'none' }}>
@@ -420,6 +421,9 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Banner Oleh-oleh</Typography>
+      </Stack>
+      <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Lokasi</Typography>
       </Stack>
     </Stack>
     
@@ -528,7 +532,11 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
           {hotel.coveroleh && (hotel.coveroleh.length > 22 ? hotel.coveroleh.slice(0, 22) + '...' : hotel.coveroleh)}
         </Typography>
       </Stack>
-     
+      <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
+        <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
+          {hotel.lokasi && (hotel.lokasi.length > 22 ? hotel.coveroleh.slice(0, 22) + '...' : hotel.lokasi)}
+        </Typography>
+      </Stack>
     </Stack>
   ))}
   

@@ -86,6 +86,7 @@ export default function Register() {
     coverhotel: '',
     coveroleh: '',
     jenis: '',
+    lokasi:[''],
   });
   // const [addresses, setAddress] = useState<Address[]>([]);
 
@@ -145,6 +146,8 @@ export default function Register() {
     //   }
 
     //   const existingData = await existingResponse.json();
+    const lokasiString = formData.lokasi.join(',');
+
       const updatedFormData = {
         domisili: formData.domisili || '',
         deskripsiabout: formData.deskripsiabout || '',
@@ -154,7 +157,7 @@ export default function Register() {
         coveroleh: uploadedImages[2] || '',
         coverhotel: uploadedImages[3] || '',
         coverresto: uploadedImages[4] || '',
-
+        lokasi: lokasiString || ''
     };
     console.log(JSON.stringify(updatedFormData))
       const response = await fetch(`https://tripselbe.fly.dev/area`, {
@@ -246,9 +249,30 @@ export default function Register() {
     }
   };
   
-  
-  
-  
+  const handleInputChange = (index: number, value: string) => {
+    const newMakanan = formData.lokasi.map((item, i) =>
+      i === index ? value : item
+    );
+
+    setFormData({
+      ...formData,
+      lokasi: newMakanan,
+    });
+  };
+  const handleDeleteMakanan = (index: number) => {
+    const updatedMakanan = [...formData.lokasi];
+    updatedMakanan.splice(index, 1);
+    setFormData({
+      ...formData,
+      lokasi: updatedMakanan,
+    });
+  };
+  const handleAddInput = () => {
+    setFormData({
+      ...formData,
+      lokasi: [...formData.lokasi, ''],
+    });
+  };
   return (
     <Stack height="900px" sx={{overflowY:'none'}} padding={'0 30px'} overflow={'auto'}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -494,7 +518,61 @@ export default function Register() {
                   }}
                 />
                 <Stack>
-
+                <Stack gap={2}>
+                <Typography sx={{ fontWeight: 500, fontSize: '24px', color: '#04214C' }}>
+                    Lokasi
+                  </Typography>
+                  {formData.lokasi.map((makanan, index) => (
+  <Stack direction="row" alignItems="center" key={index} gap={1}>
+  <Input
+    disableUnderline
+    placeholder={`Lokasi ${index + 1}`}
+    style={{ fontSize: '22px', color: '#04214C' }}
+    sx={customInputStyle}
+    value={makanan}
+    onChange={(e) => handleInputChange(index, (e.target as HTMLInputElement).value)}
+  />
+  <Button
+                  type="button"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '60px',
+                    width: '240px',
+                    fontWeight: 500,
+                    fontSize: '22px',
+                    color: '#FFF',
+                    backgroundColor: '#04214C',
+                    borderRadius: '20px',
+                    '&:hover': { background: '#04214C', color: '#FFF'}
+                  }}
+    onClick={() => handleDeleteMakanan(index)}
+  >
+    Delete
+  </Button>
+</Stack>
+                  ))}
+                  <Button
+                    type="button"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '60px',
+                      width: '240px',
+                      fontWeight: 500,
+                      fontSize: '22px',
+                      color: '#FFF',
+                      backgroundColor: '#04214C',
+                      borderRadius: '20px',
+                      '&:hover': { background: '#04214C', color: '#FFF'}
+                    }}
+                    onClick={handleAddInput}
+                  >
+                    Tambah Makanan
+                  </Button>
+                </Stack>
                 </Stack>
                 
                 

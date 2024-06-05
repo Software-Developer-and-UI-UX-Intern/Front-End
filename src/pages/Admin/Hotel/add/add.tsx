@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup } from '@mui/material';
 import { Button } from '@mui/material';
+import axios from 'axios';
 // import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import { Icon } from '@iconify/react/dist/iconify.js';
 const customInputStyle = {
@@ -159,8 +160,25 @@ const facilities = [
 
 //   return debouncedCallback;
 // }
-
+interface Area {
+  domisili: string;
+  // Add more properties as needed
+}
 export default function Register() {
+  const [areaData, setAreaData] = useState<Area[]>([]);
+
+  useEffect(() => {
+      // Fetch the area data from the backend
+      axios.get(`https://tripselbe.fly.dev/area`)
+        .then((response) => {
+          setAreaData(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching area data:', error);
+        });
+    
+  }, []);
   const [fasilitas, setFasilitasChecked] = useState<Fasilitas[]>(facilities.map(facility => ({ icon: facility.icon, nama: facility.label })));
   const handleFasilitasCheckboxChange = (index: number) => {
     const currentFacility = facilities[index];
@@ -806,33 +824,36 @@ const deleteFasilitas = async (hotelName: string) => {
                   Domisili
                 </Typography>
                 <MuiSelect
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Domisili' }}
-                  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C', }}
-                  sx={{
-                    ...customInputStyle,
-                    '&:focus': {
-                      borderColor: 'transparent !important',
-                    },
-                    '& fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                    '&:active fieldset': {
-                      borderColor: 'transparent !important',
-                    },
-                  }}
-                  name="domisili"
-                  value={formData.domisili}
-                  onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
-                >
-                  
-                  <MenuItem value='Bali'>Bali</MenuItem>
-                  <MenuItem value='NTT'>NTT</MenuItem>
-                  <MenuItem value='NTB'>NTB</MenuItem>
-                </MuiSelect>
+  displayEmpty
+  inputProps={{ 'aria-label': 'Domisili' }}
+  style={{ borderRadius: '20px', fontSize: '22px', color: '#04214C', border: '2px solid #04214C' }}
+  sx={{
+    ...customInputStyle,
+    '&:focus': {
+      borderColor: 'transparent !important',
+    },
+    '& fieldset': {
+      borderColor: 'transparent !important',
+    },
+    '&:hover fieldset': {
+      borderColor: 'transparent !important',
+    },
+    '&:active fieldset': {
+      borderColor: 'transparent !important',
+    },
+  }}
+  name="domisili"
+  value={formData.domisili}
+  onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
+>
+  {areaData?.map((domi, index) => (
+    <MenuItem key={`${domi.domisili}_${index}`} value={domi.domisili}>
+      {domi.domisili}
+    </MenuItem>
+  ))}
+</MuiSelect>
+
+
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
