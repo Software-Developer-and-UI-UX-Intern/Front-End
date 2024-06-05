@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
+import axios from 'axios';
+
 const customInputStyle = {
   width: '100%',
   height: '53px',
@@ -68,8 +70,23 @@ const customInputStyle2 = {
   },
 };
 
-
+interface Area {
+  domisili: string;
+}
 export default function Register() {
+  const [areaData, setAreaData] = useState<Area[]>([]);
+  useEffect(() => {
+    // Fetch the area data from the backend
+    axios.get(`https://tripselbe.fly.dev/area`)
+      .then((response) => {
+        setAreaData(response.data);
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching area data:', error);
+      });
+  
+}, []);
   const location = useLocation();
   const [formData, setFormData] = useState({
     nama: '',
@@ -428,13 +445,11 @@ export default function Register() {
                   value={formData.domisili}
                   onChange={(e) => setFormData({ ...formData, domisili: e.target.value })}
                 >
-                  <MenuItem value={formData.domisili}>
-                    <em>{formData.domisili}</em>
-                  </MenuItem>
-                  <MenuItem value='Bali'>Bali</MenuItem>
-                  <MenuItem value='Kupang'>Kupang</MenuItem>
-                  <MenuItem value='Mataram'>Mataram</MenuItem>
-                  <MenuItem value='Flores'>Flores</MenuItem>
+                {areaData?.map((domi, index) => (
+    <MenuItem key={`${domi.domisili}_${index}`} value={domi.domisili}>
+      {domi.domisili}
+    </MenuItem>
+  ))}
                 </MuiSelect>
                 <Typography sx={{
                   fontWeight: 500,
