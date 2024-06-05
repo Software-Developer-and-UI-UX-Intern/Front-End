@@ -333,7 +333,9 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
       console.error('Error submitting data:', error);
     }
   };
-
+  const handleAddDomisili = () => {
+    navigate(`/admin/add-domisili`);
+  };
   const handleEdit = (nama: string) => {
     navigate(`/admin/input-domisili`, { state: { nama } });
   };
@@ -360,7 +362,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
         </Typography>
 
         <Button 
-        onClick={handleAdd}
+        onClick={handleAddDomisili}
           disableElevation 
           disableFocusRipple 
           disableRipple 
@@ -442,7 +444,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
       <Stack minWidth={'68.4px'} alignItems={'center'} justifyContent={'center'} padding={'16px'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>{index + 1}</Typography>
       </Stack>
-      <Stack direction={'row'} height={'100px'} alignItems={'center'} justifyContent={'center'} width={'372px'} gap={1}>
+      <Stack direction={'row'} height={'100px'} alignItems={'center'} justifyContent={'center'} width={'372px'} gap={1} borderRight={'2px solid #04214C'}>
           <Button 
             disableElevation 
             disableFocusRipple 
@@ -533,27 +535,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
     </Stack>
   </Stack>
       </Stack>
-      <Stack padding={'20px 20px'}>
-  <Button
-  type="button"
-  sx={{
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '44px',
-    width: '300px',
-    padding: '0 20px',
-    fontWeight: 500,
-    fontSize: '22px',
-    color: '#FFF',
-    backgroundColor: '#04214C',
-    borderRadius: '20px',
-    '&:hover': { background: '#04214C', color: '#FFF' },
-  }}
-  onClick={() => submitData(hotel)} // Call the submitData function with the updated hotel data
->
-  Edit
-</Button>
-          </Stack>
+
     </Stack>
 
   {/* rekomendasi hotel */}
