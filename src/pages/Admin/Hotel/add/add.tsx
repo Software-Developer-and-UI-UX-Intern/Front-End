@@ -162,11 +162,13 @@ const facilities = [
 // }
 interface Area {
   domisili: string;
-  // Add more properties as needed
 }
+
 export default function Register() {
   const [areaData, setAreaData] = useState<Area[]>([]);
-
+  const [lokasiData, setLokasiData] = useState<{ lokasi: string[] }>({
+    lokasi: [],
+  });
   useEffect(() => {
       // Fetch the area data from the backend
       axios.get(`https://tripselbe.fly.dev/area`)
@@ -179,6 +181,7 @@ export default function Register() {
         });
     
   }, []);
+ 
   const [fasilitas, setFasilitasChecked] = useState<Fasilitas[]>(facilities.map(facility => ({ icon: facility.icon, nama: facility.label })));
   const handleFasilitasCheckboxChange = (index: number) => {
     const currentFacility = facilities[index];
@@ -214,7 +217,23 @@ export default function Register() {
     bintang: '',
     fasilitas: [''],
   });
+  useEffect(() => {
+    // Fetch the area data from the backend
+    axios.get(`https://tripselbe.fly.dev/area/${formData.domisili}`)
+      .then((response) => {
+        const responseDat = response.data;
   
+        console.log(response.data);
+        const lokasiArray = responseDat.lokasi ? responseDat.lokasi.split(',') : [];
+  
+        setLokasiData({
+          lokasi: lokasiArray,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching area data:', error);
+      });
+  }, [formData.domisili]);
   const addRoom = () => {
     setKamar([
       ...kamar,
@@ -661,7 +680,7 @@ const deleteFasilitas = async (hotelName: string) => {
                         body: JSON.stringify({
                             ...kamar,
                             gambar: imageUrl,
-                            hotel_nama: hotelName, // Ensure to send hotel name
+                            hotel_nama: hotelName, 
                         }),
                     });
 
@@ -909,7 +928,10 @@ const deleteFasilitas = async (hotelName: string) => {
                 </MuiSelect>
                 
                 </Stack>
+
                 <Stack maxWidth={'50%'}>
+                  {lokasiData.lokasi.length > 0 && (
+                    <Stack direction={'column'}>
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
@@ -943,16 +965,15 @@ const deleteFasilitas = async (hotelName: string) => {
                 {/* <MenuItem value={formData.lokasi}>
                     <em>{formData.lokasi}</em>
                   </MenuItem>                   */}
-                                    <MenuItem value={'Gianyar'}>Gianyar</MenuItem>
-                                    <MenuItem value={'Buleleng'}>Buleleng</MenuItem>
-                  <MenuItem value={'Nusa Dua'}>Nusa Dua</MenuItem>
-                  <MenuItem value={'kuta'}>Kuta</MenuItem>
-                  <MenuItem value={'Denpasar'}>Denpasar</MenuItem>
-                  <MenuItem value={'Badung'}>Badung</MenuItem>
-                  <MenuItem value={'Flores'}>Flores</MenuItem>
-                  <MenuItem value={'Kupang'}>Kupang</MenuItem>
-                  <MenuItem value={'Mataram'}>Mataram</MenuItem>
+                {lokasiData.lokasi.map((domi, index) => (
+  <MenuItem key={`${domi}_${index}`} value={domi}>
+    {domi}
+  </MenuItem>
+))}
+
                 </MuiSelect>
+                </Stack>
+                )}
                 <Typography sx={{
                   fontWeight: 500,
                   fontSize: '24px',
