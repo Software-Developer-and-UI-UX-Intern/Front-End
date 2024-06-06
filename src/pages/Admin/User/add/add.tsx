@@ -111,7 +111,19 @@ export default function Register() {
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+    if (
+      !formData.full_name || 
+      !formData.email || 
+      !formData.nik || 
+      !formData.phone_number || 
+      !formData.domisili || 
+      !formData.jenis_kelamin || 
+      !formData.password || 
+      !formData.status
+    ) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
     try {
       const response = await fetch('https://tripselbe.fly.dev/register', {
         method: 'POST',

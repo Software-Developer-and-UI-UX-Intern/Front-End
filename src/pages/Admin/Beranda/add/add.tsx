@@ -131,22 +131,20 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
+    if (!formData.domisili || !formData.deskripsiabout || !formData.jenis || gambarFiles.length < 5) {
+      alert('Please fill in all required fields and upload all images.');
+      return;
+    }
+
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
-  
-      // Check if all uploads were successful
+
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
-    //   const existingResponse = await fetch(`https://tripselbe.fly.dev/area/${formData.domisili}`);
-    //   if (!existingResponse.ok) {
-    //       const errorMessage = await existingResponse.text();
-    //       throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
-    //   }
 
-    //   const existingData = await existingResponse.json();
-    const lokasiString = formData.lokasi.join(',');
+      const lokasiString = formData.lokasi.join(',');
 
       const updatedFormData = {
         domisili: formData.domisili || '',
@@ -158,8 +156,8 @@ export default function Register() {
         coverhotel: uploadedImages[3] || '',
         coverresto: uploadedImages[4] || '',
         lokasi: lokasiString || ''
-    };
-    console.log(JSON.stringify(updatedFormData))
+      };
+
       const response = await fetch(`https://tripselbe.fly.dev/area`, {
         method: 'POST',
         headers: {
@@ -167,22 +165,19 @@ export default function Register() {
         },
         body: JSON.stringify(updatedFormData),
       });
-  
+
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
-  
-      console.log(updatedFormData);
+
       const data = await response.json();
-      // await Promise.all(addresses.map(address => postDataToServer(address)));
       alert(data.message);
     } catch (error) {
       console.error('Error Posting restoran:', error);
       alert(`Failed to update restoran: ${error}`);
     }
   };
-  
 
   const handleFileUpload = async (file: File | null, index: number) => {
     try {

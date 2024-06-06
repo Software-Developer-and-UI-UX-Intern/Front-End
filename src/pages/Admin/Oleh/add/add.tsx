@@ -443,7 +443,18 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+ // Validation for required fields
+ if (!formData.nama || !formData.tiket_masuk  || !formData.description || !formData.domisili || !formData.single_alamat || !formData.jarak || !formData.hargatermurah || !formData.hargatermahal) {
+  alert('Please fill in all the required fields.');
+  return;
+}
+
+  // Validation for image files or URLs
+  const requiredImages = [gambar1, gambar2, gambar3];
+  if (requiredImages.some(url => !url)) {
+    alert('Please upload three images.');
+    return;
+  }
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
   

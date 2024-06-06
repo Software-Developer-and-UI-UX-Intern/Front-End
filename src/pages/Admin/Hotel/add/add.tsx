@@ -134,32 +134,7 @@ const facilities = [
   { icon: 'maki:beach', label: 'Tepi Pantai' },
   { icon: 'map:spa', label: 'Spa' },
 ];
-// function useDebouncedCallback<T extends (...args: [number]) => void>(callback: T, delay: number) {
-//   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
-//   const debouncedCallback = useCallback(
-//     (...args: Parameters<T>) => {
-//       if (timeoutId) {
-//         clearTimeout(timeoutId);
-//       }
-//       const id = setTimeout(() => {
-//         callback(...args);
-//       }, delay);
-//       setTimeoutId(id);
-//     },
-//     [callback, delay, timeoutId]
-//   );
-
-//   useEffect(() => {
-//     return () => {
-//       if (timeoutId) {
-//         clearTimeout(timeoutId);
-//       }
-//     };
-//   }, [timeoutId]);
-
-//   return debouncedCallback;
-// }
 interface Area {
   domisili: string;
 }
@@ -358,7 +333,25 @@ const handleFileInputChangeFasilitas = (e: React.ChangeEvent<HTMLInputElement>, 
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  if (!formData.nama  || !formData.lokasi || !formData.domisili || !formData.telfon || !formData.jarak || !formData.hargatermurah || !formData.hargatermahal || !formData.alamat || !formData.bintang) {
+    alert('Please fill in all the hotel details.');
+    return;
+  }
 
+  if (kamar.length < 1) {
+    alert('Please add at least one Kamar.');
+    return;
+  }
+
+  if (gambarhotel.length < 1) {
+    alert('Please add at least one Gambar Hotel.');
+    return;
+  }
+
+  if (datafasilitas.length < 2) {
+    alert('Please add at least two Gambar Fasilitas.');
+    return;
+  }
   try {
     const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
  

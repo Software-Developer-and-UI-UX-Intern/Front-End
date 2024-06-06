@@ -198,7 +198,16 @@ export default function Register() {
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+// Validate required fields in a single if statement
+if (!formData.nama || !formData.domisili || !formData.tikettermurah || !formData.tikettermahal || !formData.parkirtermurah || !formData.parkirtermahal || !formData.description ) {
+  alert('Please fill in all required fields and upload all required images.');
+  return;
+}
+   // Check if gambar1, gambar2, and gambar3 are filled
+   if (!gambar1 || !gambar2 || !gambar3) {
+    alert('Please upload three images (gambar1, gambar2, gambar3).');
+    return;
+  }
     try {
         // Fetch existing data to get current URLs
 

@@ -243,7 +243,17 @@ export default function Register() {
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Validate required fields
+    if (!formData.nama || !formData.telfon || !formData.description || !formData.domisili || !formData.hargatermurah || !formData.hargatermahal || !formData.location || !formData.halal) {
+      alert('Please fill in all required fields');
+      return;
+    }
   
+    // Check if gambar1, gambar2, and gambar3 are filled
+    if (!gambar1 || !gambar2 || !gambar3) {
+      alert('Please upload three images (gambar1, gambar2, gambar3).');
+      return;
+    }
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
   
