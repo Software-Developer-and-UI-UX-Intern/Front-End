@@ -122,7 +122,7 @@ export default function Register() {
   //     formData.append('file', file);
   //     formData.append('upload_preset', 'ml_default');
   
-  //     const response = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+  //     const response = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
   //       method: 'POST',
   //       body: formData,
   //     });
@@ -148,7 +148,7 @@ export default function Register() {
   //       formData.append('file', gambar_file);
   //       formData.append('upload_preset', 'ml_default');
 
-  //       const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+  //       const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
   //         method: 'POST',
   //         body: formData,
   //       });
@@ -206,7 +206,7 @@ export default function Register() {
                     formaddress.append('file', blob);
                     formaddress.append('upload_preset', 'ml_default');
                     console.log(blob)
-                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
                         method: 'POST',
                         body: formaddress,
                     });
@@ -515,7 +515,7 @@ const hargatermahal = hargaArray[1] || ''; // Largest price
       formData.append('file', file);
       formData.append('upload_preset', 'ml_default');
   
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
         method: 'POST',
         body: formData,
       });

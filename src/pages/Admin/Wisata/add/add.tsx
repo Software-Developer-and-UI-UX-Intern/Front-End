@@ -257,7 +257,7 @@ if (!formData.nama || !formData.domisili || !formData.tikettermurah || !formData
       formData.append('file', file);
       formData.append('upload_preset', 'ml_default');
   
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
         method: 'POST',
         body: formData,
       });

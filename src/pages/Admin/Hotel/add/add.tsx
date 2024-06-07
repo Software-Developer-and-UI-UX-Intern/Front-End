@@ -595,7 +595,7 @@ const deleteFasilitas = async (hotelName: string) => {
     gambarbaru.append('file', blob);
     gambarbaru.append('upload_preset', 'ml_default');
   
-    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
       method: 'POST',
       body: gambarbaru,
     });
@@ -652,7 +652,7 @@ const deleteFasilitas = async (hotelName: string) => {
                     gambarbaru.append('file', blob);
                     gambarbaru.append('upload_preset', 'ml_default');
 
-                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+                    const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
                         method: 'POST',
                         body: gambarbaru,
                     });
@@ -716,7 +716,7 @@ const deleteFasilitas = async (hotelName: string) => {
             gambarbaru.append('file', blob);
             gambarbaru.append('upload_preset', 'ml_default');
   
-            const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+            const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
               method: 'POST',
               body: gambarbaru,
             });
