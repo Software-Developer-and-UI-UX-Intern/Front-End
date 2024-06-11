@@ -78,13 +78,18 @@ const Oleh = () => {
 
         const filteredData: OlehDataItem[] = data.filter(item => {
           if (halal === 'true') {
-            return item.halal === 'true' && item.domisili.toLowerCase() === `${destination}`;
+            console.log( item.domisili.toLowerCase() + destination)
+
+            return item.halal === 'true' && item.domisili === `${destination}`;
+
           } else {
-            return item.halal !== 'true' && item.domisili.toLowerCase() === `${destination}`;
+
+            return item.halal !== 'true' && item.domisili === `${destination}`;
+            
           }
         });
     
-
+        console.log(data)
         const transformedData: OrangewithimageProps[] = filteredData.map(item => ({
           imageSrc: item.gambar_url1 || item.gambar_url2 || item.gambar_url3 || '',
           textContent: item.nama,

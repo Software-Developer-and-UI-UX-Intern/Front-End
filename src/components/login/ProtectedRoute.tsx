@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import LoginPromptDialog from '../popup/PromptDialog';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
 const isAuthenticated = async (): Promise<boolean> => {
     const token = localStorage.getItem('token');
@@ -32,19 +32,25 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const [showLoginPrompt, setShowLoginPrompt] = useState(true);
+    const navigate = useNavigate(); // Initialize navigate function
+
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     useEffect(() => {
         const checkAuthentication = async () => {
             const authenticated = await isAuthenticated();
-            setShowLoginPrompt(!authenticated);
+            if (!authenticated) {
+                navigate('/login'); // Navigate to /login if not authenticated
+            } else {
+                setIsCheckingAuth(false);
+            }
         };
 
         checkAuthentication();
-    }, []);
+    }, [navigate]);
 
-    if (showLoginPrompt) {
-        return <LoginPromptDialog open={true} onClose={() => setShowLoginPrompt(false)} />;
+    if (isCheckingAuth) {
+        return <div>Loading...</div>; // Optionally show a loading state while checking authentication
     }
 
     return <>{children}</>;
