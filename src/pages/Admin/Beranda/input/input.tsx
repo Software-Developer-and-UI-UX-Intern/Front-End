@@ -353,7 +353,10 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
   //     throw error;
   //   }
   // };
-  
+  const capitalizeFirstLetter = (string:string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -374,7 +377,7 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
 
       const existingData = await existingResponse.json();
       const updatedFormData = {
-        domisili: formData.domisili || '',
+        domisili: capitalizeFirstLetter(formData.domisili) || '',
         deskripsiabout: formData.deskripsiabout || '',
         jenis: formData.jenis || '',
         coverabout: uploadedImages[0] || existingData.coverabout,
@@ -796,7 +799,7 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
                     }}
                     onClick={handleAddInput}
                   >
-                    Tambah Makanan
+                    Tambah Lokasi
                   </Button>
                 </Stack>
                 </Stack>

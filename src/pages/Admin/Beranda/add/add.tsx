@@ -129,6 +129,10 @@ export default function Register() {
 }
     
   };
+  const capitalizeFirstLetter = (string:string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -148,7 +152,7 @@ export default function Register() {
       const lokasiString = formData.lokasi.join(',');
 
       const updatedFormData = {
-        domisili: formData.domisili || '',
+        domisili: capitalizeFirstLetter(formData.domisili) || '',
         deskripsiabout: formData.deskripsiabout || '',
         jenis: formData.jenis || '',
         coverabout: uploadedImages[0] || '',
@@ -586,7 +590,7 @@ export default function Register() {
                     }}
                     onClick={handleAddInput}
                   >
-                    Tambah Makanan
+                    Tambah Lokasi
                   </Button>
                 </Stack>
                 </Stack>
