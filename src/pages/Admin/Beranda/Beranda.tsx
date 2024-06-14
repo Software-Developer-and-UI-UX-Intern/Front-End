@@ -428,7 +428,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
     </Stack>
     
     {/* rows container with vertical scroll */}
-    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    <Stack direction={'column'} height={'auto'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
     {areaData?.map((hotel, index) => (
     <Stack 
       direction={'row'} 
@@ -603,7 +603,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
     </Stack>
     
     {/* rows container with vertical scroll */}
-    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    <Stack direction={'column'} height={'auto'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
     {hotel.map((hotel, index) => (
     <Stack 
       direction={'row'} 
@@ -714,14 +714,14 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
   }}
   onClick={() => submitData(hotel)} // Call the submitData function with the updated hotel data
 >
-  Edit
+  Save
 </Button>
           </Stack>
     </Stack>
 
 
   {/* rekomendasi Wisata */}
-  <Stack width="100%" height="500px" sx={{overflowY:'none'}}>
+  <Stack width="100%" height="auto" sx={{overflowY:'none'}}>
       
       <Stack direction={'row'} justifyContent={'space-between'} padding={'0px 30px'}>
         <Typography fontWeight={500} fontSize={'42px'} color={'#04214C'}>
@@ -731,7 +731,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
        
       </Stack>
       
-      <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'680px'}>
+      <Stack margin={'20px 0 20px 0'} overflow={'auto'} height={'auto'}>
   <Stack sx={{ backgroundColor: '#04214C' }} flexDirection={'column'} margin={'0 20px 0 20px'} width={'calc((372px * 3) + 105px)'} height={'auto'} borderRadius={'30px 30px 0 0'}>
     
     {/* header container with horizontal scroll */}
@@ -740,7 +740,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>No</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wisata</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Provinsi</Typography>
@@ -755,7 +755,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
 
 
     {/* rows container with vertical scroll */}
-    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    <Stack direction={'column'} height={'auto'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
     {wisata.map((hotel, index) => (
   <Stack
     direction={'row'}
@@ -843,7 +843,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
   }}
   onClick={() => submitDataWisata(wisata)} // Call the submitData function with the updated hotel data
 >
-  Edit
+  Save
 </Button>
           </Stack>
     </Stack>
@@ -893,7 +893,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Action</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wisata</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Domisili</Typography>
@@ -1011,7 +1011,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
   }}
   onClick={() => submitDataPopuler(populer)} // Call the submitData function with the updated hotel data
 >
-  Edit
+  Save
 </Button>
           </Stack>
     </Stack>
@@ -1036,14 +1036,14 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
         <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>No</Typography>
       </Stack>
       <Stack minWidth={'372px'} alignItems={'center'} justifyContent={'center'}>
-        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Nama Wista</Typography>
+        <Typography fontSize={'26px'} color={'#FFF'} fontWeight={500}>Link Youtube</Typography>
       </Stack>
 
 
     </Stack>
     
     {/* rows container with vertical scroll */}
-    <Stack direction={'column'} height={'590px'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
+    <Stack direction={'column'} height={'auto'} sx={{ backgroundColor: '#FFF', overflowY: 'auto', overflowX:'hidden' }}>
     {youtube.map((hotel, index) => (
   <Stack
     direction={'row'}
@@ -1080,7 +1080,6 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
 
   </Stack>
 ))}
-
   <Stack padding={'20px 0px'}>
   <Button
   type="button"
@@ -1099,13 +1098,16 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
   }}
   onClick={() => submitDataYoutube(youtube)} // Call the submitData function with the updated hotel data
 >
-  Edit
+  Save
 </Button>
           </Stack>
-    </Stack>
-  </Stack>
-      </Stack>
 
+    </Stack>
+    
+  </Stack>
+  
+      </Stack>
+    
     </Stack>
     </Stack>
   );

@@ -64,7 +64,7 @@ const customInputStyle2 = {
     fontWeight: 500, // Change font weight here
     color:'#04214C',
     fontSize: '22px', // Change font size here
-    
+    whiteSpace: 'pre-line',
   },
 };
 // interface Address  {

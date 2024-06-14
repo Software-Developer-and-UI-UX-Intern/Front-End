@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
 import { Button } from '@mui/material';
+
 const customInputStyle = {
   width: '100%',
   height: '53px',
@@ -63,7 +64,7 @@ const customInputStyle2 = {
     fontWeight: 500, // Change font weight here
     color:'#04214C',
     fontSize: '22px', // Change font size here
-    
+    whiteSpace: 'pre-line',
   },
 };
 // interface Address  {
@@ -172,6 +173,26 @@ export default function Register() {
       }
 
       const data = await response.json();
+        // Reset form fields after successful submission
+    setFormData({
+      domisili: '',
+      coverabout: '',
+      footerabout: '',
+      deskripsiabout: '',
+      coverresto: '',
+      coverhotel: '',
+      coveroleh: '',
+      jenis: '',
+      lokasi: [''],
+    });
+
+    setGambarFiles([]);
+    setGambar1('');
+    setGambar2('');
+    setGambar3('');
+    setGambar4('');
+    setGambar5('');
+
       alert(data.message);
     } catch (error) {
       console.error('Error Posting restoran:', error);

@@ -47,6 +47,37 @@ export default function Navbar() {
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null); // State for wisata menu
   const [profileMenuActive, setProfileMenuActive] = useState(false); // State to track wisata menu activation
   const [menuActive, setMenuActive] = useState(false);
+  const [userStatus, setUserStatus] = useState<string>('Guest'); // Default to 'Super Admin'
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // State for sidebar collapse
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token);
+      
+      if (token) {
+        try {
+          const response = await fetch('https://tripselbe.fly.dev/user', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          console.log(data); // Log the received data
+          if (data && data.status) {
+            setUserStatus(data.status);
+          } else {
+            console.error('Status not found in user data');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+  
+    fetchUserData();
+  }, []);
   const [data, setData] = useState<Data>({
     oleh: [],
     wisata: [],
@@ -104,15 +135,18 @@ export default function Navbar() {
     setMenuActive(false);
   };
   const handleProfilemenu = () => {
-    navigate(`/profile`)
+    navigate(`/`)
   }
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate(`/admin-login`)
+    navigate(`/login-admin`)
   }
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
   return (
   <Stack direction={'row'}>
     <Stack
@@ -120,7 +154,7 @@ export default function Navbar() {
       sx={{
         backgroundColor: '#FF010C',
         justifyContent: 'space-between',
-        width: '270px',
+        width: sidebarCollapsed ? '135px' : '270px',
         position: 'sticky',
         height: '100vh', // Set height to 100vh for full viewport height
         top: 0, // Stick to the top of the viewport
@@ -129,8 +163,8 @@ export default function Navbar() {
       }}
     >
       <Stack justifyContent={'space-around'} height={'100%'} alignItems={'center'} width={'auto'}>
-        <Stack width={'82px'}>
-        <img src={logo} alt="logo" />
+      <Stack width={sidebarCollapsed ? '82px' : '82px'}>
+      <img src={logo} alt="logo" />
         </Stack>
         <Stack gap={5} alignItems={'start'}>
         {/* middle button */}
@@ -142,15 +176,17 @@ export default function Navbar() {
                       color: '#FFF', // Change text color to gray
                       '&:hover': { fontWeight: 700, color: '#FFF' },
                       padding:'0px',
-                      minWidth:'auto',
+                      minWidth:'100%',
                       height:'auto',
                       transition: 'color 0.75s ease-in-out',
                     }}
                   >
           <Icon icon="heroicons:home-20-solid" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Beranda
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Beranda
+                  </Typography>
+                )}
           </Button>
           </Stack>
         {/* Hotel */}
@@ -167,9 +203,11 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="icon-park-solid:hotel" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Hotel
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Hotel
+                  </Typography>
+                )}
           </Button>
           </Stack>
           {/* Restaurant */}
@@ -186,9 +224,11 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="ion:restaurant-outline" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Restoran
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Restoran
+                  </Typography>
+                )}
           </Button>
           </Stack>
           {/* Wisata */}
@@ -205,9 +245,11 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="akar-icons:location" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Wisata
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Wisata
+                  </Typography>
+                )}
           </Button>
           </Stack>
           {/* Oleh-oleh */}
@@ -224,9 +266,11 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="lets-icons:shop" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Oleh-oleh
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Oleh - Oleh
+                  </Typography>
+                )}
           </Button>
           </Stack>
         {/* User */}
@@ -243,9 +287,11 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="solar:user-bold" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          User
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    User
+                  </Typography>
+                )}
           </Button>
           </Stack>
         </Stack>
@@ -264,22 +310,24 @@ export default function Navbar() {
                     }}
                   >
           <Icon icon="ic:round-log-out" width="42" height="42" style={{ color: '#FFF' }} />
-          <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
-          Sign Out
-          </Typography>
+          {!sidebarCollapsed && (
+                  <Typography fontWeight={'500'} fontSize={'20px'} paddingLeft={'20px'}>
+                    Sign Out
+                  </Typography>
+                )}
           </Button>
           </Stack>
         </Stack>
       </Stack>
     </Stack>
-    <Stack direction={'column'} width="calc(100% - 200px)" height={'100vh'} sx={{overflowY:'hidden'}} justifyContent={'center'}>
+    <Stack direction={'column'} width="calc(100%)" height={'100vh'} sx={{overflowY:'hidden'}} justifyContent={'center'}>
       {/* navbar top */}
       <Stack height={'100px'} justifyContent={'center'} direction={'row'} padding={'0px 30px'}>
         {/* hamburger */}
       <Stack gap={2} direction={'row'} justifyContent={'center'} color={'red'} alignItems={'center'} height={'auto'}>
           <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
-                      onClick={() => navigate(`/admin-beranda`)}                  
-                      sx={{
+ onClick={toggleSidebar}
+                       sx={{
                       color: '#FFF', // Change text color to gray
                       '&:hover': { fontWeight: 700, color: '#FFF' },
                       padding:'0px',
@@ -361,7 +409,7 @@ export default function Navbar() {
                         textWrap:'nowrap'
                       }}
                     >
-                Super Admin
+                {userStatus}
                 </Typography>
                 </Button>
                 <Menu
@@ -381,7 +429,7 @@ export default function Navbar() {
                   },
                 }}
               >
-                    <MenuItem onClick={() => handleProfilemenu()} sx={menuItemStyle}>Profile</MenuItem>
+                    <MenuItem onClick={() => handleProfilemenu()} sx={menuItemStyle}>Tripsel</MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleLogout()} sx={menuItemStyle}>Sign out</MenuItem>
                 </Menu>

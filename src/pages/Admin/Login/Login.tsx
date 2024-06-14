@@ -78,7 +78,7 @@ export default function Login() {
       const userResponse = await axios.get(`https://tripselbe.fly.dev/user/${email}`);
       const { status } = userResponse.data;
       
-      if (status === 'admin' || status === 'superadmin') {
+      if (status === 'Admin' || status === 'Super Admin') {
         // User is not a guest, proceed with login
         const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
         const { token } = response.data;
@@ -92,7 +92,7 @@ export default function Login() {
         setLoading(false);
     
         // Return Navigate component to redirect to the home page after successful login
-        navigate(`/`);
+        navigate(`/admin/beranda`);
       } else {
         // User is a guest, redirect to verification page
         setLoading(false);

@@ -81,6 +81,8 @@ export default function Beranda() {
           color: 'white',
           fontSize: '25px',
           textAlign: 'left',
+          whiteSpace: 'pre-line',
+
         }}>
         {areaData?.deskripsiabout}
         </Typography>

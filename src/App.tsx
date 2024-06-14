@@ -26,6 +26,7 @@ import { AddOleh } from './pages/Admin/Oleh/add';
 import Footer from './components/ui/footer';
 import { Beranda } from './pages/Beranda';
 import { Login } from './pages/Login';
+import { LoginAdmin } from './pages/Admin/Login';
 // import { AdminLogin } from './pages/Admin/Login';
 import { LupaPassword } from './pages/Login/Lupapassword';
 import { LupaVerifikasi } from './pages/Login/Lupapassword/Lupaverifikasi';
@@ -59,6 +60,8 @@ import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/700.css';
 import '@fontsource/poppins/800.css';
 import ProtectedRoute from './components/login/ProtectedRoute';
+import ProtectedRouteAdmin from './components/login/ProtectedRouteAdmin';
+
 
 // const isAuthenticated = () => {
 //   const token = localStorage.getItem('token');
@@ -361,8 +364,14 @@ const router = createBrowserRouter([
     },
     {
       path: '/admin',
-      element: <Navbaradmin />,
-      children: [
+      element: (
+        <ProtectedRouteAdmin>
+        <>
+          <Navbaradmin />
+        </>
+        </ProtectedRouteAdmin>
+      ),
+            children: [
         {
           path: 'hotel', 
           element: <AdminHotel />,
@@ -444,6 +453,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/login-admin',
+    element: <LoginAdmin />,
   },
   {
     path: '/lupa-password',
