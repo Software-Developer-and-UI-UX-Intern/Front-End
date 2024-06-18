@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, Checkbox, RadioGroup, Radio, FormControlLabel, FormControl, FormGroup, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -140,6 +140,8 @@ const facilities = [
   { icon: 'map:spa', label: 'Spa' },
 ];
 export default function Register() {
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const [areaData, setAreaData] = useState<Area[]>([]);
   const [lokasiData, setLokasiData] = useState<{ lokasi: string[] }>({
     lokasi: [],
@@ -446,6 +448,7 @@ const debouncedHandleFileInputChange = (e: ChangeEvent<HTMLInputElement>, index:
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  setLoading(true); // Set loading to true when submission starts
 
   try {
     const hargaString = `Rp ${formData.hargatermurah.toLocaleString()} - Rp ${formData.hargatermahal.toLocaleString()}`;
@@ -476,6 +479,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       alert('Hotel information updated successfully!');
   } catch (error) {
       console.error('Error updating hotel information:', error);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
 };
 
@@ -1866,6 +1871,9 @@ const deleteFasilitas = async (hotelName: string) => {
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -1892,6 +1900,7 @@ const deleteFasilitas = async (hotelName: string) => {
             >
               Simpan Perubahan
             </Button>
+            )}
           </Stack>
         </Stack>
       </form>

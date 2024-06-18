@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 
 const customInputStyle = {
@@ -78,6 +78,7 @@ const customInputStyle2 = {
 //   jenis: string;
 // }
 export default function Register() {
+  const [loading, setLoading] = useState(false); // Add loading state
   const [formData, setFormData] = useState({
     domisili: '',
     coverabout: '',
@@ -136,6 +137,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when submission starts
 
     if (!formData.domisili || !formData.deskripsiabout || !formData.jenis || gambarFiles.length < 5) {
       alert('Please fill in all required fields and upload all images.');
@@ -201,6 +203,8 @@ export default function Register() {
     } catch (error) {
       console.error('Error Posting restoran:', error);
       alert(`Failed to update restoran: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
 
@@ -600,6 +604,9 @@ export default function Register() {
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -626,6 +633,7 @@ export default function Register() {
             >
               Simpan Perubahan
             </Button>
+          )}
           </Stack>
         </Stack>
       </form>

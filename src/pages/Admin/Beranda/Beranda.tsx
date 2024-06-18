@@ -534,7 +534,7 @@ const submitDataPopuler = async (hotel: Areapopuler[]) => {
       </Stack>
       <Stack minWidth={'370.4px'} alignItems={'center'} justifyContent={'center'} borderRight={'2px solid #04214C'}>
         <Typography fontSize={'26px'} color={'#04214C'} fontWeight={500}>
-          {hotel.lokasi && (hotel.lokasi.length > 22 ? hotel.coveroleh.slice(0, 22) + '...' : hotel.lokasi)}
+          {hotel.lokasi && (hotel.lokasi.length > 22 ? hotel.lokasi.slice(0, 22) + '...' : hotel.lokasi)}
         </Typography>
       </Stack>
     </Stack>

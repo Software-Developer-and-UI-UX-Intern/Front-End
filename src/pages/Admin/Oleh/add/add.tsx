@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import axios from 'axios';
@@ -80,6 +80,8 @@ interface Area {
   domisili: string;
 }
 export default function Register() {
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const [areaData, setAreaData] = useState<Area[]>([]);
   useEffect(() => {
     // Fetch the area data from the backend
@@ -443,6 +445,8 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when submission starts
+
  // Validation for required fields
  if (!formData.nama || !formData.tiket_masuk  || !formData.description || !formData.domisili || !formData.single_alamat || !formData.jarak || !formData.hargatermurah || !formData.hargatermahal) {
   alert('Please fill in all the required fields.');
@@ -501,6 +505,8 @@ export default function Register() {
     } catch (error) {
       console.error('Error updating restoran:', error);
       alert(`Failed to update restoran: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
   
@@ -1033,6 +1039,9 @@ export default function Register() {
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -1059,6 +1068,7 @@ export default function Register() {
             >
               Simpan Perubahan
             </Button>
+            )}
           </Stack>
         </Stack>
       </form>

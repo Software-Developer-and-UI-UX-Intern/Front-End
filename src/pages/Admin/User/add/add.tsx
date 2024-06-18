@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 const customInputStyle = {
@@ -108,9 +108,12 @@ export default function Register() {
     };
     fetchRestoranData();
   }, [location]);
-  
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Set loading to false when submission is complete
+
     if (
       !formData.full_name || 
       !formData.email || 
@@ -144,6 +147,8 @@ export default function Register() {
     } catch (error) {
       console.error('Error updating user:', error);
       alert(`Failed to update user: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
   
@@ -385,6 +390,9 @@ export default function Register() {
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -411,6 +419,7 @@ export default function Register() {
             >
               Simpan Perubahan
             </Button>
+            )}
           </Stack>
         </Stack>
       </form>

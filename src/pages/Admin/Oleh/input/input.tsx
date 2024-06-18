@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import axios from 'axios';
@@ -80,6 +80,8 @@ interface Area {
   domisili: string;
 }
 export default function Register() {
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const [areaData, setAreaData] = useState<Area[]>([]);
   useEffect(() => {
     // Fetch the area data from the backend
@@ -458,7 +460,8 @@ const hargatermahal = hargaArray[1] || ''; // Largest price
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    setLoading(true); // Set loading to true when submission starts
+
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
   
@@ -503,6 +506,8 @@ const hargatermahal = hargaArray[1] || ''; // Largest price
     } catch (error) {
       console.error('Error updating restoran:', error);
       alert(`Failed to update restoran: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
   
@@ -1038,6 +1043,9 @@ const hargatermahal = hargaArray[1] || ''; // Largest price
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -1064,6 +1072,7 @@ const hargatermahal = hargaArray[1] || ''; // Largest price
             >
               Simpan Perubahan
             </Button>
+            )}
           </Stack>
         </Stack>
       </form>

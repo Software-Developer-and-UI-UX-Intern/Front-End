@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 const customInputStyle = {
@@ -78,6 +78,7 @@ const customInputStyle2 = {
 //   jenis: string;
 // }
 export default function Register() {
+  const [loading, setLoading] = useState(false); // Add loading state
   const location = useLocation();
   const [formData, setFormData] = useState({
     domisili: '',
@@ -353,14 +354,12 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
   //     throw error;
   //   }
   // };
-  const capitalizeFirstLetter = (string:string) => {
-    if (!string) return '';
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    setLoading(true); // Set loading to true when submission starts
+
     try {
       const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
   
@@ -377,7 +376,7 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
 
       const existingData = await existingResponse.json();
       const updatedFormData = {
-        domisili: capitalizeFirstLetter(formData.domisili) || '',
+        domisili: formData.domisili || '',
         deskripsiabout: formData.deskripsiabout || '',
         jenis: formData.jenis || '',
         coverabout: uploadedImages[0] || existingData.coverabout,
@@ -409,6 +408,8 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
     } catch (error) {
       console.error('Error updating restoran:', error);
       alert(`Failed to update restoran: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
   
@@ -809,6 +810,9 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
             </Stack>
           </Stack>
           <Stack spacing={3} alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -835,6 +839,8 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
             >
               Simpan Perubahan
             </Button>
+          )}
+
           </Stack>
         </Stack>
       </form>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField } from '@mui/material';
+import { Stack, Typography, Input, MenuItem, Select as MuiSelect, TextField, CircularProgress } from '@mui/material';
 import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom'; // Import the useLocation hook
 import axios from 'axios';
@@ -240,9 +240,12 @@ export default function Register() {
     };
     fetchRestoranData();
   }, [location]);
-  
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when submission starts
+
     // Validate required fields
     if (!formData.nama || !formData.telfon || !formData.description || !formData.domisili || !formData.hargatermurah || !formData.hargatermahal || !formData.location || !formData.halal) {
       alert('Please fill in all required fields');
@@ -294,6 +297,8 @@ export default function Register() {
     } catch (error) {
       console.error('Error creating new restoran:', error);
       alert(`Failed to create new restoran: ${error}`);
+    }finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
   
@@ -877,6 +882,9 @@ export default function Register() {
             </Stack>
           </Stack>
           <Stack alignItems={'center'} justifyContent={'center'} width={'100%'} direction={'row'} height={'120px'}>
+          {loading ? (
+              <CircularProgress />
+            ) : (
             <Button
               type="submit"
               sx={{
@@ -903,6 +911,7 @@ export default function Register() {
             >
               Simpan Perubahan
             </Button>
+            )}
           </Stack>
         </Stack>
       </form>
