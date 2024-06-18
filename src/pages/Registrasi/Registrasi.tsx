@@ -5,6 +5,7 @@ import { InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import bg from '../../assets/login.png';
 import logo from '../../assets/Trip-sel.png';
+import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
   width: '100%',
@@ -12,7 +13,7 @@ const customInputStyle = {
   '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '1px solid #04214C', // Apply border directly to the input
+    border: '2px solid #04214C', // Apply border directly to the input
     outline: 'none',
     padding: '0px 10px'
   },
@@ -44,6 +45,7 @@ const customInputStyle = {
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -52,7 +54,8 @@ export default function Register() {
     domisili: '',
     jenisKelamin: '',
     password: '',
-    confirmPassword: '' // New state for confirm password
+    confirmPassword: '',
+    status: '' 
   });
   const [submitPressed, setSubmitPressed] = useState(false);
 
@@ -60,20 +63,20 @@ export default function Register() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  interface FormDataObject {
-    fullName: string;
-    email: string;
-    nik: string;
-    phoneNumber: string;
-    domisili: string;
-    jenisKelamin: string;
-    password: string;
-  }
+  // interface FormDataObject {
+  //   fullName: string;
+  //   email: string;
+  //   nik: string;
+  //   phoneNumber: string;
+  //   domisili: string;
+  //   jenisKelamin: string;
+  //   password: string;
+  // }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitPressed(true); // Button is pressed
-
+  
     // Check if any of the fields are empty
     if (
       formData.fullName === '' ||
@@ -87,56 +90,82 @@ export default function Register() {
     ) {
       return; // Prevent form submission
     }
-
+  
     // Check if email ends with "@telkomsel.co.id"
     if (!formData.email.endsWith('@telkomsel.co.id')) {
       return; // Prevent form submission
     }
-
+  
     // Check if password has at least 8 characters
     if (formData.password.length < 8) {
       return; // Prevent form submission
     }
-
+  
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
       return; // Prevent form submission
     }
-
-    const formDataCopy = new FormData(e.target as HTMLFormElement);
-    const formDataObject: FormDataObject = {
-      fullName: formDataCopy.get('fullName') as string,
-      email: formDataCopy.get('email') as string,
-      nik: formDataCopy.get('nik') as string,
-      phoneNumber: formDataCopy.get('phoneNumber') as string,
-      domisili: formDataCopy.get('domisili') as string,
-      jenisKelamin: formDataCopy.get('jenisKelamin') as string,
-      password: formDataCopy.get('password') as string,
-    };
-
+  
     try {
-      const response = await fetch('https://tripselbe.fly.dev/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataObject),
-      });
-
-      if (!response.ok) {
-        // Handle non-200 HTTP status codes
-        const errorMessage = await response.text();
-        throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
+      // Check if user with the provided email exists
+      const response = await fetch(`https://tripselbe.fly.dev/user/${formData.email}`);
+      if (response.ok) {
+        const userData = await response.json();
+        // Check if user status is "guest"
+        if (userData.status === 'guest') {
+          // Update existing user data
+          const updateData = { ...formData };
+          // Check if the user status was guest before
+          if (userData.status === 'guest') {
+            // Set the user status to be the same as before
+            updateData.status = userData.status;
+          }
+          const updateResponse = await fetch('https://tripselbe.fly.dev/user', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
+          });
+    
+          if (!updateResponse.ok) {
+            // Handle non-200 HTTP status codes
+            const errorMessage = await updateResponse.text();
+            throw new Error(`Server responded with status ${updateResponse.status}: ${errorMessage}`);
+          }
+    
+          alert('User data updated successfully');
+          navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
+        } else {
+          // User already exists, display error message
+          alert('User with provided email already exists');
+        }
+      } else {
+        // User does not exist, proceed with registration
+        const registerResponse = await fetch('https://tripselbe.fly.dev/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+    
+        if (!registerResponse.ok) {
+          // Handle non-200 HTTP status codes
+          const errorMessage = await registerResponse.text();
+          throw new Error(`Server responded with status ${registerResponse.status}: ${errorMessage}`);
+        }
+    
+        const registerData = await registerResponse.json();
+        alert(registerData.message); // Display success message from the server
+        navigate(`/verifikasi`, { state: { email: formData.email, password: formData.password } });
       }
-
-      const data = await response.json();
-      alert(data.message); // Display success message from the server
     } catch (error) {
       console.error('Error registering user:', error);
       alert(`Failed to register user ${error}`); // Alert the specific error message
-    }
+    }    
   };
-
+  
 
   return (
     <Box>
@@ -214,7 +243,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Nama Lengkap (Sesuai KTP)*
+                      Nama Lengkap (Sesuai KTP)<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -263,7 +292,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Email Telkomsel*
+                      Email Telkomsel<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -312,15 +341,15 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Nomor Induk Kependudukan*
+                      Nomor Induk Kepegawaian<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
-                      placeholder="Contoh: 5178xxxxxxxxx"
+                      placeholder="Contoh: 4321xx"
                       sx={customInputStyle}
                       style={{fontSize:'22px', color:'#04214C'}}
                       inputProps={{
-                        'aria-label': 'Nomor Induk Kependudukan',
+                        'aria-label': 'Nomor Induk Kepegawaian',
                         name: 'nik',
                         value: formData.nik,
                         onChange: (e) => setFormData({ ...formData, nik: (e.target as HTMLInputElement).value }),
@@ -363,7 +392,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      No. handphone*
+                      No. handphone<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <Input
                       disableUnderline
@@ -412,7 +441,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Domisili*
+                      Domisili<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <MuiSelect
                     displayEmpty
@@ -481,7 +510,7 @@ export default function Register() {
                       fontSize: '24px',
                       color: '#04214C'
                     }}>
-                      Jenis Kelamin*
+                      Jenis Kelamin<span style={{ color: '#FF010C' }}>*</span>
                     </Typography>
                     <MuiSelect
                       displayEmpty
@@ -550,7 +579,7 @@ export default function Register() {
                     fontSize: '24px',
                     color: '#04214C'
                   }}>
-                    Password*
+                    Password<span style={{ color: '#FF010C' }}>*</span>
                   </Typography>
                   <Input
                     disableUnderline
@@ -612,7 +641,7 @@ export default function Register() {
                     fontSize: '24px',
                     color: '#04214C',
                   }}>
-                    konfirmasi Password*
+                    konfirmasi Password<span style={{ color: '#FF010C' }}>*</span>
                   </Typography>
                   <Input
                     disableUnderline
@@ -689,9 +718,7 @@ export default function Register() {
                     '&:focus': {
                       backgroundColor: '#FF010C', 
                     },
-                    '&:hover': {
-                      backgroundColor: '#FF010C', 
-                    },
+                    '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
                   }}
                 >
                   Daftar

@@ -4,9 +4,9 @@ import { Button, InputAdornment, IconButton, Link } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { debounce } from 'lodash';
-
 import bg from '../../assets/login.png';
 import logo from '../../assets/Trip-sel.png'
+import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
   width: '100%',
@@ -14,20 +14,29 @@ const customInputStyle = {
   '& input': {
     borderRadius: '20px',
     height: '53px',
-    border: '1px solid #04214C',
+    border: '2px solid #04214C', // Apply border directly to the input
     outline: 'none',
-    padding:'0px 10px',
+    padding: '0px 10px'
   },
   '& .MuiInputLabel-root': {
-    color:  '#04214C',
+    color: '#6E6C6C', // Initially make label transparent
     '&.Mui-focused': {
-      color:'transparent',
+      color: 'transparent', // Change label color when focused
     },
   },
   '& .MuiOutlinedInput-root': {
     borderRadius: '20px',
     '&:hover fieldset': {
-      borderColor: '#000',
+      borderColor: 'red',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#04214C',
+    },
+  },
+  '& .MuiOutlinedInput-root.MuiSelect-root': {
+    borderRadius: '20px',
+    '&:hover fieldset': {
+      borderColor: '#04214C',
     },
     '&.Mui-focused fieldset': {
       borderColor: '#04214C',
@@ -41,6 +50,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState(false); // State to manage login error
+  const navigate = useNavigate();
 
   const debouncedHandleLogin = debounce(handleLogin, 1000);
 
@@ -63,16 +73,46 @@ export default function Login() {
   async function handleLogin() {
     try {
       setLoading(true);
-      const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
-      const { token } = response.data;
-      console.log('Token:', token);
-      setLoading(false);
+      
+      // Check user status
+      const userResponse = await axios.get(`https://tripselbe.fly.dev/user/${email}`);
+      const { status } = userResponse.data;
+      
+      if (status !== 'guest') {
+        // User is not a guest, proceed with login
+        const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
+        const { token } = response.data;
+    
+        // Calculate token expiration time (e.g., 1 hour from now)
+        const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+    
+        // Save token and its expiration time in localStorage
+        saveTokenToLocalStorage(token, expirationTime);
+    
+        setLoading(false);
+    
+        // Return Navigate component to redirect to the home page after successful login
+        navigate(`/`);
+      } else {
+        // User is a guest, redirect to verification page
+        setLoading(false);
+        alert('Akun belum terverifikasi, mohon registrasi ulang')
+        // navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
+      }
+
     } catch (error) {
       console.log('Invalid email or password');
       setLoading(false);
       setLoginError(true); // Set loginError state to true on error
     }
   }
+
+  
+  // Function to save token and its expiration time in localStorage
+  const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('tokenExpiration', expirationTime.toString());
+  };  
 
   return (
     <Box>
@@ -207,7 +247,20 @@ export default function Login() {
                 }}>
                   *Email atau password salah
                 </Typography>
-              
+                <Link href='/lupa-password' sx={{
+                  textDecoration: 'underline',
+                  fontWeight: 700,
+                  color: '#04214C',
+                }}>
+                  <Typography sx={{
+                    fontWeight:500,
+                    color:'#04214C',
+                    fontSize:'22px',
+                    textAlign:'right'
+                  }}>
+                    Lupa Password
+                  </Typography>
+                </Link>
             </Stack>
             <Stack spacing={3} alignItems={'center'} width={'100%'}>
               <Button
@@ -227,7 +280,7 @@ export default function Login() {
                   fontFamily: 'Poppins',
                   fontWeight: 700,
                   fontSize: '24px',
-                  '&:hover': { background: '#FF010C', color: 'white' },
+                  '&:hover': { background: 'white', color: 'red', boxShadow: '0px 0px 0px 2px red',}
                 }}
               >
                 {loading ? <CircularProgress size={24} sx={{color:'white'}} /> : 'Masuk'}
