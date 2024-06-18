@@ -1,5 +1,5 @@
 // Beranda.tsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack, Typography, Button } from '@mui/material';
 import bg from '../../assets/beranda/Bali.png';
 // import { RekomenHotel } from '../../components/beranda/rekomenhotel';
@@ -9,25 +9,22 @@ import YoutubeVideo from '../../components/beranda/youtube';
 import Balimenunggu  from '../../components/beranda/balimenunggu';
 import BerandaData from './berandadata'
 import '../../assets/font/telkomselbatik.css'
-// interface HotelRecommendationsProps {
-//   hotels: Hotel[];
-// }
+interface BerandaData {
+  imageSrc: string;
+  textContent: string;
+}
 
-// const HotelRecommendations: React.FC<HotelRecommendationsProps> = ({ hotels }) => {
-//   return (
-//     <Stack direction={'row'} spacing={2}>
-//       {hotels.map((hotel) => (
-//         <RekomenHotel
-//           key={hotel.id}
-//           name={hotel.name}
-//           stars={hotel.stars}
-//           image={hotel.image}
-//         />
-//       ))}
-//     </Stack>
-//   );
-// };
-
+interface Area {
+  domisili: string;
+  jenis: string;
+  coverabout: string;
+  footerabout: string;
+  coverhotel: string;
+  coveroleh: string;
+  coverresto: string;
+  deskripsiabout: string;
+  lokasi: string;
+}
 
 export default function Beranda() {
 
@@ -37,7 +34,30 @@ export default function Beranda() {
     document.body.style.marginTop = '-120px';
     window.scrollTo(0, 0);
   }, []);
+  const [berandaData, setBerandaData] = useState<BerandaData[]>([]);
 
+  useEffect(() => {
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.marginTop = '-120px';
+    window.scrollTo(0, 0);
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://tripselbe.fly.dev/area');
+        const data = await response.json();
+        const formattedData = data.map((item: Area) => ({
+          imageSrc: item.coverabout,
+          textContent: item.domisili,
+        }));
+        setBerandaData(formattedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   // const startIndex = activeIndex * itemsPerPage;
   // const endIndex = startIndex + itemsPerPage;
 
@@ -115,7 +135,7 @@ export default function Beranda() {
           Jelajahi seluruh regionalnya sekarang!
         </Typography>
 
-        <Balimenunggu orangeData={BerandaData} />
+        <Balimenunggu orangeData={berandaData} />
       </Stack>
 
       <Stack sx={{
