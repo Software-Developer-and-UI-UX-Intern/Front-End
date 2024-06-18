@@ -52,7 +52,9 @@ export default function Hotel() {
   interface Area {
     domisili: string;
     coverhotel: string;
+    jenis:string;
   }
+  
   const [value, setValue] = useState<string>('');
   const [selectedStars, setSelectedStars] = useState<number[]>([]);
   const [checkedFasilitas, setCheckedFasilitas] = useState<string[]>([]);
@@ -258,52 +260,58 @@ export default function Hotel() {
               <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}  marginRight={'72px'}>
               <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Fasilitas</Typography>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('wifi')} onChange={() => handleFasilitasChange('wifi')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('WiFi Gratis')} onChange={() => handleFasilitasChange('WiFi Gratis')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>WiFi</Typography>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Wifi Gratis</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('kolam renang')} onChange={() => handleFasilitasChange('kolam renang')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('Kolam Renang')} onChange={() => handleFasilitasChange('Kolam Renang')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Kolam Renang</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('Parkir')} onChange={() => handleFasilitasChange('Parkir')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('Parkir Gratis')} onChange={() => handleFasilitasChange('Parkir Gratis')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Parkir</Typography>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Parkir Gratis</Typography>
               </Stack>
               </Stack>
 
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('restoran')} onChange={() => handleFasilitasChange('restoran')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('Tepi Pantai')} onChange={() => handleFasilitasChange('Tepi Pantai')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Restoran</Typography>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Tepi Pantai</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('gym')} onChange={() => handleFasilitasChange('gym')} />
-              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>GYM</Typography>
-              </Stack>
-              </Stack>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('ruangan meeting')} onChange={() => handleFasilitasChange('ruangan meeting')} />
-              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Ruangan Meeting</Typography>
-              </Stack>
-              </Stack>
-              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('spa')} onChange={() => handleFasilitasChange('spa')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('Spa')} onChange={() => handleFasilitasChange('Spa')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
               <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Spa</Typography>
               </Stack>
               </Stack>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
-              <CustomCheckbox checked={checkedFasilitas.includes('laundry')} onChange={() => handleFasilitasChange('laundry')} />
+              <CustomCheckbox checked={checkedFasilitas.includes('Bar')} onChange={() => handleFasilitasChange('Bar')} />
               <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
-              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Laundry</Typography>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Bar</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox checked={checkedFasilitas.includes('Pusat kebugaran')} onChange={() => handleFasilitasChange('Pusat kebugaran')} />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Pusat Kebugaran</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox checked={checkedFasilitas.includes('Layanan Kamar')} onChange={() => handleFasilitasChange('Layanan Kamar')} />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Layanan Kamar</Typography>
+              </Stack>
+              </Stack>
+              <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
+              <CustomCheckbox checked={checkedFasilitas.includes('Restoran')} onChange={() => handleFasilitasChange('Restoran')} />
+              <Stack direction={'row'} alignItems={'center'} justifyContent={'left'} width={'100%'} height={'100%'}>
+              <Typography  color={'white'} fontSize={'20px'} fontWeight={500}>Restoran</Typography>
               </Stack>
               </Stack>
               </Stack>
@@ -317,7 +325,7 @@ export default function Hotel() {
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
             <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Hotel</Typography>
             </Stack>
-            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} selectedDomisili={`${destination}`} />
+            <ListHotel selectedStars={selectedStars} minimal={value} maximal={value2} checkedFasilitas={checkedFasilitas} selectedDomisili={`${destination}`} jenis={areaData?.jenis||'TSO/Grapari'} />
             </Stack>
           </Stack>
         </Stack>

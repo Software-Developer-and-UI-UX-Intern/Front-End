@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 
 interface Hotel {
   gambar_url1: string;
@@ -23,14 +23,15 @@ interface ListHotelProps {
   maximal: string;
   checkedFasilitas: string[];
   selectedDomisili: string;
+  jenis:string;
 }
-interface Area {
-  jenis: string;
-}
-export default function ListHotel({ selectedStars, minimal, maximal, checkedFasilitas, selectedDomisili }: ListHotelProps) {
+// interface Area {
+//   jenis: string;
+// }
+export default function ListHotel({ selectedStars, minimal, maximal, checkedFasilitas, selectedDomisili, jenis }: ListHotelProps) {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const navigate = useNavigate();
-  const [areaData, setAreaData] = useState<Area| null>(null);
+  // const [areaData, setAreaData] = useState<Area| null>(null);
 
   useEffect(() => {
     // Fetch hotels data
@@ -46,32 +47,37 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
           const fasilitasResponse = await fetch(`https://tripselbe.fly.dev/hotel-fasilitas/${hotel.nama}`);
           const fasilitasData = await fasilitasResponse.json();
           const fasilitasArray = fasilitasData.map((fasilitas: { nama: string }) => {
-            // Convert to lowercase and remove numbers from the string
-            return fasilitas.nama.toLowerCase().replace(/\d+/g, '').trim();
+            // Convert to lowercase and remove numbers from the string //gajadi
+            return fasilitas.nama;
           });
-          if (hotel.domisili) {
-            // Fetch the area data from the backend
-            axios.get(`https://tripselbe.fly.dev/area/${hotel.domisili}`)
-              .then((response) => {
-                setAreaData(response.data);
-                console.log(response.data)
-              })
-              .catch((error) => {
-                console.error('Error fetching area data:', error);
-              });
-          }
+          // if (hotel.domisili) {
+          //   // Fetch the area data from the backend
+          //   axios.get(`https://tripselbe.fly.dev/area/${hotel.domisili}`)
+          //     .then((response) => {
+          //       // setAreaData(response.data);
+          //       console.log(response.data)
+          //     })
+          //     .catch((error) => {
+          //       console.error('Error fetching area data:', error);
+          //     });
+          // }
           return {
             ...hotel,
             thumbnailUrl: thumbnailImage ? thumbnailImage.url : undefined,
             fasilitas: fasilitasArray  // Add fasilitas array to the hotel object
           };
         }));
-        setHotels(hotelsWithThumbnailsAndFasilitas);
-        console.log(hotelsWithThumbnailsAndFasilitas);
-      })
-      .catch(error => console.error('Error fetching hotels:', error));
-  }, []);
-
+           // Sort hotels by shortest jarak
+           hotelsWithThumbnailsAndFasilitas.sort((a, b) => {
+            const jarakA = parseFloat(a.jarak || '0');
+            const jarakB = parseFloat(b.jarak || '0');
+            return jarakA - jarakB;
+          });
+  
+          setHotels(hotelsWithThumbnailsAndFasilitas);
+        })
+        .catch(error => console.error('Error fetching hotels:', error));
+    }, []);
   const handleItemClick = (hotelName: string) => {
     navigate(`/cari-hotel?kesiniyuk=${encodeURIComponent(hotelName)}`);
   };
@@ -143,7 +149,7 @@ export default function ListHotel({ selectedStars, minimal, maximal, checkedFasi
                 {hotel.jarak && (
                   <Stack height={'35px'} justifyContent={'left'} alignItems={'center'} direction={'row'} gap={1} paddingLeft={'10px'}>
                     <Icon icon="solar:route-bold" width="23" height="23" style={{ color: '#04214C' }} />
-                    <Typography fontWeight={500} fontSize={'20px'} color={'#04214C'}>{hotel.jarak} km ke {areaData?.jenis|| 'TSO'} {hotel.domisili}</Typography>
+                    <Typography fontWeight={500} fontSize={'20px'} color={'#04214C'}>{hotel.jarak} km ke {jenis} {hotel.domisili}</Typography>
                   </Stack>
                 )}
               </Stack>

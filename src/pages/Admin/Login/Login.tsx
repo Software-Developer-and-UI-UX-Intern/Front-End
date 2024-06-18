@@ -97,6 +97,8 @@ export default function Login() {
         // User is a guest, redirect to verification page
         setLoading(false);
         alert('Hanya Admin yang boleh masuk!')
+        console.log(status);
+
         // navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
       }
 

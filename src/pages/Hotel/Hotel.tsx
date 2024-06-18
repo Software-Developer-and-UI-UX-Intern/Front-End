@@ -19,9 +19,15 @@ interface HotelData {
   alamat: string;
   bintang: string;
 }
-
+interface Area {
+  domisili: string;
+jenis: string;
+}
 export default function Hotel() {
+  const [areaData, setAreaData] = useState<Area | null>(null);
+
   const [hotelData, setHotelData] = useState<HotelData | null>(null);
+
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
@@ -42,6 +48,14 @@ export default function Hotel() {
         }
         const data = await response.json();
         setHotelData(data);
+
+           // Fetch area data based on domisili
+           const areaResponse = await fetch(`https://tripselbe.fly.dev/area/${encodeURIComponent(data.domisili)}`);
+           if (!areaResponse.ok) {
+             throw new Error('Failed to fetch area data');
+           }
+           const areaData = await areaResponse.json();
+           setAreaData(areaData);
       } catch (error) {
         console.error('Error fetching hotel data:', error);
       }
@@ -147,7 +161,7 @@ export default function Hotel() {
         <Stack gap={3} direction={'row'}>
           <Icon icon="solar:route-bold" width="50" height="50" style={{ color: 'red' }} />
           <Typography fontWeight={'500'} fontSize={'30px'} color={'#04214C'}>
-            {jarak} Km ke TSO {lokasi}
+            {jarak} Km ke {areaData?.jenis} {lokasi}
           </Typography>
         </Stack>
         <Typography fontSize={'42px'} fontWeight={600} color={'#FF010C'} marginTop={2}>

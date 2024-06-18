@@ -1,5 +1,6 @@
 import { Typography, Card, Stack } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 interface OrangewithimageProps {
   imageSrc: string;
@@ -11,9 +12,28 @@ interface OrangewithimageProps {
   imgheight?: string;
   domisili: string;
 }
-
+interface Area {
+  domisili: string;
+  jenis: string;
+}
 const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, domisili, textContent,location, width = '335px', height = '400px', fontsize = '50px', imgheight = '80px' }) => {
+  const [jenis, setJenis] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchJenis = async () => {
+      try {
+        const areaResponse = await fetch(`https://tripselbe.fly.dev/area/${domisili}`);
+        if (!areaResponse.ok) {
+          throw new Error('Failed to fetch area data');
+        }
+        const areaData: Area = await areaResponse.json();
+        setJenis(areaData.jenis);
+      } catch (error) {
+        console.error('Error fetching jenis:', error);
+      }
+    };
 
+    fetchJenis();
+  }, [domisili]);
   return (
     <Card sx={{ width: width, height: height, background: 'linear-gradient(65deg, #FF0025 23.51%, #F9A12D 81.92%)', borderRadius: '0px 104px 40px 0px' }}>
       <Stack width={width} height={`calc(${height} - ${imgheight})`} sx={{
@@ -30,7 +50,7 @@ overflow:'auto'
           background:'linear-gradient(90deg, #04214C 25.42%, rgba(4, 33, 76, 0.00) 100%)',
           justifyContent:'center',
         }}>
-          <Typography color={'white'} fontSize={'32px'} fontWeight={500} paddingLeft={'53px'} >{location} km dari TSO {domisili}</Typography>
+          <Typography color={'white'} fontSize={'32px'} fontWeight={500} paddingLeft={'53px'} >{location} km dari {jenis} {domisili}</Typography>
           </Stack>
         </Stack>
       </Stack>

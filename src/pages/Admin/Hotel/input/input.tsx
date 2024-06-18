@@ -910,6 +910,7 @@ const deleteFasilitas = async (hotelName: string) => {
                   <MenuItem value={formData.domisili}>
       <em>{formData.domisili}</em>
     </MenuItem>
+    
                   {areaData?.map((domi, index) => (
     <MenuItem key={`${domi.domisili}_${index}`} value={domi.domisili}>
       {domi.domisili}
@@ -1007,6 +1008,12 @@ const deleteFasilitas = async (hotelName: string) => {
                 <MenuItem value={formData.lokasi}>
       <em>{formData.lokasi}</em>
     </MenuItem>                
+    <MenuItem value='-'>
+      -
+    </MenuItem>
+    <MenuItem value={formData.domisili}>
+    {formData.domisili}
+    </MenuItem>
                 {lokasiData.lokasi.map((domi, index) => (
   <MenuItem key={`${domi}_${index}`} value={domi}>
     {domi}
