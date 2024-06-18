@@ -340,10 +340,13 @@ export default function Register() {
   //     throw new Error(`Failed to fetch addresses: ${error}`);
   //   }
   // };
-  const removeAddress = (index:number) => {
-    const newKamar = [...addresses];
-    newKamar.splice(index, 1);
-    setAddress(newKamar);
+  const removeAddress = (index: number) => {
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus cabang ini??');
+    if (isConfirmed) {
+      const newAddresses = [...addresses];
+      newAddresses.splice(index, 1);
+      setAddress(newAddresses);
+    }
   };
   const deleteAddress = async (olehName: string) => {
     try {

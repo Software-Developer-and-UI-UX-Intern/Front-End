@@ -250,10 +250,13 @@ export default function Register() {
       },
     ]);
   };
-  const removeRoom = (index:number) => {
-    const newKamar = [...kamar];
-    newKamar.splice(index, 1);
-    setKamar(newKamar);
+  const removeRoom = (index: number) => {
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus kamar ini?');
+    if (isConfirmed) {
+      const newKamar = [...kamar];
+      newKamar.splice(index, 1);
+      setKamar(newKamar);
+    }
   };
 const handleFileInputChangeKamar = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = e.target.files?.[0];
@@ -809,8 +812,19 @@ const deleteFasilitas = async (hotelName: string) => {
   };
   
   const handleDeleteImages = () => {
-    setGambarHotel(prevState => prevState.filter((_, index) => !selectedImages.includes(index)));
-    setSelectedImages([]);
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus gambar yang dipilih?');
+    if (isConfirmed) {
+      setGambarHotel(prevState => prevState.filter((_, index) => !selectedImages.includes(index)));
+      setSelectedImages([]);
+    }
+  };
+
+  const handleDeleteImagesFasilitas = () => {
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus fasilitas yang dipilih?');
+    if (isConfirmed) {
+      setFasilitas(prevState => prevState.filter((_, index) => !selectedImagesFasilitas.includes(index)));
+      setSelectedImagesFasilitas([]);
+    }
   };
 
   const toggleSelectionMode = () => {
@@ -824,11 +838,6 @@ const deleteFasilitas = async (hotelName: string) => {
     } else {
       setSelectedImagesFasilitas([...selectedImagesFasilitas, index]);
     }
-  };
-  
-  const handleDeleteImagesFasilitas = () => {
-    setFasilitas(prevState => prevState.filter((_, index) => !selectedImagesFasilitas.includes(index)));
-    setSelectedImagesFasilitas([]);
   };
 
   const toggleSelectionModeFasilitas = () => {

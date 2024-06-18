@@ -230,10 +230,13 @@ export default function Register() {
       },
     ]);
   };
-  const removeRoom = (index:number) => {
-    const newKamar = [...kamar];
-    newKamar.splice(index, 1);
-    setKamar(newKamar);
+  const removeRoom = (index: number) => {
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus kamar ini?');
+    if (isConfirmed) {
+      const newKamar = [...kamar];
+      newKamar.splice(index, 1);
+      setKamar(newKamar);
+    }
   };
   const handleRoomChange = (index: number, field: keyof Kamar, value: string | boolean) => {
     const newKamar = [...kamar];
@@ -390,19 +393,6 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     }
 };
 
-
-  // // Debounce the handleFileInputChangeKamar function with a delay of 500ms
-  // const debouncedHandleFileInputChangeKamar = useDebouncedCallback(handleFileInputChangeKamar, 500);
-
-  // // Debounce the handleFileInputChange function with a delay of 500ms
-  // const debouncedHandleFileInputChange = useDebouncedCallback(handleFileInputChange, 500);
-
-  // // Debounce the handleFileInputChangeFasilitas function with a delay of 500ms
-  // const debouncedHandleFileInputChangeFasilitas = useDebouncedCallback(handleFileInputChangeFasilitas, 500);
-
-  // // Debounce the handleSubmit function with a delay of 500ms
-  // const debouncedHandleSubmit = useDebouncedCallback(handleSubmit, 500);
-// Debounced version of handleFileInputChangeKamar
 let timeoutIdKamar: NodeJS.Timeout | null = null;
 const debouncedHandleFileInputChangeKamar = (e: ChangeEvent<HTMLInputElement>, index: number) => {
   if (timeoutIdKamar) {
@@ -433,17 +423,6 @@ const debouncedHandleFileInputChange = (e: ChangeEvent<HTMLInputElement>, index:
     handleFileInputChange(e, index);
   }, 500); // Adjust the delay as needed
 };
-
-// Debounced version of handleSubmit
-// let timeoutIdSubmit: NodeJS.Timeout | null = null;
-// const debouncedHandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-//   if (timeoutIdSubmit) {
-//     clearTimeout(timeoutIdSubmit);
-//   }
-//   timeoutIdSubmit = setTimeout(() => {
-//     handleSubmit(e);
-//   }, 500); // Adjust the delay as needed
-// };
 
 
 
@@ -775,8 +754,19 @@ const deleteFasilitas = async (hotelName: string) => {
   };
   
   const handleDeleteImages = () => {
-    setGambarHotel(prevState => prevState.filter((_, index) => !selectedImages.includes(index)));
-    setSelectedImages([]);
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus gambar yang dipilih?');
+    if (isConfirmed) {
+      setGambarHotel(prevState => prevState.filter((_, index) => !selectedImages.includes(index)));
+      setSelectedImages([]);
+    }
+  };
+
+  const handleDeleteImagesFasilitas = () => {
+    const isConfirmed = window.confirm('Apakah anda yakin ingin menghapus fasilitas yang dipilih?');
+    if (isConfirmed) {
+      setFasilitas(prevState => prevState.filter((_, index) => !selectedImagesFasilitas.includes(index)));
+      setSelectedImagesFasilitas([]);
+    }
   };
 
   const toggleSelectionMode = () => {
@@ -790,11 +780,6 @@ const deleteFasilitas = async (hotelName: string) => {
     } else {
       setSelectedImagesFasilitas([...selectedImagesFasilitas, index]);
     }
-  };
-  
-  const handleDeleteImagesFasilitas = () => {
-    setFasilitas(prevState => prevState.filter((_, index) => !selectedImagesFasilitas.includes(index)));
-    setSelectedImagesFasilitas([]);
   };
 
   const toggleSelectionModeFasilitas = () => {
