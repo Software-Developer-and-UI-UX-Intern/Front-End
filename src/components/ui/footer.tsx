@@ -7,7 +7,7 @@ import '@fontsource/poppins/800.css';
 import logoTripsel from '../../assets/Trip-sel.png';
 import logoTelkomsel from '../../assets/Telkomsel (full).png';
 import { useNavigate } from 'react-router-dom';
-
+import qos from '../../assets/qrcode.png'
 export default function Navbar() {
   const navigate = useNavigate();
 
@@ -19,7 +19,10 @@ export default function Navbar() {
    
     window.open(`${url}`, '_blank');
   }
-
+  const handleImageClick = () => {
+    // Your click handling logic here
+    window.open(`https://apps.powerapps.com/play/e/default-fc743075-93ed-4a5c-82c0-ca5eac914220/a/bccfe7f8-7c3c-4e11-9661-5cd973c98eb8?tenantId=fc743075-93ed-4a5c-82c0-ca5eac914220&hint=6ce95ae7-4cb9-45db-8533-40032515a739&sourcetime=1714621426691&pa_isFromQRCode=true`, '_blank');
+  };
   return (
     <Stack direction='row' sx={{
         display: 'flex',
@@ -130,6 +133,7 @@ export default function Navbar() {
 
         </Stack>
 
+<Stack direction={'column'} justifyContent={'center'} alignItems={'center'}>
         <Typography sx={{
           color: '#04214c',
           fontWeight: 600,
@@ -141,7 +145,12 @@ export default function Navbar() {
           Ada kendala dengan Trip-mu?<br></br>
           QOS-an hadir disini!
         </Typography>
+        <Stack height={'100%'} width={'100%'} justifyContent={'center'} alignItems={'center'}>
+        <img src={qos} alt="Logo Tripsel" height={'250px'} width={'250px'} style={{ cursor: 'pointer' }} // Optional: Changes the cursor to a pointer when hovering over the image
+        onClick={handleImageClick}/>
 
+        </Stack>
+        </Stack>
       </Stack>
   );
 }

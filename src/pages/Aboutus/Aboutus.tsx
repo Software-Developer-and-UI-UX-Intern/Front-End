@@ -12,7 +12,7 @@ import Kakkadek from '../../assets/about us/kak kadek.jpg'
 import Kakhani from '../../assets/about us/kak hani.jpg'
 import martin from '../../assets/about us/martin.jpg'
 import tata from '../../assets/about us/tata.jpg'
-import nana from '../../assets/about us/nana.jpg'
+import nana from '../../assets/about us/nana2.jpg'
 import adi from '../../assets/about us/adi.jpg'
 import {  useNavigate } from 'react-router-dom';
 
@@ -223,32 +223,32 @@ Trip-sel sudah mencakup seluruh regional Telkomsel pastinya. Jadi jangan ragu un
         </Stack>
 
         <Stack width={'auto'} height={'auto'} marginTop={'30px'} marginBottom={'55px'} gap={3}>
-        <Stack direction={'row'} gap={3}>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={Kaksam} textContent='Kak Sam' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+        <Stack direction={'row'} gap={3} justifyContent={'center'} alignItems={'center'}>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={Kaksam} textContent='Kak Sam' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={Kakida} textContent='Kak Ida' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={Kakida} textContent='Kak Ida' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={Kakkadek} textContent='Kak Kadek' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={Kakkadek} textContent='Kak Kadek' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={Kakhani} textContent='Kak Hani' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={Kakhani} textContent='Kak Hani' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
         </Stack>
-        <Stack direction={'row'} gap={3}>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={adi} textContent='Adi' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+        <Stack direction={'row'} gap={3}  justifyContent={'center'} alignItems={'center'}>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={adi} textContent='Adi' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={martin} textContent='Martin' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={martin} textContent='Martin' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={nana} textContent='Nana' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={nana} textContent='Nana' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
-          <Stack width={'100%'}>
-          <Orangewithimage imageSrc={tata} textContent='tata' fontsize='42px' height='480px' imgheight='105px' width='100%'/>
+          <Stack width={'270px'}>
+          <Orangewithimage imageSrc={tata} textContent='Tata' fontsize='42px' height='485px' imgheight='105px' width='100%'/>
           </Stack>
         </Stack>
         </Stack>
