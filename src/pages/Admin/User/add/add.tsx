@@ -96,7 +96,7 @@ export default function Register() {
           full_name: restoranData.full_name || '',
           email: restoranData.email || '',
           nik: restoranData.nik || '',
-          phone_number: restoranData.phone_numer || '',
+          phone_number: restoranData.phone_number || '',
           domisili: restoranData.domisili || '',
           jenis_kelamin: restoranData.jenis_kelamin || '',
           password: restoranData.password || '',

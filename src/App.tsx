@@ -61,6 +61,8 @@ import '@fontsource/poppins/700.css';
 import '@fontsource/poppins/800.css';
 import ProtectedRoute from './components/login/ProtectedRoute';
 import ProtectedRouteAdmin from './components/login/ProtectedRouteAdmin';
+import ProtectedRouteSuperAdmin from './components/login/ProtectedRouteSuperAdmin';
+
 
 
 // const isAuthenticated = () => {
@@ -434,7 +436,13 @@ const router = createBrowserRouter([
         },
         {
           path: 'user', 
-          element: <AdminUser />,
+          element: (
+            <ProtectedRouteSuperAdmin>
+            <>
+              <AdminUser />
+            </>
+            </ProtectedRouteSuperAdmin>
+          ),
         },
         {
           path: 'input-user', 
