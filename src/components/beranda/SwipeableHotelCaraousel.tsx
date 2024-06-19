@@ -4,6 +4,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import { RekomenHotel } from '../beranda/rekomenhotel';
 import { Buttonslider } from './buttonslider';
 import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
 interface Hotel {
     name: string;
@@ -46,6 +47,11 @@ interface CarouselContentProps {
 function CarouselContent({ hotels, setActiveIndex }: CarouselContentProps) {
     const [activeIndex, setActiveIndexLocal] = useState(0);
     const carouselContext = useContext(CarouselContext);
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const handleItemClick = (textcontent: string) => {
+        navigate(`/cari-hotel?kesiniyuk=${encodeURIComponent(textcontent)}`);
+    };
 
     useEffect(() => {
         const slideChangeHandler = () => {
@@ -63,27 +69,28 @@ function CarouselContent({ hotels, setActiveIndex }: CarouselContentProps) {
 
     return (
         <Stack gap={5}>
-        <Stack sx={{ width: 'auto', maxHeight:'435px' }} gap={5} >
-            <Slider>
-                {[...Array(totalPages)].map((_, index) => (
-                    <Slide index={index} key={index}>
-                        <Stack maxHeight={'426px'} key={index}>
-                            <Stack maxHeight={'426px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
-                                {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex: number) => (
-                                    <RekomenHotel
-                                        key={index * 2 + hotelIndex}
-                                        name={hotel.name}
-                                        stars={hotel.stars}
-                                        image={hotel.image}
-                                    />
-                                ))}
+            <Stack sx={{ width: 'auto', maxHeight: '435px' }} gap={5}>
+                <Slider>
+                    {[...Array(totalPages)].map((_, index) => (
+                        <Slide index={index} key={index}>
+                            <Stack maxHeight={'426px'} key={index}>
+                                <Stack maxHeight={'426px'} direction={'row'} gap={5} sx={{ display: 'flex' }} justifyContent={'center'} alignItems={'center'}>
+                                    {hotels.slice(index * 2, index * 2 + 2).map((hotel, hotelIndex: number) => (
+                                        <Stack key={index * 2 + hotelIndex} onClick={() => handleItemClick(hotel.name)}>
+                                            <RekomenHotel
+                                                name={hotel.name}
+                                                stars={hotel.stars}
+                                                image={hotel.image}
+                                            />
+                                        </Stack>
+                                    ))}
+                                </Stack>
                             </Stack>
-                        </Stack>
-                    </Slide>
-                ))}
-            </Slider>
-        </Stack>
-        <Buttonslider  activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />
+                        </Slide>
+                    ))}
+                </Slider>
+            </Stack>
+            <Buttonslider activeIndex={activeIndex} setActiveIndex={setActiveIndex} totalPages={totalPages} />
         </Stack>
     );
 }
