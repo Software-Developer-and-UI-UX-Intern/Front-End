@@ -358,23 +358,50 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when submission starts
-
-    try {
-      const uploadedImages = await Promise.all(gambarFiles.map((file, index) => handleFileUpload(file, index + 1)));
+    setLoading(true);
   
-      // Check if all uploads were successful
+    try {
+      // Ensure that only the images that have been changed are uploaded
+      const uploadedImages = await Promise.all(
+        gambarFiles.map((file, index) => {
+          if (file) {
+            return handleFileUpload(file, index);
+          } else {
+            // Use existing images from formData if they have not been changed
+            switch (index) {
+              case 0:
+                return formData.coverabout;
+              case 1:
+                return formData.footerabout;
+              case 2:
+                return formData.coveroleh;
+              case 3:
+                return formData.coverresto;
+              case 4:
+                return formData.coverhotel;
+              default:
+                return null;
+            }
+          }
+        })
+      );
+  
+      // Check if any of the image uploads failed
       if (uploadedImages.some(image => image === null)) {
         throw new Error('One or more image uploads failed');
       }
+  
+      // Fetch existing data to get URLs of images not changed
       const existingResponse = await fetch(`https://tripselbe.fly.dev/area/${formData.domisili}`);
       if (!existingResponse.ok) {
-          const errorMessage = await existingResponse.text();
-          throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
+        const errorMessage = await existingResponse.text();
+        throw new Error(`Failed to fetch existing data: ${existingResponse.status}: ${errorMessage}`);
       }
-      const lokasiString = formData.lokasi.join(',');
-
+  
       const existingData = await existingResponse.json();
+      const lokasiString = formData.lokasi.join(',');
+  
+      // Update formData with either newly uploaded images or existing images
       const updatedFormData = {
         domisili: formData.domisili || '',
         deskripsiabout: formData.deskripsiabout || '',
@@ -382,12 +409,12 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
         coverabout: uploadedImages[0] || existingData.coverabout,
         footerabout: uploadedImages[1] || existingData.footerabout,
         coveroleh: uploadedImages[2] || existingData.coveroleh,
-        coverhotel: uploadedImages[3] || existingData.coverhotel,
-        coverresto: uploadedImages[4] || existingData.coverresto,
-        lokasi: lokasiString || ''
-
-    };
-    console.log(JSON.stringify(updatedFormData))
+        coverhotel: uploadedImages[4] || existingData.coverhotel,
+        coverresto: uploadedImages[3] || existingData.coverresto,
+        lokasi: lokasiString || '',
+      };
+  
+      // Send the updated formData to the server
       const response = await fetch(`https://tripselbe.fly.dev/area/${formData.domisili}`, {
         method: 'PUT',
         headers: {
@@ -401,36 +428,35 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
         throw new Error(`Server responded with status ${response.status}: ${errorMessage}`);
       }
   
-      console.log(updatedFormData);
       const data = await response.json();
-      // await Promise.all(addresses.map(address => postDataToServer(address)));
       alert(data.message);
     } catch (error) {
       console.error('Error updating restoran:', error);
-      alert(`Failed to update restoran: ${error}`);
-    }finally {
-      setLoading(false); // Set loading to false when submission is complete
+      alert(`Failed to update restoran`);
+    } finally {
+      setLoading(false);
     }
   };
   
+  
 
-  const handleFileUpload = async (file: File | null, index: number) => {
+  const handleFileUpload = async (blob: Blob | null, index: number) => {
     try {
-      if (!file) return null; // If file is null, return null
+      if (!blob) return null; // If blob is null, return null
   
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'ml_default');
+      const gambarbaru = new FormData();
+      gambarbaru.append('file', blob);
+      gambarbaru.append('upload_preset', 'ml_default');
   
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
         method: 'POST',
-        body: formData,
+        body: gambarbaru,
       });
-      
+  
       if (!cloudinaryResponse.ok) {
         throw new Error(`Failed to upload image ${index} to Cloudinary`);
       }
-      
+  
       const cloudinaryData = await cloudinaryResponse.json();
       const imageUrl = cloudinaryData.secure_url;
   
@@ -441,6 +467,7 @@ const makananArray = restoranData.lokasi ? restoranData.lokasi.split(',') : [];
       return null;
     }
   };
+  
   
   
   const [gambar1, setGambar1] = useState('');

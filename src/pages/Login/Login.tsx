@@ -136,7 +136,7 @@ export default function Login() {
               />
               <Typography sx={{
                 fontWeight: 700,
-                fontSize: '42px',
+                fontSize: { xs: '32px', md: '42px' },
                 color:'#FF010C',
               }}>
                 #TripwithTelkomsel

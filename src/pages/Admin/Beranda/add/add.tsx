@@ -160,8 +160,8 @@ export default function Register() {
         coverabout: uploadedImages[0] || '',
         footerabout: uploadedImages[1] || '',
         coveroleh: uploadedImages[2] || '',
-        coverhotel: uploadedImages[3] || '',
-        coverresto: uploadedImages[4] || '',
+        coverhotel: uploadedImages[4] || '',
+        coverresto: uploadedImages[3] || '',
         lokasi: lokasiString || ''
       };
 
@@ -208,23 +208,23 @@ export default function Register() {
     }
   };
 
-  const handleFileUpload = async (file: File | null, index: number) => {
+  const handleFileUpload = async (blob: Blob | null, index: number) => {
     try {
-      if (!file) return null; // If file is null, return null
+      if (!blob) return null; // If blob is null, return null
   
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'ml_default');
+      const gambarbaru = new FormData();
+      gambarbaru.append('file', blob);
+      gambarbaru.append('upload_preset', 'ml_default');
   
-      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dgm5qtyrg/image/upload', {
+      const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/danakva2d/image/upload', {
         method: 'POST',
-        body: formData,
+        body: gambarbaru,
       });
-      
+  
       if (!cloudinaryResponse.ok) {
         throw new Error(`Failed to upload image ${index} to Cloudinary`);
       }
-      
+  
       const cloudinaryData = await cloudinaryResponse.json();
       const imageUrl = cloudinaryData.secure_url;
   
@@ -235,6 +235,7 @@ export default function Register() {
       return null;
     }
   };
+  
   
   
   const [gambar1, setGambar1] = useState('');

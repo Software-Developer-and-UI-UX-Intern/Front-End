@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, Link } from '@mui/material';
+import { AppBar, Container,Drawer,List,ListItem, ListItemText, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, Link, useMediaQuery } from '@mui/material';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -11,7 +11,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
+import { useTheme } from '@mui/material/styles';
+import {Menu as MenuIcon}  from '@mui/icons-material';
 const menuItemStyle = {
   fontSize: '22px',
   fontWeight: 500,
@@ -76,6 +77,12 @@ export default function Navbar() {
     restoran: [],
     area: [],
   });
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,31 +147,31 @@ export default function Navbar() {
     fetchUserData();
   }, []);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setProfileAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+  const handleProfileMenuOpen = (event: React.SyntheticEvent)=> {
+    setProfileAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when hotel menu button is clicked
     setProfileMenuActive(true); // Set hotel menu as active
     handleMenuOpen();
   };
 
-  const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+  const handleHotelMenuOpen = (event: React.SyntheticEvent) => {
+    setHotelAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when hotel menu button is clicked
     setHotelMenuActive(true); // Set hotel menu as active
     handleMenuOpen();
   };
 
-  const handleRestoranMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setRestoranAnchorEl(event.currentTarget); // Set anchor element when restoran menu button is clicked
+  const handleRestoranMenuOpen = (event: React.SyntheticEvent) => {
+    setRestoranAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when restoran menu button is clicked
     setRestoranMenuActive(true); // Set restoran menu as active
     handleMenuOpen();
   };
-  const handleOlehOlehMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOlehOlehAnchorEl(event.currentTarget); // Set anchor element when oleh-oleh menu button is clicked
+  const handleOlehOlehMenuOpen = (event: React.SyntheticEvent) => {
+    setOlehOlehAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when oleh-oleh menu button is clicked
     setOlehOlehMenuActive(true); // Set oleh-oleh menu as active
     handleMenuOpen();
   };
 
-  const handleWisataMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setWisataAnchorEl(event.currentTarget); // Set anchor element when wisata menu button is clicked
+  const handleWisataMenuOpen = (event: React.SyntheticEvent) => {
+    setWisataAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when wisata menu button is clicked
     setWisataMenuActive(true); // Set wisata menu as active
     handleMenuOpen();
   };
@@ -258,287 +265,470 @@ export default function Navbar() {
 >
       <Container maxWidth="xl">
         <Toolbar style={{ justifyContent: 'space-between', height:'105px' }}>
-          <Stack sx={{ width: '200px' }}>
+          <Stack sx={{ width:{md: '200px',xs:'100px'}}}>
             <img src={logoTripsel} alt="logo" />
           </Stack>
-          <Stack gap={3} width={'80%'} direction={'row'}>
-            {showCategories && (
-              <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} height={'105px'}>
-                <Button 
-  disableElevation 
-  disableFocusRipple 
-  disableRipple 
-  disableTouchRipple
-  onClick={handleBerandamenu}
-  sx={{
-    color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
-    padding:'0px',
-    minWidth:'auto',
-    height:'auto',
-    transition: 'color 0.4s ease-in-out',
-  }}
->
-                   <Typography
-                      sx={{
-                        alignContent: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '5px',
-                        fontSize: '24px',
-                        color: 'inherit',
-                        fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out',
-                      }}
-                    >
-                      Beranda
-                    </Typography>
-                </Button>
-                <Button 
-  disableElevation 
-  disableFocusRipple 
-  disableRipple 
-  disableTouchRipple
-  onClick={handleHotelMenuOpen}
-  endIcon={<ExpandMoreIcon sx={{transform: hotelMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: hotelMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
-  sx={{
-    color: hotelMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (hotelMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
-    transition: 'color 0.4s ease-in-out',
-  }}
->
-                   <Typography
-                      sx={{
-                        alignContent: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '5px',
-                        fontSize: '24px',
-                        color: 'inherit',
-                        fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out, ',
-                      }}
-                    >
-                      Hotel
-                    </Typography>
-                </Button>
-                <Menu
-                disableScrollLock
-                anchorEl={hotelAnchorEl}
-                open={Boolean(hotelAnchorEl)}
-                onClose={handleMenuClose}
-                elevation={0}
+          
+          <Stack gap={3} width={ {md: '80%',xs:'auto'} }  direction={'row'}>
+          {isMobile ? (
+            <>
+              <IconButton
+                color="inherit"
+                edge="end"
+                onClick={handleDrawerToggle}
+                sx={{ display: { md: 'none' }, color:'#6E6C6C' }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
                 PaperProps={{
                   style: {
-                    background: isOpaque ? 'white' : 'white',
-                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
-                    width:'270px',
-                    borderRadius:'0px 0px 30px 30px',
-                    transition: 'background 0.2s ease-in-out ',
+                    width: '250px',
                   },
                 }}
               >
+                <List>
+                  <ListItem onClick={handleBerandamenu}>
+                    <ListItemText primary="Beranda" onClick={handleBerandamenu} />
+                  </ListItem>
+                  <Divider />
+                  <ListItem onClick={handleHotelMenuOpen}>
+                    <ListItemText primary="Hotel" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={hotelAnchorEl}
+                    open={Boolean(hotelAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
                     {data.area.map((area, index) => (
-              <Stack key={area.domisili}>
-                <MenuItem onClick={() => handleMenuItemClick(area.domisili)} sx={menuItemStyle}>
-                  {area.domisili}
-                </MenuItem>
-                {index < data.area.length - 1 && <Divider />}
-              </Stack>
-            ))}
-
-
-            </Menu>
-            <Button 
-  disableElevation 
-  disableFocusRipple 
-  disableRipple 
-  disableTouchRipple
-  onClick={handleRestoranMenuOpen}
-  endIcon={<ExpandMoreIcon sx={{transform: restoranMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: restoranMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
-  sx={{
-    color: restoranMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (restoranMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
-    transition: 'color 0.4s ease-in-out',
-  }}
->
-
-                   <Typography
-                      sx={{
-                        alignContent: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '5px',
-                        fontSize: '24px',
-                        color: 'inherit',
-                        fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out ',
-                      }}
-                    >
-                      Restoran
-                    </Typography>
-                </Button>
-
-                <Menu
-                disableScrollLock
-                anchorEl={restoranAnchorEl}
-                open={Boolean(restoranAnchorEl)}
-                onClose={handleMenuClose}
-                elevation={0}
-                PaperProps={{
-                  style: {
-                    background: isOpaque ? 'white' : 'white',
-                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
-                    width:'270px',
-                    borderRadius:'0px 0px 30px 30px',
-                    transition: 'background 0.2s ease-in-out ',
-                  },
-                }}
-              >
-               {data.area.map((area, index) => (
-              <Stack key={area.domisili}>
-                <MenuItem onClick={() => handleRestoranMenuItemClick(area.domisili)} sx={menuItemStyle}>
-                  {area.domisili}
-                </MenuItem>
-                {index < data.area.length - 1 && <Divider />}
-              </Stack>
-            ))}
-        
-            </Menu>
-                <Button 
-  disableElevation 
-  disableFocusRipple 
-  disableRipple 
-  disableTouchRipple
-  onClick={handleOlehOlehMenuOpen}
-  endIcon={<ExpandMoreIcon sx={{transform: olehOlehMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: olehOlehMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
-  sx={{
-    color: olehOlehMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (olehOlehMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
-    transition: 'color 0.4s ease-in-out',
-  }}
->
-                   <Typography
-                      sx={{
-                        alignContent: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '5px',
-                        fontSize: '24px',
-                        color: 'inherit',
-                        fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out ',
-                      }}
-                    >
-                      Oleh-oleh
-                    </Typography>
-                </Button>
-                <Menu
-                disableScrollLock
-                anchorEl={olehOlehAnchorEl}
-                open={Boolean(olehOlehAnchorEl)}
-                onClose={handleMenuClose}
-                elevation={0}
-                PaperProps={{
-                  style: {
-                    background: isOpaque ? 'white' : 'white',
-                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
-                    width:'270px',
-                    borderRadius:'0px 0px 30px 30px',
-                    transition: 'background 0.2s ease-in-out ',
-                  },
-                }}
-              >
-                     {data.area.map((area, index) => (
-              <Stack key={area.domisili}>
-                <MenuItem onClick={() => handleOlehOlehMenuItemClick(area.domisili)} sx={menuItemStyle}>
-                  {area.domisili}
-                </MenuItem>
-                {index < data.area.length - 1 && <Divider />}
-              </Stack>
-            ))}
-                </Menu>
-                <Button 
-  disableElevation 
-  disableFocusRipple 
-  disableRipple 
-  disableTouchRipple
-  onClick={handleWisataMenuOpen}
-  endIcon={<ExpandMoreIcon sx={{transform: wisataMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: wisataMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
-  sx={{
-    color: wisataMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (wisataMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
-    '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
-    transition: 'color 0.4s ease-in-out',
-  }}
->
-                   <Typography
-                      sx={{
-                        alignContent: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
-                        paddingTop: '5px',
-                        fontSize: '24px',
-                        color: 'inherit',
-                        fontWeight: 'inherit',
-                        transition: 'font-weight 0.1s ease-in-out',
-                      }}
-                    >
-                      Wisata
-                    </Typography>
-                </Button>
-                <Menu
-                disableScrollLock
-                anchorEl={wisataAnchorEl}
-                open={Boolean(wisataAnchorEl)}
-                onClose={handleMenuClose}
-                elevation={0}
-                PaperProps={{
-                  style: {
-                    background: isOpaque ? 'white' : 'white',
-                    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-                    color: isOpaque ? '#6E6C6C' : '#6E6C6C',
-                    width:'270px',
-                    borderRadius:'0px 0px 30px 30px',
-                    transition: 'background 0.2s ease-in-out ',
-                  },
-                }}
-              >
-                     {data.area.map((area, index) => (
-              <Stack key={area.domisili}>
-                <MenuItem onClick={() => handleWisataMenuItemClick(area.domisili)} sx={menuItemStyle}>
-                  {area.domisili}
-                </MenuItem>
-                {index < data.area.length - 1 && <Divider />}
-              </Stack>
-            ))}
-                </Menu>
-                
-                <Stack justifyContent={'center'} alignItems={'center'}>
-                <IconButton
-              onClick={handleSearchButtonClick}
-              disableTouchRipple
-              disableFocusRipple
-              disableRipple
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleRestoranMenuOpen}>
+                    <ListItemText primary="Restoran" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={restoranAnchorEl}
+                    open={Boolean(restoranAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleRestoranMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleOlehOlehMenuOpen}>
+                    <ListItemText primary="Oleh-oleh" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={olehOlehAnchorEl}
+                    open={Boolean(olehOlehAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleOlehOlehMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleWisataMenuOpen}>
+                    <ListItemText primary="Wisata" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={wisataAnchorEl}
+                    open={Boolean(wisataAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleWisataMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleProfileMenuOpen}>
+                    <ListItemText primary="Profile" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={profileAnchorEl}
+                    open={Boolean(profileAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    <MenuItem onClick={handleProfilemenu} sx={menuItemStyle}>Profile</MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleLogout} sx={menuItemStyle}>Sign out</MenuItem>
+                  </Menu>
+                </List>
+              </Drawer>
+            </>
+          ) : (
+            <Stack direction={'row'}>
+            {showCategories && (
               
-              sx={{
-                height: '54px',
-                width:'54px',
-                borderRadius: '50%',
-                padding: '0px',
-                border:(isOpaque ? '2px solid gray' : (menuActive ? '2px solid gray' : '2px solid white')),                  
-                color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
-                  '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red', border: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? '3px solid gray' : '3px solid red'},
-                  transition: 'color 0.75s ease-in-out, border 0.4s ease-in-out'
-              }}
-            >
-              <SearchIcon sx={{ width: 'auto' }} />
-            </IconButton>
+              <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} height={'105px'}>
+                        
+                    
+                  
+                        <Button 
+                          disableElevation 
+                          disableFocusRipple 
+                          disableRipple 
+                          disableTouchRipple
+                          onClick={handleBerandamenu}
+                          sx={{
+                            color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
+                            '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
+                            padding:'0px',
+                            minWidth:'auto',
+                            height:'auto',
+                            transition: 'color 0.4s ease-in-out',
+                          }}
+                        >
+                          <Typography
+                              sx={{
+                                alignContent: 'center',
+                                paddingLeft: '5px',
+                                paddingRight: '5px',
+                                paddingTop: '5px',
+                                fontSize: '24px',
+                                color: 'inherit',
+                                fontWeight: 'inherit',
+                                transition: 'font-weight 0.1s ease-in-out',
+                              }}
+                            >
+                              Beranda
+                            </Typography>
+                        </Button>
+                        <Button 
+                        disableElevation 
+                        disableFocusRipple 
+                        disableRipple 
+                        disableTouchRipple
+                        onClick={handleHotelMenuOpen}
+                        endIcon={<ExpandMoreIcon sx={{transform: hotelMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: hotelMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
+                        sx={{
+                          color: hotelMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (hotelMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+                          '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
+                          transition: 'color 0.4s ease-in-out',
+                        }}
+                      >
+                          <Typography
+                              sx={{
+                                alignContent: 'center',
+                                paddingLeft: '5px',
+                                paddingRight: '5px',
+                                paddingTop: '5px',
+                                fontSize: '24px',
+                                color: 'inherit',
+                                fontWeight: 'inherit',
+                                transition: 'font-weight 0.1s ease-in-out, ',
+                              }}
+                            >
+                              Hotel
+                            </Typography>
+                        </Button>
+                        <Menu
+                              disableScrollLock
+                              anchorEl={hotelAnchorEl}
+                              open={Boolean(hotelAnchorEl)}
+                              onClose={handleMenuClose}
+                              elevation={0}
+                              PaperProps={{
+                                style: {
+                                  background: isOpaque ? 'white' : 'white',
+                                  boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                                  color: isOpaque ? '#6E6C6C' : '#6E6C6C',
+                                  width:'270px',
+                                  borderRadius:'0px 0px 30px 30px',
+                                  transition: 'background 0.2s ease-in-out ',
+                                },
+                              }}
+                            >
+                                    {data.area.map((area, index) => (
+                              <Stack key={area.domisili}>
+                                <MenuItem onClick={() => handleMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                                  {area.domisili}
+                                </MenuItem>
+                                {index < data.area.length - 1 && <Divider />}
+                              </Stack>
+                          ))}
+
+
+                    </Menu>
+                    <Button 
+                    disableElevation 
+                    disableFocusRipple 
+                    disableRipple 
+                    disableTouchRipple
+                    onClick={handleRestoranMenuOpen}
+                    endIcon={<ExpandMoreIcon sx={{transform: restoranMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: restoranMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
+                    sx={{
+                      color: restoranMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (restoranMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+                      '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
+                      transition: 'color 0.4s ease-in-out',
+                    }}
+                  >
+
+                          <Typography
+                              sx={{
+                                alignContent: 'center',
+                                paddingLeft: '5px',
+                                paddingRight: '5px',
+                                paddingTop: '5px',
+                                fontSize: '24px',
+                                color: 'inherit',
+                                fontWeight: 'inherit',
+                                transition: 'font-weight 0.1s ease-in-out ',
+                              }}
+                            >
+                              Restoran
+                            </Typography>
+                        </Button>
+
+                        <Menu
+                        disableScrollLock
+                        anchorEl={restoranAnchorEl}
+                        open={Boolean(restoranAnchorEl)}
+                        onClose={handleMenuClose}
+                        elevation={0}
+                        PaperProps={{
+                          style: {
+                            background: isOpaque ? 'white' : 'white',
+                            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                            color: isOpaque ? '#6E6C6C' : '#6E6C6C',
+                            width:'270px',
+                            borderRadius:'0px 0px 30px 30px',
+                            transition: 'background 0.2s ease-in-out ',
+                          },
+                        }}
+                      >
+                      {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleRestoranMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                
+                    </Menu>
+                  <Button 
+                    disableElevation 
+                    disableFocusRipple 
+                    disableRipple 
+                    disableTouchRipple
+                    onClick={handleOlehOlehMenuOpen}
+                    endIcon={<ExpandMoreIcon sx={{transform: olehOlehMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: olehOlehMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
+                    sx={{
+                      color: olehOlehMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (olehOlehMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+                      '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
+                      transition: 'color 0.4s ease-in-out',
+                    }}
+                  >
+                          <Typography
+                              sx={{
+                                alignContent: 'center',
+                                paddingLeft: '5px',
+                                paddingRight: '5px',
+                                paddingTop: '5px',
+                                fontSize: '24px',
+                                color: 'inherit',
+                                fontWeight: 'inherit',
+                                transition: 'font-weight 0.1s ease-in-out ',
+                              }}
+                            >
+                              Oleh-oleh
+                            </Typography>
+                  </Button>
+                  <Menu
+                        disableScrollLock
+                        anchorEl={olehOlehAnchorEl}
+                        open={Boolean(olehOlehAnchorEl)}
+                        onClose={handleMenuClose}
+                        elevation={0}
+                        PaperProps={{
+                          style: {
+                            background: isOpaque ? 'white' : 'white',
+                            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                            color: isOpaque ? '#6E6C6C' : '#6E6C6C',
+                            width:'270px',
+                            borderRadius:'0px 0px 30px 30px',
+                            transition: 'background 0.2s ease-in-out ',
+                          },
+                        }}
+                  >
+                            {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleOlehOlehMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                <Button 
+                    disableElevation 
+                    disableFocusRipple 
+                    disableRipple 
+                    disableTouchRipple
+                    onClick={handleWisataMenuOpen}
+                    endIcon={<ExpandMoreIcon sx={{transform: wisataMenuActive ? 'rotate(180deg)' : 'rotate(0deg)',stroke: wisataMenuActive ? 'red' : 'currentColor', strokeWidth: 2, transition: 'stroke 0.75s ease-in-out' }} />}
+                    sx={{
+                      color: wisataMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (wisataMenuActive ? 'red' : (menuActive ? 'gray' : 'white'))),
+                      '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red' },
+                      transition: 'color 0.4s ease-in-out',
+                    }}
+                >
+                          <Typography
+                              sx={{
+                                alignContent: 'center',
+                                paddingLeft: '5px',
+                                paddingRight: '5px',
+                                paddingTop: '5px',
+                                fontSize: '24px',
+                                color: 'inherit',
+                                fontWeight: 'inherit',
+                                transition: 'font-weight 0.1s ease-in-out',
+                              }}
+                            >
+                              Wisata
+                            </Typography>
+                </Button>
+                      <Menu
+                        disableScrollLock
+                        anchorEl={wisataAnchorEl}
+                        open={Boolean(wisataAnchorEl)}
+                        onClose={handleMenuClose}
+                        elevation={0}
+                        PaperProps={{
+                          style: {
+                            background: isOpaque ? 'white' : 'white',
+                            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                            color: isOpaque ? '#6E6C6C' : '#6E6C6C',
+                            width:'270px',
+                            borderRadius:'0px 0px 30px 30px',
+                            transition: 'background 0.2s ease-in-out ',
+                          },
+                        }}
+                      >
+                                {data.area.map((area, index) => (
+                          <Stack key={area.domisili}>
+                            <MenuItem onClick={() => handleWisataMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                              {area.domisili}
+                            </MenuItem>
+                            {index < data.area.length - 1 && <Divider />}
+                          </Stack>
+                        ))}
+                        </Menu>
+                        
+                        <Stack justifyContent={'center'} alignItems={'center'}>
+                        <IconButton
+                      onClick={handleSearchButtonClick}
+                      disableTouchRipple
+                      disableFocusRipple
+                      disableRipple
+                      
+                      sx={{
+                        height: '54px',
+                        width:'54px',
+                        borderRadius: '50%',
+                        padding: '0px',
+                        border:(isOpaque ? '2px solid gray' : (menuActive ? '2px solid gray' : '2px solid white')),                  
+                        color: (isOpaque ? 'gray' : (menuActive ? 'gray' : 'white')),
+                          '&:hover': { fontWeight: 700, color: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red', border: (isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive)) ? '3px solid gray' : '3px solid red'},
+                          transition: 'color 0.75s ease-in-out, border 0.4s ease-in-out'
+                      }}
+                    >
+                      <SearchIcon sx={{ width: 'auto' }} />
+                    </IconButton>
+                    
             </Stack>
+            
             </Stack>
             )}
+
+            
             {!showCategories && (
   <Stack
     direction="column" justifyContent={'center'} alignItems={'center'}
@@ -642,7 +832,8 @@ export default function Navbar() {
                     <MenuItem onClick={() => handleLogout()} sx={menuItemStyle}>Sign out</MenuItem>
                 </Menu>
               </Stack>
-              
+              </Stack>
+          )}
           </Stack>
           
         </Toolbar>
