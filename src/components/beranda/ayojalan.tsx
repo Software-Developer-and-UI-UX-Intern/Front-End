@@ -36,11 +36,13 @@ export default function RowAndColumnSpacing({ backendLink, recommendationData }:
   }, [backendLink, recommendationData]); // Ensure useEffect runs when backendLink or recommendationData changes
 
   return (
-    <Grid container rowSpacing={5} columnSpacing={5} alignItems='center' justifyContent='center' borderRadius='40px'>
+    <Grid container rowSpacing={{ xs: 0, sm: 3, md: 5 }} columnSpacing={{ xs: 0, sm: 3, md: 5 }} alignItems='center' justifyContent='center' borderRadius='40px'>
       {recommendations.map(recommendation => (
         <Grid item key={recommendation.id} xs={'auto'} >
           <Box height='auto' sx={{ borderRadius: '40px' }}>
-            <Stack width='584px' height={'390px'} sx={{ borderRadius: '40px' }} onClick={() => handleItemClick(recommendation.name)}>
+            <Stack 
+             width={{ md: '584px', xs: '284px' }}
+             height={{ md: '390px', xs: '245px' }} sx={{ borderRadius: '40px' }} onClick={() => handleItemClick(recommendation.name)}>
               <img src={recommendation.image} alt={recommendation.name} width='100%' height={'100%'} style={{ borderRadius: '40px 0 40px 0' }} />
               <Stack marginTop={'-100px'} justifyContent={'center'} alignItems={'center'} paddingBottom={'20px'}>
                 <Typography color={'white'} sx={{ fontSize: '32px', fontWeight: 500 }}>

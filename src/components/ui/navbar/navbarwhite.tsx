@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, Link } from '@mui/material';
+import { AppBar, Container,Drawer,List,ListItem, ListItemText, Toolbar, Stack, Typography, Button, InputBase, IconButton, Menu, MenuItem, Divider, Link, useMediaQuery } from '@mui/material';
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -11,8 +11,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloseIcon from '@mui/icons-material/Close';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { useLocation } from 'react-router-dom';
-
+import { useTheme } from '@mui/material/styles';
+import {Menu as MenuIcon}  from '@mui/icons-material';
 const menuItemStyle = {
   fontSize: '22px',
   fontWeight: 500,
@@ -70,8 +70,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuActive, setMenuActive] = useState(false);
   const [userFullName, setUserFullName] = useState('');
-  const location = useLocation();
-  const [isProfilePage, setIsProfilePage] = useState(false);
+  // const [isProfilePage, setIsProfilePage] = useState(false);
   const [data, setData] = useState<Data>({
     oleh: [],
     wisata: [],
@@ -79,7 +78,12 @@ export default function Navbar() {
     restoran: [],
     area: [],
   });
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -113,9 +117,9 @@ export default function Navbar() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setIsProfilePage(location.pathname === '/profile');
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   setIsProfilePage(location.pathname === '/profile');
+  // }, [location.pathname]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -146,31 +150,31 @@ export default function Navbar() {
     fetchUserData();
   }, []);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setProfileAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+  const handleProfileMenuOpen = (event: React.SyntheticEvent) => {
+    setProfileAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when hotel menu button is clicked
     setProfileMenuActive(true); // Set hotel menu as active
     handleMenuOpen();
   };
 
-  const handleHotelMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setHotelAnchorEl(event.currentTarget); // Set anchor element when hotel menu button is clicked
+  const handleHotelMenuOpen = (event: React.SyntheticEvent) => {
+    setHotelAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when hotel menu button is clicked
     setHotelMenuActive(true); // Set hotel menu as active
     handleMenuOpen();
   };
 
-  const handleRestoranMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setRestoranAnchorEl(event.currentTarget); // Set anchor element when restoran menu button is clicked
+  const handleRestoranMenuOpen = (event: React.SyntheticEvent) => {
+    setRestoranAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when restoran menu button is clicked
     setRestoranMenuActive(true); // Set restoran menu as active
     handleMenuOpen();
   };
-  const handleOlehOlehMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOlehOlehAnchorEl(event.currentTarget); // Set anchor element when oleh-oleh menu button is clicked
+  const handleOlehOlehMenuOpen = (event: React.SyntheticEvent) => {
+    setOlehOlehAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when oleh-oleh menu button is clicked
     setOlehOlehMenuActive(true); // Set oleh-oleh menu as active
     handleMenuOpen();
   };
 
-  const handleWisataMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setWisataAnchorEl(event.currentTarget); // Set anchor element when wisata menu button is clicked
+  const handleWisataMenuOpen = (event: React.SyntheticEvent) => {
+    setWisataAnchorEl(event.currentTarget as HTMLElement); // Set anchor element when wisata menu button is clicked
     setWisataMenuActive(true); // Set wisata menu as active
     handleMenuOpen();
   };
@@ -267,7 +271,180 @@ export default function Navbar() {
           <Stack sx={{ width: '200px' }}>
             <img src={logoTripsel} alt="logo" />
           </Stack>
-          <Stack gap={3} width={'80%'} direction={'row'}>
+          <Stack gap={3}  width={ {md: '80%',xs:'auto'} }  direction={'row'}>
+          {isMobile ? (
+            <>
+              <IconButton
+                edge="end"
+                onClick={handleDrawerToggle}
+                sx={{ display: { md: 'none' }, color:'#6E6C6C' }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
+                PaperProps={{
+                  style: {
+                    width: '250px',
+                  },
+                }}
+              >
+                <List>
+                  <ListItem onClick={handleMenuClose}>
+                    <ListItemText primary="Beranda" onClick={handleBerandamenu} />
+                  </ListItem>
+                  <Divider />
+                  <ListItem onClick={handleHotelMenuOpen}>
+                    <ListItemText primary="Hotel" onClick={() =>handleHotelMenuOpen}  />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={hotelAnchorEl}
+                    open={Boolean(hotelAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleRestoranMenuOpen}>
+                    <ListItemText primary="Restoran" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={restoranAnchorEl}
+                    open={Boolean(restoranAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleRestoranMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleOlehOlehMenuOpen}>
+                    <ListItemText primary="Oleh-oleh" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={olehOlehAnchorEl}
+                    open={Boolean(olehOlehAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleOlehOlehMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleWisataMenuOpen}>
+                    <ListItemText primary="Wisata" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={wisataAnchorEl}
+                    open={Boolean(wisataAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    {data.area.map((area, index) => (
+                      <Stack key={area.domisili}>
+                        <MenuItem onClick={() => handleWisataMenuItemClick(area.domisili)} sx={menuItemStyle}>
+                          {area.domisili}
+                        </MenuItem>
+                        {index < data.area.length - 1 && <Divider />}
+                      </Stack>
+                    ))}
+                  </Menu>
+                  <Divider />
+                  <ListItem onClick={handleProfileMenuOpen}>
+                    <ListItemText primary="Profile" />
+                  </ListItem>
+                  <Menu
+                    disableScrollLock
+                    anchorEl={profileAnchorEl}
+                    open={Boolean(profileAnchorEl)}
+                    onClose={handleMenuClose}
+                    elevation={0}
+                    PaperProps={{
+                      style: {
+                        background: 'white',
+                        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+                        color: '#6E6C6C',
+                        width: '250px',
+                        borderRadius: '0px 0px 30px 30px',
+                        transition: 'background 0.2s ease-in-out',
+                      },
+                    }}
+                  >
+                    <MenuItem onClick={handleProfilemenu} sx={menuItemStyle}>Profile</MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleLogout} sx={menuItemStyle}>Sign out</MenuItem>
+                  </Menu>
+                </List>
+              </Drawer>
+            </>
+          ) : (
+            <Stack direction={'row'}>
             {showCategories && (
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} height={'105px'}>
                 <Button disableElevation disableFocusRipple disableRipple disableTouchRipple
@@ -520,6 +697,8 @@ export default function Navbar() {
             </Stack>
             </Stack>
             )}
+               
+           
             {!showCategories && (
   <Stack
     direction="row"
@@ -578,8 +757,8 @@ export default function Navbar() {
       disableTouchRipple
       onClick={handleProfileMenuOpen}
       sx={{
-        color: (isProfilePage ? 'black'  :(profileMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (profileMenuActive ? 'red' : (menuActive ? 'gray' : 'gray'))))),
-        '&:hover': { fontWeight: 700, color: (isProfilePage ? 'black'  :(isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red') },
+        color: (profileMenuActive && isOpaque ? 'red' : (isOpaque ? 'gray' : (profileMenuActive ? 'red' : (menuActive ? 'gray' : 'gray')))),
+        '&:hover': { fontWeight: 700, color: ((isOpaque && (hotelMenuActive || restoranMenuActive || olehOlehMenuActive || wisataMenuActive || profileMenuActive)) ? 'gray' : 'red') },
         padding:'0px',
         minWidth:'auto',
         height:'auto',
@@ -625,6 +804,8 @@ export default function Navbar() {
                     <MenuItem onClick={() => handleLogout()} sx={menuItemStyle}>Sign out</MenuItem>
                 </Menu>
               </Stack>
+              </Stack>
+            )}
           </Stack>
           
         </Toolbar>
