@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, useMediaQuery, useTheme  } from '@mui/material';
 import bg from '../../assets/beranda/Bali.png';
 import RowAndColumnSpacing from '../../../src/components/beranda/ayojalan';
 import SwipeableHotelCarousel from '../../components/beranda/SwipeableHotelCaraousel';
@@ -34,6 +34,8 @@ export default function Beranda() {
   }, []);
 
   const [berandaData, setBerandaData] = useState<BerandaData[]>([]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,118 +144,129 @@ export default function Beranda() {
         <Balimenunggu orangeData={berandaData} />
       </Stack>
 
-      <Stack
-        sx={{
-          display: 'flex',
-          height: 'auto',
-          width: '100%',
-          paddingTop: '50px',
-          backgroundColor: 'white',
-          paddingX: { xs: '0px', md: '0' },
-        }}
-      >
+      {!isMobile && (
         <Stack
           sx={{
+            display: 'flex',
             height: 'auto',
             width: '100%',
+            paddingTop: '50px',
             backgroundColor: 'white',
+            paddingX: { xs: '0px', md: '0' },
           }}
         >
           <Stack
-            paddingBottom={'64px'}
             sx={{
               height: 'auto',
               width: '100%',
               backgroundColor: 'white',
-              borderBottomRightRadius: { xs: '0', md: '500px' },
             }}
           >
-            <Typography
+            <Stack
+              paddingBottom={'64px'}
               sx={{
-                marginLeft: { xs: '16px', md: '100px' },
-                fontWeight: 700,
-                color: '#ff010c',
-                fontSize: { xs: '32px', sm: '45px', md: '60px' },
-                alignItems: 'center',
-                fontFamily: 'TelkomselBatikBold',
-              }}
-            >
-              Rekomendasi Hotel
-            </Typography>
-
-            <Typography
-              sx={{
-                marginLeft: { xs: '16px', md: '100px' },
-                fontWeight: 400,
-                color: '#04214c',
-                fontSize: { xs: '16px', sm: '24px', md: '30px' },
-                alignItems: 'center',
-              }}
-            >
-              Khusus T-Flyers aja lho~
-            </Typography>
-          </Stack>
-
-          <Stack
-            sx={{
-              display: 'flex',
-              height: 'auto',
-              width: 'auto',
-              marginLeft: { xs: '16px', md: '100px' },
-              marginRight: { xs: '16px', md: '100px' },
-              backgroundColor: 'white',
-            }}
-            direction="row"
-            gap={5}
-          >
-            <SwipeableHotelCarousel />
-          </Stack>
-          <Stack justifyContent="center" alignContent="center" alignItems="center" sx={{ marginTop: '46px', marginBottom: '126px' }}>
-            <Button
-              sx={{
-                alignContent: 'center',
-                width: { xs: '160px', md: '288px' },
-                height: { xs: '50px', md: '80px' },
-                borderRadius: '40px',
-                backgroundColor: '#ff010c',
-                color: 'white',
-                '&:hover': {
-                  background: 'white',
-                  color: 'red',
-                  boxShadow: '0px 0px 0px 2px red',
-                  borderRadius: '40px',
-                },
+                height: 'auto',
+                width: '100%',
+                backgroundColor: 'white',
+                borderBottomRightRadius: { xs: '0', md: '500px' },
               }}
             >
               <Typography
                 sx={{
-                  color: 'inherit',
-                  fontWeight: '600',
-                  fontSize: { xs: '16px', md: '32px' },
+                  marginLeft: { xs: '16px', md: '100px' },
+                  fontWeight: 700,
+                  color: '#ff010c',
+                  fontSize: { xs: '32px', sm: '45px', md: '60px' },
+                  alignItems: 'center',
+                  fontFamily: 'TelkomselBatikBold',
                 }}
               >
-                Jelajahi
+                Rekomendasi Hotel
               </Typography>
-            </Button>
-          </Stack>
-          <Stack>
-            <Typography
-              sx={{
-                fontWeight: 700,
-                color: '#ff010c',
-                fontSize: { xs: '32px', sm: '45px', md: '60px' },
-                textAlign: 'center',
-                fontFamily: 'TelkomselBatikBold',
-              }}
-            >
-              Ayo Jalan-Jalan
-            </Typography>
-          </Stack>
 
-          <Stack width="auto" height="auto" marginLeft={{ xs: '16px', md: '100px' }} marginRight={{ xs: '16px', md: '100px' }} marginTop="30px" marginBottom="55px">
-            <RowAndColumnSpacing backendLink="https://tripselbe.fly.dev/recommendationwisata" />
+              <Typography
+                sx={{
+                  marginLeft: { xs: '16px', md: '100px' },
+                  fontWeight: 400,
+                  color: '#04214c',
+                  fontSize: { xs: '16px', sm: '24px', md: '30px' },
+                  alignItems: 'center',
+                }}
+              >
+                Khusus T-Flyers aja lho~
+              </Typography>
+            </Stack>
+
+            <Stack
+              sx={{
+                display: 'flex',
+                height: 'auto',
+                width: 'auto',
+                marginLeft: { xs: '16px', md: '100px' },
+                marginRight: { xs: '16px', md: '100px' },
+                backgroundColor: 'white',
+              }}
+              direction="row"
+              gap={5}
+            >
+              <SwipeableHotelCarousel />
+            </Stack>
+            {/* <Stack justifyContent="center" alignContent="center" alignItems="center" sx={{ marginTop: '46px', marginBottom: '126px' }}>
+              <Button
+                sx={{
+                  alignContent: 'center',
+                  width: { xs: '160px', md: '288px' },
+                  height: { xs: '50px', md: '80px' },
+                  borderRadius: '40px',
+                  backgroundColor: '#ff010c',
+                  color: 'white',
+                  '&:hover': {
+                    background: 'white',
+                    color: 'red',
+                    boxShadow: '0px 0px 0px 2px red',
+                    borderRadius: '40px',
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: 'inherit',
+                    fontWeight: '600',
+                    fontSize: { xs: '16px', md: '32px' },
+                  }}
+                >
+                  Jelajahi
+                </Typography>
+              </Button>
+            </Stack> */}
           </Stack>
         </Stack>
+      )}
+
+      <Stack>
+        <Typography
+          sx={{
+            fontWeight: 700,
+            color: '#ff010c',
+            fontSize: { xs: '32px', sm: '45px', md: '60px' },
+            textAlign: 'center',
+            fontFamily: 'TelkomselBatikBold',
+            paddingTop: '30px',
+          }}
+        >
+          Ayo Jalan-Jalan
+        </Typography>
+      </Stack>
+
+      <Stack
+        width="auto"
+        height="auto"
+        marginLeft={{ xs: '16px', md: '100px' }}
+        marginRight={{ xs: '16px', md: '100px' }}
+        marginTop="30px"
+        marginBottom="55px"
+      >
+        <RowAndColumnSpacing backendLink="https://tripselbe.fly.dev/recommendationwisata" />
       </Stack>
 
       <Stack
@@ -287,4 +300,3 @@ export default function Beranda() {
     </Stack>
   );
 }
-

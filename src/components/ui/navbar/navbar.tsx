@@ -443,7 +443,7 @@ export default function Navbar() {
               </Drawer>
             </>
           ) : (
-            <Stack direction={'row'}>
+            <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} gap={5}>
             {showCategories && (
               
               <Stack direction={'row'} justifyContent={'space-between'} width={'100%'} height={'105px'}>
