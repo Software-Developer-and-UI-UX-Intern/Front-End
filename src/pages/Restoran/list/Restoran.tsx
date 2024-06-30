@@ -139,8 +139,22 @@ const Oleh = () => {
           }}>
            
           <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-            <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>Restoran</Typography>
-            <Typography fontSize={'70px'} color={'#fff'} fontFamily={'TelkomselBatikBold'}>{destination}</Typography>
+          <Typography
+      sx={{
+        fontSize: { xs: '60px', md: '70px' },
+        color: '#fff',
+        fontFamily: 'TelkomselBatikBold',
+      }}
+    >
+      Restoran
+    </Typography>
+    <Typography
+      sx={{
+        fontSize: { xs: '60px', md: '70px' },
+        color: '#fff',
+        fontFamily: 'TelkomselBatikBold',
+      }}
+    >{destination}</Typography>
           </Stack>
         </Stack>
 
@@ -151,8 +165,8 @@ const Oleh = () => {
             cursor: 'pointer'
           }} onClick={handleHalalClick}>
             <Typography sx={{
-              fontSize: '42px',
-              fontWeight: halal === 'true' ? 700 : 400,
+            fontSize: { xs: '32px', md: '42px' },
+            fontWeight: halal === 'true' ? 700 : 400,
               textAlign: 'center',
               color: halal === 'true' ? 'white' : '#6E6C6C'
             }}>Halal</Typography>
@@ -164,8 +178,8 @@ const Oleh = () => {
             cursor: 'pointer'
           }} onClick={handleNonHalalClick}>
             <Typography sx={{
-              fontSize: '42px',
-              fontWeight: halal === 'false' ? 700 : 400,
+            fontSize: { xs: '32px', md: '42px' },
+            fontWeight: halal === 'false' ? 700 : 400,
               textAlign: 'center',
               color: halal === 'false' ? 'white' : '#6E6C6C'
             }}>Non Halal</Typography>

@@ -75,12 +75,12 @@ export default function Beranda() {
         borderRadius: '0 0 100px 100px',
         paddingBottom:'80px'
       }}>
-<Stack gap={4} marginLeft={'145px'} marginRight={'145px'} >
+<Stack gap={4} marginLeft={{ xs: '20px', md: '145px' }} marginRight={{ xs: '20px', md: '145px' }} >
         <Typography sx={{
           fontWeight: 400,
           color: 'white',
           fontSize: '25px',
-          textAlign: 'left',
+          textAlign: {xs: 'justify', md: 'left'} ,
           whiteSpace: 'pre-line',
 
         }}>
@@ -138,15 +138,10 @@ export default function Beranda() {
         <Stack justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
           <Typography fontSize={'90px'} fontFamily={'TelkomselBatikBold'} color={'#04214C'}>Sampai berjumpa di {destination}!</Typography>
         </Stack>
-        
-         
         </Stack>
         <Stack width={'100%'} height={'3px'} marginTop={'-2px'} sx={{background:'white'}}>
         </Stack>
       </Stack>
-
-
-
     </Stack>
   );
 }

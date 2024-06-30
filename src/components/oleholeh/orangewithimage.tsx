@@ -1,4 +1,4 @@
-import { Typography, Card, Stack } from '@mui/material';
+import { Typography, Card, Stack, useTheme, useMediaQuery } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
@@ -7,7 +7,7 @@ interface OrangewithimageProps {
   textContent: string;
   location: string;
   width?: string;
-  height?: string;
+  // height?: string;
   fontsize?: string;
   imgheight?: string;
   domisili: string;
@@ -16,8 +16,18 @@ interface Area {
   domisili: string;
   jenis: string;
 }
-const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, domisili, textContent,location, width = '335px', height = '400px', fontsize = '50px', imgheight = '80px' }) => {
+const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, domisili, textContent,location, width = '335px', fontsize = '50px', imgheight = '80px' }) => {
   const [jenis, setJenis] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const calculateHeight = () => {
+    if (isMobile) {
+      return '350px'; // Adjust the height for mobile view
+    } else {
+      return '600px'; // Default height for larger screens
+    }
+  };
   useEffect(() => {
     const fetchJenis = async () => {
       try {
@@ -35,11 +45,15 @@ const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, domisili, t
     fetchJenis();
   }, [domisili]);
   return (
-    <Card sx={{ width: width, height: height, background: 'linear-gradient(65deg, #FF0025 23.51%, #F9A12D 81.92%)', borderRadius: '0px 104px 40px 0px' }}>
-      <Stack width={width} height={`calc(${height} - ${imgheight})`} sx={{
-
-
-        }}>
+    <Card
+    sx={{
+      width: { xs: '300px', md: width },
+      height: calculateHeight(), // Dynamic height based on screen size
+      background: 'linear-gradient(65deg, #FF0025 23.51%, #F9A12D 81.92%)',
+      borderRadius: '0px 104px 40px 0px',
+    }}
+  >
+    <Stack width={width} height={`calc(${calculateHeight()} - ${isMobile ? '70px' : imgheight })`} sx={{}}>
         <Stack width={'100%'} height={'100%'} sx={{
                   backgroundImage: `url(${imageSrc})`,
 justifyContent: 'flex-end',
@@ -50,13 +64,13 @@ overflow:'auto'
           background:'linear-gradient(90deg, #04214C 25.42%, rgba(4, 33, 76, 0.00) 100%)',
           justifyContent:'center',
         }}>
-          <Typography color={'white'} fontSize={'32px'} fontWeight={500} paddingLeft={'53px'} >{location} km dari {jenis} {domisili}</Typography>
+          <Typography color={'white'} fontSize={isMobile ? '18px' : '32px' } fontWeight={500} paddingLeft={isMobile ? '25px' : '53px' } >{location} km dari {jenis} {domisili}</Typography>
           </Stack>
         </Stack>
       </Stack>
       <Stack width={'100%'}justifyContent={'center'} alignItems={'center'}>
-        <Stack width={'100%'} height={imgheight} justifyContent={'center'}sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        <Typography sx={{ textAlign: 'center' }} fontSize={fontsize} fontWeight={500} color={'white'}>
+        <Stack width={'100%'} height={isMobile ? '70px' : imgheight } justifyContent={'center'}sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <Typography sx={{ textAlign: 'center' }} fontSize={isMobile ? '22px' : fontsize} fontWeight={500} color={'white'}>
           {textContent.length >= 22 ? `${textContent.slice(0, 22)}...` : textContent}
         </Typography>
     </Stack>
@@ -71,7 +85,7 @@ Orangewithimage.propTypes = {
   location: PropTypes.string.isRequired,
   domisili: PropTypes.string.isRequired,
   width: PropTypes.string,
-  height: PropTypes.string,
+  // height: PropTypes.string,
 };
 
 export default Orangewithimage;

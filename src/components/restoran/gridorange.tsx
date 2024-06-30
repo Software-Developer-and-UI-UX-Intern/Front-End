@@ -47,11 +47,11 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   };
 
   return (
-    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'start' : 'start'} paddingLeft={'125px'}>
+    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'start' : 'start'} paddingLeft={ {xs: '40px', md: '125px'} }>
       {GridData.map((orangedata, index) => (
         <Grid item key={index} >
           <div style={{ cursor: 'pointer' }} onClick={() => handleItemClick(orangedata.textContent)}>
-            <Item imageSrc={orangedata.imageSrc} domisili={orangedata.domisili} location={orangedata.location} textContent={orangedata.textContent} width='579px' height='600px' fontsize='42px' imgheight='131px' />
+            <Item imageSrc={orangedata.imageSrc} domisili={orangedata.domisili} location={orangedata.location} textContent={orangedata.textContent} width='579px' fontsize='42px' imgheight='131px' />
           </div>
         </Grid>
       ))}

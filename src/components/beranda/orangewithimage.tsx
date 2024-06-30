@@ -1,4 +1,4 @@
-import { Typography, Card, Stack } from '@mui/material';
+import { Typography, Card, Stack, useTheme, useMediaQuery } from '@mui/material';
 import PropTypes from 'prop-types';
 
 interface OrangewithimageProps {
@@ -11,10 +11,12 @@ interface OrangewithimageProps {
 }
 
 const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, textContent, width = '335px', height = '400px', fontsize = '50px', imgheight = '80px' }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Card sx={{ width: { xs: '300px', md: width }, height: height, background: 'linear-gradient(65deg, #FF0025 23.51%, #F9A12D 81.92%)', borderRadius: '0px 104px 40px 0px' }}>
-      <Stack width={width} height={`calc(${height} - ${imgheight})`}>
+      <Stack width={width} height={`calc(${height} - ${isMobile ? '70px' : imgheight })`}>
   <img 
     src={imageSrc} 
     alt="Image" 
@@ -27,8 +29,8 @@ const Orangewithimage: React.FC<OrangewithimageProps> = ({ imageSrc, textContent
     }}
   />      </Stack>
       <Stack width={'100%'}justifyContent={'center'} alignItems={'center'}>
-        <Stack width={'100%'} height={imgheight} justifyContent={'center'}sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        <Typography sx={{ textAlign: 'center' }} fontSize={fontsize} fontWeight={700} color={'white'}>
+        <Stack width={'100%'} height={isMobile ? '70px' : imgheight } justifyContent={'center'}sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <Typography sx={{ textAlign: 'center' }} fontSize={isMobile ? '28px' : fontsize } fontWeight={700} color={'white'}>
           {textContent.length >= 22 ? `${textContent.slice(0, 22)}...` : textContent}
         </Typography>
     </Stack>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Import useHistory
 import Item from './orangewithimage';
 
@@ -49,12 +49,12 @@ export default function GridOrange({ backendLink, Data }: GridProps) {
   };
 
   return (
-    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'start' : 'start'} paddingLeft={'125px'}>      {GridData.map((orangedata, index) => (
+    <Grid container rowSpacing={3} columnSpacing={3} justifyContent={GridData.length % 2 === 0 ? 'start' : 'start'} paddingLeft={{xs: '40px', md: '125px'}} >      {GridData.map((orangedata, index) => (
         <Grid item key={index} alignItems='center' justifyContent='center'>
           {/* Wrap the Item component inside a div and attach an onClick event */}
-          <div style={{ cursor: 'pointer' }} onClick={() => handleItemClick(orangedata.textContent)}>
-            <Item imageSrc={orangedata.imageSrc} domisili={orangedata.domisili} location={orangedata.jarak} textContent={orangedata.textContent} width='579px' height='600px' fontsize='42px' imgheight='90px' />
-          </div>
+          <Stack style={{ cursor: 'pointer' }} onClick={() => handleItemClick(orangedata.textContent)}>
+            <Item imageSrc={orangedata.imageSrc} domisili={orangedata.domisili} location={orangedata.jarak} textContent={orangedata.textContent} width='579px' fontsize='42px' imgheight='90px' />
+          </Stack>
         </Grid>
       ))}
     </Grid>

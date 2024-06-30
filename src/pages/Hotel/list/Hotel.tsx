@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Button, Stack, Typography, Input, Checkbox, styled } from '@mui/material';
+import { Button, Stack, Typography, Input, Checkbox, styled, useMediaQuery, useTheme } from '@mui/material';
 import bali from '../../../assets/hotel/bali/up.png';
 import '../../../assets/font/telkomselbatik.css'
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -61,6 +61,8 @@ export default function Hotel() {
   const [destination, setDestination] = useState<string | null>(null);
   const [areaData, setAreaData] = useState<Area| null>(null);
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const gasParam = params.get('Gas');
@@ -156,13 +158,15 @@ export default function Hotel() {
         width: '100%',
         margin: '0',
       }}>
-        <Stack  marginLeft={'100px'} marginRight={'100px'} marginTop={'250px'} height={'600px'} justifyContent={'space-between'}>
+        <Stack  marginLeft={isMobile ? '20px' : '100px'} marginRight={isMobile ? '20px' : '100px'} marginTop={isMobile ? '150px' : '250px'} height={'600px'} justifyContent={'space-between'}>
         <Stack>
-        <Typography fontSize={'82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di {destination}!</Typography>
+        <Typography fontSize={isMobile ? '48px' : '82px'} fontFamily={'TelkomselBatikBold'} color={'#FFF'}>Selamat datang di {destination}!</Typography>
         <Typography fontSize={'32px'} color={'#FFF'} maxWidth={'924px'}>Yuk, cari rekomendasi Hotel dengan harga spesial hanya buat T-Flyers lho.</Typography>
         </Stack>
         <Stack justifyContent={'center'} alignItems={'center'} >
+        {!isMobile && (
         <Button onClick={handleScrollDown} sx={{width:'500px', height:'100px',boxShadow:'0px 4px 4px 0px rgba(0, 0, 0, 0.25)',borderRadius:'100px', color:'white',fontSize:'44px', fontWeight:700,     background: 'linear-gradient(360deg, #fb8c2a, #FF010C)'}}>Cek Rekomendasi</Button>
+        )}
         </Stack>
         </Stack>
       </Stack>
@@ -187,8 +191,8 @@ export default function Hotel() {
           <Typography sx={{
             fontWeight: 700,
             color: '#ff010c',
-            fontSize: '60px',
-            paddingTop: '50px',
+            fontSize: isMobile ? '48px' : '60px', // Adjust font size for mobile view
+            paddingTop: isMobile ? '30px' : '50px',
             textAlign: 'center',
             font:'TelkomselBatikBold'
           }}>
@@ -197,15 +201,18 @@ export default function Hotel() {
           <Typography sx={{
             fontWeight: 500,
             color: '#04214C',
-            fontSize: '38px',
+            fontSize: isMobile ? '28px' : '38px',
             paddingBottom: '42px',
             textAlign: 'center'
           }}>
           Rekomendasi kami hanya untuk T-Flyers
           </Typography>
           
-          <Stack direction={'row'} gap={3} marginLeft={'100px'} marginRight={'100px'}>
-            {/* left */}
+          <Stack direction={'row'} gap={3} sx={{
+  marginLeft: isMobile ? '20px' : '100px',
+  marginRight: isMobile ? '20px' : '100px',
+}}>            {/* left */}
+            {!isMobile && (
             <Stack direction={'column'}  width={'auto'} height={'auto'}  >
               <Stack sx={{background:'#FF010C'}} marginBottom={'10px'} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'}>
                 <Typography color={'white'} fontSize={'28px'} fontWeight={500}>Filter</Typography>
@@ -257,6 +264,7 @@ export default function Hotel() {
               </Stack>
 
               {/* filter fasilitas */}
+             
               <Stack width={'100%'} height={'auto'} sx={{background:'#04214C'}} borderRadius={'40px'}  paddingTop={'8px'}  paddingBottom={'8px'}  marginRight={'72px'}>
               <Typography  color={'white'} fontSize={'22px'} fontWeight={500} textAlign={'center'}>Fasilitas</Typography>
               <Stack direction={'row'} alignItems={'start'} marginLeft={'20px'} paddingBottom={'20px'}>
@@ -315,11 +323,11 @@ export default function Hotel() {
               </Stack>
               </Stack>
               </Stack>
-
+              
 
               </Stack>
             </Stack>
-
+          )}
             {/* right */}
             <Stack direction={'column'} width={'100%'} height={'auto'}>
             <Stack sx={{background:'#FF010C'}} width={'100%'} height={'60px'} borderRadius={'100px'} justifyContent={'center'} alignItems={'center'} marginBottom={'10px'}>
