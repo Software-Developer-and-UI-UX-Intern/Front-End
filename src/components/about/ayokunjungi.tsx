@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { useRef, useState, useEffect } from 'react';
-import Orangewithimage1 from '../beranda/orangewithimage';
+import Orangewithimage1 from '../beranda/soal';
 import left from '../../assets/about/arrow_left_blue.png';
 import right from '../../assets/about/arrow_right_blue.png';
 import { useNavigate } from 'react-router-dom';

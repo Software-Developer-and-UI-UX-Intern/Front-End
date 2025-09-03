@@ -4,7 +4,7 @@ import Navbar  from './components/ui/navbar/navbar';
 import Navbarwhite  from './components/ui/navbar/navbarwhite';
 import Navbaradmin  from './components/ui/navbar/navbaradmin';
 // import Adminlayout  from './pages/Admin/Login/adminlayout';
-import { AboutUs } from './pages/Aboutus';
+import { Quiz } from './pages/quiz';
 import { AdminHotel } from './pages/Admin/Hotel';
 import { AdminBeranda } from './pages/Admin/Beranda';
 import { InputHotel } from './pages/Admin/Hotel/input';
@@ -42,14 +42,14 @@ import { Bali } from './pages/About/list';
 // import { Mataram } from './pages/About/mataram';
 import {Oleh} from './pages/Oleh';
 import {OlehBali} from './pages/Oleh/list';
-import {Hotel} from './pages/Hotel';
-import {HotelBali} from './pages/Hotel/list';
+import {Paket} from './pages/Paket';
+// import {Tryout} from './pages/Paket/list';
 // import {HotelNTT} from './pages/Hotel/ntt';
 // import {HotelNTB} from './pages/Hotel/ntb';
 // import {OlehMataram} from './pages/Oleh/OlehMataram';
 // import {OlehKupang} from './pages/Oleh/OlehKupang';
 // import {OlehFlores} from './pages/Oleh/OlehFlores';
-import {Restoran} from './pages/Restoran';
+import {Quizattempt} from './pages/Restoran';
 import {RestoranBali} from './pages/Restoran/list';
 // import {RestoranMataram} from './pages/Restoran/RestoranMataram';
 // import {RestoranKupang} from './pages/Restoran/RestoranKupang';
@@ -93,49 +93,49 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
         <>
           <Navbar />
           <Beranda />
           <Footer />
         </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   {
-    path: '/aboutus',
+    path: '/quiz',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbar />
-        <AboutUs />
+        <Quiz />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   {
     path: '/cari-wisata',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbarwhite />
         <About />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   {
     path: '/wisata',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbar />
         <Bali />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   // {
@@ -177,25 +177,25 @@ const router = createBrowserRouter([
   {
     path: '/cari-oleh-oleh',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbarwhite />
         <Oleh />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   {
     path: '/oleh-oleh',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbar />
         <OlehBali />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   // {
@@ -234,28 +234,28 @@ const router = createBrowserRouter([
   //     </ProtectedRoute>
   //   )
   // },
-  {
-    path: '/cari-restoran',
-    element: (
-      <ProtectedRoute>
-      <>
-        <Navbarwhite />
-        <Restoran />
-        <Footer/>
-      </>
-      </ProtectedRoute>
-    )
-  },
+  // {
+  //   path: '/cari-restoran',
+  //   element: (
+  //     // <ProtectedRoute>
+  //     <>
+  //       <Navbarwhite />
+  //       <Restoran />
+  //       <Footer/>
+  //     </>
+  //     // </ProtectedRoute>
+  //   )
+  // },
   {
     path: '/restoran',
     element: (
-      <ProtectedRoute>
+      // <ProtectedRoute>
       <>
         <Navbar />
         <RestoranBali />
         <Footer/>
       </>
-      </ProtectedRoute>
+      // </ProtectedRoute>
     )
   },
   // {
@@ -295,28 +295,28 @@ const router = createBrowserRouter([
   //   )
   // },
   {
-    path: '/cari-hotel',
+    path: '/paketku',
     element: (
-    <ProtectedRoute>
+    // <ProtectedRoute>
     <>
-    <Navbarwhite />
-    <Hotel/>,
+    <Navbar />
+    <Paket/>,
     <Footer/>
     </>
-    </ProtectedRoute>
+    // </ProtectedRoute>
     )
   
     },
     {
-      path: '/hotel',
+      path: '/tryouts',
       element: (
-        <ProtectedRoute>
+        // <ProtectedRoute>
         <>
           <Navbar/>
-          <HotelBali />
+          <Quizattempt/>
           <Footer/>
         </>
-        </ProtectedRoute>
+        // </ProtectedRoute>
       )
     },
     // {
@@ -346,12 +346,12 @@ const router = createBrowserRouter([
     {
       path: '/profile',
       element: (
-        <ProtectedRoute>
+        // <ProtectedRoute>
         <>
           <Navbarwhite/>
           <Profile />
         </>
-        </ProtectedRoute>
+        // </ProtectedRoute>
       )
     },
     {

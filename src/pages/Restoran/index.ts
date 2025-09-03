@@ -1,1 +1,1 @@
-export { default as Restoran } from './Restoran';
+export { default as Quizattempt } from './Paketku';

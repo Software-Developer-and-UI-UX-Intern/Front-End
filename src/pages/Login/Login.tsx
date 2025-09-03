@@ -4,8 +4,7 @@ import { Button, InputAdornment, IconButton, Link } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { debounce } from 'lodash';
-import bg from '../../assets/login.png';
-import logo from '../../assets/Trip-sel.png'
+import bg from '../../assets/logoukai.png';
 import { useNavigate } from 'react-router-dom';
 
 const customInputStyle = {
@@ -71,48 +70,48 @@ export default function Login() {
   };
 
   async function handleLogin() {
-    try {
-      setLoading(true);
-      
-      // Check user status
-      const userResponse = await axios.get(`https://tripselbe.fly.dev/user/${email}`);
-      const { status } = userResponse.data;
-      
-      if (status !== 'guest') {
-        // User is not a guest, proceed with login
-        const response = await axios.post('https://tripselbe.fly.dev/login', { email, password });
-        const { token } = response.data;
-    
-        // Calculate token expiration time (e.g., 1 hour from now)
-        const expirationTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-    
-        // Save token and its expiration time in localStorage
-        saveTokenToLocalStorage(token, expirationTime);
-    
-        setLoading(false);
-    
-        // Return Navigate component to redirect to the home page after successful login
-        navigate(`/`);
-      } else {
-        // User is a guest, redirect to verification page
-        setLoading(false);
-        alert('Akun belum terverifikasi, mohon registrasi ulang')
-        // navigate(`/verifikasi`, { state: { email: email, password: password } }); // Pass email as a state to /verifikasi
-      }
+  try {
+    setLoading(true);
 
-    } catch (error) {
-      console.log('Invalid email or password');
-      setLoading(false);
-      setLoginError(true); // Set loginError state to true on error
-    }
-  }
+    // Login request ke backend
+    const response = await axios.post('http://localhost:3000/login', { email, password });
 
-  
-  // Function to save token and its expiration time in localStorage
-  const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
+    // Ambil token dari response (user tidak digunakan)
+    const { token } = response.data;
+
+    // Hitung waktu kadaluarsa token (7 hari sesuai backend)
+    const expirationTime = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 hari dalam ms
+
+    // Simpan token dan expiration di localStorage
     localStorage.setItem('token', token);
     localStorage.setItem('tokenExpiration', expirationTime.toString());
-  };  
+
+    // Reset error
+    setLoginError(false);
+
+    // Redirect ke home
+    navigate(`/`);
+  } catch (error: unknown) {
+    // Type guard untuk error axios
+    if (axios.isAxiosError(error)) {
+      console.error(error.response?.data || error.message);
+    } else {
+      console.error(error);
+    }
+    setLoginError(true);
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+
+  
+  // // Function to save token and its expiration time in localStorage
+  // const saveTokenToLocalStorage = (token: string, expirationTime: number) => {
+  //   localStorage.setItem('token', token);
+  //   localStorage.setItem('tokenExpiration', expirationTime.toString());
+  // };  
 
   return (
     <Box>
@@ -120,27 +119,13 @@ export default function Login() {
         <Grid item xs={12} md={6} sx={{ maxHeight: '100%' }}>
           <Stack height={'100%'} justifyContent={'center'} alignItems={'center'}>
             <Stack direction={'column'} sx={{ display: { md: 'flex' },width:'100%', height: '100%', justifyContent:'center',alignContent:'center', alignItems:'center' }}>
-              <Stack sx={{ width:'100%', justifyContent:'center', alignItems:'center' }}>
-                <img
-                  src={logo}
-                  alt=""
-                  width="100%"
-                  style={{maxWidth:'314px'}}
-                />
-              </Stack>
               <img
                 src={bg}
                 alt=""
                 width="100%"
                 style={{maxWidth:'550px', maxHeight:'550px'}}
               />
-              <Typography sx={{
-                fontWeight: 700,
-                fontSize: { xs: '32px', md: '42px' },
-                color:'#FF010C',
-              }}>
-                #TripwithTelkomsel
-              </Typography>
+
             </Stack>
           </Stack>
         </Grid>
@@ -178,7 +163,7 @@ export default function Login() {
                 fontSize: '32px',
                 color:'#FF010C',
               }}>
-                Selamat datang di Trip-sel
+                Selamat datang di Rumah Ukai
               </Typography>
             </Stack>
             <Stack spacing={2}>
